@@ -7,6 +7,7 @@
 #include <fmt/core.h>
 #include <mtgoparser/clap.hpp>
 #include <mtgoparser/io.hpp>
+#include <mtgoparser/io/gzip.hpp>
 #include <mtgoparser/mtg.hpp>
 #include <mtgoparser/mtgo/card.hpp>
 #include <mtgoparser/util.hpp>
@@ -856,6 +857,57 @@ TEST_CASE("io_util::get_files_with_timestamp")
 
     // Clean up by removing the files and directory
     std::filesystem::remove_all(sub_dir);
+  }
+}
+
+TEST_CASE("Compression with io_util::gzip::compress")
+{
+  SECTION("Compress simple string")
+  {
+    const std::string test_raw_contents = "test file contents";
+    // This compression is counter-productive as the string is so short. Just the headers of Gzip are 20 bytes.
+    const std::string compressed = io_util::gzip::compress(test_raw_contents);
+
+    // Check that the compressed string is not empty
+    CHECK_FALSE(compressed.empty());
+
+    // Check that the compressed string is not the same as the original string
+    CHECK(compressed != test_raw_contents);
+
+    const std::string decompressed = io_util::gzip::decompress(compressed);
+
+    // Check that the decompressed string is the same as the original string
+    CHECK(decompressed == test_raw_contents);
+  }
+
+  SECTION("Compress a string incrementing from 1 to 33")
+  {
+    // There's very little repetition so this 57 byte string is still 57 bytes after compression
+    const std::string raw_str = "123456789101112131415161718192021222324252627282930313233";
+
+    const std::string compressed = io_util::gzip::compress(raw_str);
+
+    const std::string decompressed = io_util::gzip::decompress(compressed);
+
+    // Check that the decompressed string is the same as the original string
+    CHECK(decompressed == raw_str);
+    CHECK(decompressed.size() == raw_str.size());
+  }
+
+  SECTION("Compress a string of 24 '1's")
+  {
+    // This is very compressible as there's a lot of repetition
+    // The header of Gzip is 20 bytes, and then it takes 3 bytes to encode the length of the compressed string
+    // One for the character '1', one for the number of repetitions `18`(hex)
+    const std::string raw_str = "111111111111111111111111";
+
+    const std::string compressed = io_util::gzip::compress(raw_str);
+    CHECK(compressed.size() == 23);
+
+    const std::string decompressed = io_util::gzip::decompress(compressed);
+
+    // Check that the decompressed string is the same as the original string
+    CHECK(decompressed == raw_str);
   }
 }
 
