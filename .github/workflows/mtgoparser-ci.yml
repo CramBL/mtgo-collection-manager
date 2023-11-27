@@ -14,7 +14,6 @@ on:
 env:
   CLANG_VERSION_MACOS: "15.0.3"
   VERBOSE: 1
-  EXCLUDE_BOOST_LIBS: "serialization;asio;json;graph;log;property_tree;wave;contract;coroutine;date_time;fiber;locale;thread;type_erasure;test;url;python;compute;crc;dll;endian;lamda;fusion;geometry;gil;regex;iostreams;filesystem;program_options;random;math;multiprecision;mysql;stacktrace;"
 
 jobs:
   # JOB to run change detection
@@ -162,6 +161,11 @@ jobs:
         uses: cardinalby/export-env-action@v2
         with:
           envFile: '.github/constants.env'
+
+      - name: 🗻 Set EXCLUDE_BOOST_LIBS environment variable 🏝️
+        run: |
+          EXCLUDE_BOOST_LIBS=$(<build-util/boost-exclude-libs.txt)
+          echo "EXCLUDE_BOOST_LIBS=${EXCLUDE_BOOST_LIBS}" >> $GITHUB_ENV
 
       - name: ⚙️ Setup C++ Tools - MacOS 🍎
         if: runner.os == 'macOS'
