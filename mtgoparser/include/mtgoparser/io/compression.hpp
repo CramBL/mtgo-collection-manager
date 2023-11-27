@@ -16,6 +16,9 @@ namespace io_util::compression {
 
 [[nodiscard]] inline auto compress(const std::string &data) -> std::string
 #if defined(_MSC_VER)
+{
+  throw std::runtime_error("Compression not supported on Windows.");
+}
 #else
 {
   z_stream zs;
@@ -63,6 +66,9 @@ namespace io_util::compression {
 
 [[nodiscard]] inline auto decompress(const std::string &data) -> std::string
 #if defined(_MSC_VER)
+{
+  throw std::runtime_error("Decompression not supported on Windows.");
+}
 #else
 {
   z_stream zs;
