@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstring>
+#include <stdexcept>
+#include <string>
 #include <vector>
 
 #include <zlib.h>

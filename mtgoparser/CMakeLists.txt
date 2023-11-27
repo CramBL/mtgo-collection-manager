@@ -72,6 +72,7 @@ target_link_system_library(${PROJECT_NAME} INTERFACE Boost::headers)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::outcome)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::conversion)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::unordered)
+target_link_system_library(${PROJECT_NAME} INTERFACE Boost::iostreams)
 
 # To build the binary executable MTGO preprocessor that can do a full parse of all card data files
 add_subdirectory(src)
