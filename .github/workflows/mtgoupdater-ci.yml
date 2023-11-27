@@ -65,8 +65,10 @@ jobs:
 
       - name: 🗻 Set EXCLUDE_BOOST_LIBS environment variable 🏝️
         run: |
-          EXCLUDE_BOOST_LIBS=$(<build-util/boost-exclude-libs.txt)
-          echo "EXCLUDE_BOOST_LIBS=${EXCLUDE_BOOST_LIBS}" >> $GITHUB_ENV
+          $env:EXCLUDE_BOOST_LIBS = Get-Content -Raw -Path "build-util/boost-exclude-libs.txt"
+          Write-Output "EXCLUDE_BOOST_LIBS=$env:EXCLUDE_BOOST_LIBS" >> $env:GITHUB_ENV
+        shell: pwsh
+
 
       - uses: moonrepo/setup-rust@v1
         with:
