@@ -65,16 +65,4 @@ function(mtgoparser_setup_dependencies)
       GIT_TAG "v1.3"
       )
   endif()
-
-  if(zlib_ADDED)
-    target_include_directories(zlib
-                              PUBLIC $<BUILD_INTERFACE:${zlib_BINARY_DIR}>
-                              PUBLIC $<INSTALL_INTERFACE:include>)
-    target_include_directories(zlibstatic
-                              PUBLIC $<BUILD_INTERFACE:${zlib_BINARY_DIR}>
-                              PUBLIC $<INSTALL_INTERFACE:include>)
-    message(STATUS "Added local zlib at: ${zlib_SOURCE_DIR}")
-  else()
-    message(STATUS "Found zlib at: ${zlib_SOURCE_DIR}")
-  endif()
 endfunction()

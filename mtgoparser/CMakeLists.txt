@@ -76,7 +76,7 @@ target_link_system_library(${PROJECT_NAME} INTERFACE Boost::conversion)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::unordered)
 # Not so modern dependencies.
 target_link_system_library(${PROJECT_NAME} INTERFACE rapidxml)
-target_link_system_library(${PROJECT_NAME} INTERFACE zlibstatic)
+target_link_system_library(${PROJECT_NAME} INTERFACE zlib)
 
 # To build the binary executable MTGO preprocessor that can do a full parse of all card data files
 add_subdirectory(src)
