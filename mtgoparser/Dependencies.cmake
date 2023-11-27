@@ -44,7 +44,7 @@ function(mtgoparser_setup_dependencies)
       GIT_TAG "boost-1.83.0"
       OPTIONS
         "header_only TRUE"
-        "COMPONENTS core;outcome;headers;conversion;detail;unordered"
+        "COMPONENTS core;outcome;headers;conversion;detail;unordered;iostreams"
     )
   endif()
 
