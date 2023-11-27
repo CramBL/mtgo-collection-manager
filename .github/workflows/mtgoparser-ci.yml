@@ -69,7 +69,7 @@ jobs:
         include:
           # Add appropriate variables for gcov version required. This will intentionally break
           # if you try to use a compiler that does not have gcov set
-          - os: macos-12
+          - os: macos-13
             build_type: Debug
             compiler: gcc-13
             gcov_executable: gcov
@@ -78,7 +78,7 @@ jobs:
             packaging_maintainer_mode: Off
             build_shared: Off
 
-          - os: macos-12
+          - os: macos-13
             build_type: Debug
             compiler: llvm-15.0.3
             enable_ipo: Off
@@ -271,7 +271,7 @@ jobs:
         if: matrix.package_generator != ''
         working-directory: ./mtgoparser/build
         run: |
-          cpack -C ${{matrix.build_type}} -G ${{matrix.package_generator}}
+          sudo cpack -C ${{matrix.build_type}} -G ${{matrix.package_generator}}
 
       - name: 📩 Upload package artifact (From CPack)
         if: matrix.package_generator != ''

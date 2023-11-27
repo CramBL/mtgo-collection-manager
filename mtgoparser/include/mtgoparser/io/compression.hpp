@@ -18,6 +18,7 @@ namespace io_util::compression {
 #if defined(_MSC_VER)
 {
   throw std::runtime_error("Compression not supported on Windows.");
+  return data;
 }
 #else
 {
@@ -64,10 +65,11 @@ namespace io_util::compression {
 }
 #endif
 
-  [[nodiscard]] inline auto decompress(const std::string &data) -> std::string
+[[nodiscard]] inline auto decompress(const std::string &data) -> std::string
 #if defined(_MSC_VER)
 {
-  throw std::runtime_error("Decompression not supported on Windows.");
+  throw std::runtime_error("Decompression not supported on Windows yet.");
+  return data;
 }
 #else
 {
