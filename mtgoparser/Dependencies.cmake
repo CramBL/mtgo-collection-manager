@@ -57,7 +57,8 @@ function(mtgoparser_setup_dependencies)
     )
   endif()
 
-  # Add ZLIB
+if(UNIX)
+  # Add ZLIB for unix
   if (NOT TARGET zlib)
     cpmaddpackage(
       NAME zlib
@@ -65,4 +66,6 @@ function(mtgoparser_setup_dependencies)
       GIT_TAG "v1.3"
       )
   endif()
+endif()
+
 endfunction()

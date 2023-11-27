@@ -5,13 +5,18 @@
 #include <string>
 #include <vector>
 // NOLINTBEGIN
+#if defined(_MSC_VER)
+// TODO: compression for windows
+#else
 #include "zlib.h"
+#endif
 // NOLINTEND
 
-namespace io_util::gzip {
-
+namespace io_util::compression {
 
 [[nodiscard]] inline auto compress(const std::string &data) -> std::string
+#if defined(_MSC_VER)
+#else
 {
   z_stream zs;
   memset(&zs, 0, sizeof(zs));
@@ -54,8 +59,11 @@ namespace io_util::gzip {
 
   return compressed;
 }
+#endif
 
 [[nodiscard]] inline auto decompress(const std::string &data) -> std::string
+#if defined(_MSC_VER)
+#else
 {
   z_stream zs;
   memset(&zs, 0, sizeof(zs));
@@ -86,5 +94,6 @@ namespace io_util::gzip {
 
   return decompressed;
 }
+#endif
 
-}// namespace io_util::gzip
+}// namespace io_util::compression

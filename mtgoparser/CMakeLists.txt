@@ -63,7 +63,7 @@ $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
 $<INSTALL_INTERFACE:include>
 )
 
-find_package(ZLIB REQUIRED)
+
 
 include(cmake/SystemLink.cmake)
 target_link_system_library(${PROJECT_NAME} INTERFACE fmt::fmt)
@@ -76,7 +76,11 @@ target_link_system_library(${PROJECT_NAME} INTERFACE Boost::conversion)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::unordered)
 # Not so modern dependencies.
 target_link_system_library(${PROJECT_NAME} INTERFACE rapidxml)
-target_link_system_library(${PROJECT_NAME} INTERFACE zlib)
+if(UNIX)
+# ZLIB for compression on Linux and MacOS
+  find_package(ZLIB REQUIRED)
+  target_link_system_library(${PROJECT_NAME} INTERFACE zlib)
+endif()
 
 # To build the binary executable MTGO preprocessor that can do a full parse of all card data files
 add_subdirectory(src)
