@@ -61,7 +61,7 @@ namespace io_util::compression {
 }
 #endif
 
-[[nodiscard]] inline auto decompress(const std::string &data) -> std::string
+  [[nodiscard]] inline auto decompress(const std::string &data) -> std::string
 #if defined(_MSC_VER)
 #else
 {
