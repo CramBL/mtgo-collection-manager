@@ -62,17 +62,22 @@ $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
 $<INSTALL_INTERFACE:include>
 )
+
+find_package(ZLIB REQUIRED)
+
 include(cmake/SystemLink.cmake)
 target_link_system_library(${PROJECT_NAME} INTERFACE fmt::fmt)
 target_link_system_library(${PROJECT_NAME} INTERFACE glaze::glaze)
 target_link_system_library(${PROJECT_NAME} INTERFACE spdlog::spdlog)
-target_link_system_library(${PROJECT_NAME} INTERFACE rapidxml)
 target_link_system_library(${PROJECT_NAME} INTERFACE tomlplusplus::tomlplusplus)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::headers)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::outcome)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::conversion)
 target_link_system_library(${PROJECT_NAME} INTERFACE Boost::unordered)
-target_link_system_library(${PROJECT_NAME} INTERFACE Boost::iostreams)
+# Not so modern dependencies.
+target_link_system_library(${PROJECT_NAME} INTERFACE rapidxml)
+target_link_system_library(${PROJECT_NAME} INTERFACE z) # zlib
+
 
 # To build the binary executable MTGO preprocessor that can do a full parse of all card data files
 add_subdirectory(src)

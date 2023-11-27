@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include <zlib.h>
+#include "zlib.h"
 
 namespace io_util::gzip {
 

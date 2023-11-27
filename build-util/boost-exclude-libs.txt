@@ -1,1 +1,1 @@
-serialization;asio;json;graph;log;property_tree;wave;contract;coroutine;date_time;fiber;locale;thread;type_erasure;test;url;python;compute;crc;dll;endian;lamda;geometry;gil;filesystem;program_options;math;multiprecision;mysql;stacktrace;
+serialization;asio;json;graph;log;property_tree;wave;contract;coroutine;date_time;fiber;locale;thread;type_erasure;test;url;python;compute;crc;dll;endian;lamda;geometry;gil;filesystem;program_options;math;multiprecision;mysql;stacktrace;iostreams;regex;random;fusion;

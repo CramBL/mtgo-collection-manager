@@ -44,7 +44,7 @@ function(mtgoparser_setup_dependencies)
       GIT_TAG "boost-1.83.0"
       OPTIONS
         "header_only TRUE"
-        "COMPONENTS core;outcome;headers;conversion;detail;unordered;iostreams"
+        "COMPONENTS core;outcome;headers;conversion;detail;unordered"
     )
   endif()
 
@@ -54,6 +54,15 @@ function(mtgoparser_setup_dependencies)
       VERSION 3.4.0
       GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
       GIT_TAG        v3.4.0
+    )
+  endif()
+
+  if (NOT TARGET ZLIB)
+    cpmaddpackage(
+      NAME ZLIB
+      VERSION 1.3
+      GITHUB_REPOSITORY "madler/zlib"
+      GIT_TAG "v1.3"
     )
   endif()
 
