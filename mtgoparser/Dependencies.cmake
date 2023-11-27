@@ -57,13 +57,24 @@ function(mtgoparser_setup_dependencies)
     )
   endif()
 
-  if (NOT TARGET ZLIB)
+  # Add ZLIB
+  if (NOT TARGET zlib)
     cpmaddpackage(
-      NAME ZLIB
-      VERSION 1.3
-      GITHUB_REPOSITORY "madler/zlib"
+      NAME zlib
+      GIT_REPOSITORY "https://github.com/madler/zlib.git"
       GIT_TAG "v1.3"
-    )
+      )
   endif()
 
+  if(zlib_ADDED)
+    target_include_directories(zlib
+                              PUBLIC $<BUILD_INTERFACE:${zlib_BINARY_DIR}>
+                              PUBLIC $<INSTALL_INTERFACE:include>)
+    target_include_directories(zlibstatic
+                              PUBLIC $<BUILD_INTERFACE:${zlib_BINARY_DIR}>
+                              PUBLIC $<INSTALL_INTERFACE:include>)
+    message(STATUS "Added local zlib at: ${zlib_SOURCE_DIR}")
+  else()
+    message(STATUS "Found zlib at: ${zlib_SOURCE_DIR}")
+  endif()
 endfunction()
