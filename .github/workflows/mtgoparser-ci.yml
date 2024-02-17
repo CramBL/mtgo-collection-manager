@@ -208,6 +208,10 @@ jobs:
         if: runner.os == 'Linux'
         uses: rui314/setup-mold@v1
 
+      - name: Clone boost submodule
+        run: git submodule update --init --recursive
+        working-directory: ./mtgoparser
+
       - name: Linux 🐧 - 🔧 Configure CMake
         if: runner.os == 'Linux'
         working-directory: ./mtgoparser
