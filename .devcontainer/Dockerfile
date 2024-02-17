@@ -175,7 +175,7 @@ RUN apt-get update -qq \
     && rm -rf /var/lib/apt/lists/*
 
 # Include project
-ADD . /workspaces/mtgo-collection-manager
+COPY . /workspaces/mtgo-collection-manager
 WORKDIR /workspaces/mtgo-collection-manager
 
 FROM build-base as extras
