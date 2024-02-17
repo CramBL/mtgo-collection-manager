@@ -136,7 +136,7 @@ tasks:
          DEPLOYING_BINARY: '{{default "OFF" .DEPLOYING_BINARY}}'
 
       cmds:
-         - git submodule update --init --recursive --merge
+         - git submodule update --init --recursive --merge || echo "Failed to update submodules, this is expected if the submodules are already up to date, and the MTGO Getter project is being built simultaneously, as it runs git commands as well. Now we sleep for 3 seconds to let MTGO Getter finish" && sleep 3
          - cd deps-submodules/boost && git checkout boost-1.84.0 && cd ../..
          - cmake -S .
            -B build
