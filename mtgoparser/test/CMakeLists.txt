@@ -1,9 +1,4 @@
-if(WIN32)
-  # Because of the `-t` option when including runtime dlls
-  cmake_minimum_required(VERSION 3.26) # LLVM 16.0.0 requires >= 3.20.0
-else()
-  cmake_minimum_required(VERSION 3.21)
-endif()
+cmake_minimum_required(VERSION 3.28.2) # Boost 1.84.0 requires >= 3.28.2
 
 project(mtgoparserTests LANGUAGES CXX)
 
