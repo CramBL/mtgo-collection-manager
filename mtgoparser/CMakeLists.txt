@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28.2) # Boost 1.84.0 requires >= 3.28.2
+cmake_minimum_required(VERSION 3.28.1) # Boost 1.84.0 requires >= 3.28.2
 
 
 # Only set the cxx_standard if it is not set by someone else
