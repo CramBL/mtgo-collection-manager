@@ -9,7 +9,7 @@ function(mtgoparser_setup_dependencies)
   # already been provided to us by a parent project
 
   if(NOT TARGET glaze::glaze)
-    cpmaddpackage("gh:stephenberry/glaze@1.9.1")
+    cpmaddpackage("gh:stephenberry/glaze@2.1.4")
   endif()
 
   if(NOT TARGET fmtlib::fmtlib)
@@ -37,15 +37,9 @@ function(mtgoparser_setup_dependencies)
   endif()
 
   if(NOT TARGET Boost)
-    cpmaddpackage(
-      NAME Boost
-      VERSION 1.84.0
-      GITHUB_REPOSITORY "boostorg/boost"
-      GIT_TAG "boost-1.84.0"
-      OPTIONS
-        "header_only TRUE"
-        "COMPONENTS core;outcome;headers;conversion;detail;unordered"
-    )
+    # Boost 1.84 is needed from above
+    # With these components: outcome core conversion detail headers
+    add_subdirectory(deps-submodules/boost EXCLUDE_FROM_ALL)
   endif()
 
   if (NOT TARGET tomlplusplus)

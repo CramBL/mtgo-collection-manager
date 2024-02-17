@@ -1,0 +1,3 @@
+[submodule "mtgoparser/deps-submodules/boost"]
+	path = mtgoparser/deps-submodules/boost
+	url = https://github.com/boostorg/boost
