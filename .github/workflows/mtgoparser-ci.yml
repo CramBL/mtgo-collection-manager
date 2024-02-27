@@ -49,7 +49,7 @@ jobs:
           - ubuntu-22.04
           - windows-2022
         compiler:
-          - llvm-17.0.2 # Latest version as of 2023-11-28 (last version of llvm-17)
+          - llvm-17.0.6 # Latest version as of 2023-11-28 (last version of llvm-17)
           - gcc-13
         generator:
           - "Ninja Multi-Config"
@@ -92,7 +92,7 @@ jobs:
             gcov_executable: "llvm-cov gcov" # simply putting "gcov" errors on Ubuntu with a segfault (exit -11 = SIGSEGV) as it's the wrong gcov version
             enable_ipo: On
 
-          - compiler: llvm-17.0.2
+          - compiler: llvm-17.0.6
             gcov_executable: "llvm-cov gcov"
             enable_ipo: On
 
@@ -204,10 +204,6 @@ jobs:
           gcovr: true
           opencppcoverage: true
 
-      - name: Setup Mold linker for Linux 🐧 builds
-        if: runner.os == 'Linux'
-        uses: rui314/setup-mold@v1
-
       - name: Linux 🐧 - 🔧 Configure CMake
         if: runner.os == 'Linux'
         working-directory: ./mtgoparser
@@ -221,8 +217,6 @@ jobs:
           -D${{ env.PROJECT_NAME }}_ENABLE_COVERAGE:BOOL=${{ matrix.build_type == 'Debug' }}
           -DGIT_SHA:STRING=${{ github.sha }}
           -DBOOST_EXCLUDE_LIBRARIES="${{ env.EXCLUDE_BOOST_LIBS }}"
-          -DUSER_LINKER_OPTION=mold
-          -Dmtgoparser_ENABLE_USER_LINKER:BOOL=On
 
       - name: 💻 Windows & MacOS 🍎 - 🔧 Configure CMake
         if: runner.os != 'Linux'
