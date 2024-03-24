@@ -2,11 +2,11 @@ use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Prices {
-    usd: Option<String>,
-    usd_foil: Option<String>,
-    eur: Option<String>,
-    eur_foil: Option<String>,
-    tix: Option<String>,
+    pub usd: Option<String>,
+    pub usd_foil: Option<String>,
+    pub eur: Option<String>,
+    pub eur_foil: Option<String>,
+    pub tix: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -30,7 +30,7 @@ mod tests {
         let scryfall_json_str =
             std::fs::read_to_string("../test/test-data/scryfall/default-cards-small-5cards.json")?;
 
-        let scryfall_cards: Vec<ScryfallCard> = serde_json::from_str(&scryfall_json_str)?;
+        let mut scryfall_cards: Vec<ScryfallCard> = serde_json::from_str(&scryfall_json_str)?;
 
         assert_eq!(
             scryfall_cards[0],
@@ -45,6 +45,25 @@ mod tests {
                     eur: Some("0.20".into()),
                     eur_foil: Some("0.50".into()),
                     tix: Some("0.03".into())
+                }
+            }
+        );
+
+        scryfall_cards.sort_unstable_by_key(|k| k.mtgo_id);
+
+        assert_eq!(
+            scryfall_cards[0],
+            ScryfallCard {
+                mtgo_id: 235,
+                name: "Swamp".into(),
+                released_at: "2003-12-31".into(),
+                rarity: "common".into(),
+                prices: Prices {
+                    usd: None,
+                    usd_foil: None,
+                    eur: None,
+                    eur_foil: None,
+                    tix: Some("0.05".into())
                 }
             }
         );

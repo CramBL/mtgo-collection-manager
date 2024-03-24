@@ -4,6 +4,7 @@ pub mod collection;
 pub mod goatbots;
 pub mod mtgo_card;
 pub mod scryfall;
+pub mod util;
 pub mod xml;
 
 pub fn update(full_trade_list: &Path) {}
