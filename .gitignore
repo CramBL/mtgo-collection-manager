@@ -14,6 +14,9 @@ mtgoparser/cmake-build-*/
 mtgoparser/conan-cache/
 mtgoparser/.cache
 
+## MTGO Parser-RS
+mtgoparser-rs/target
+
 
 ## MTGO Updater
 mtgoupdater/state_log.toml
