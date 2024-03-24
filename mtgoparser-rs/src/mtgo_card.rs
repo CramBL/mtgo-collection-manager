@@ -1,5 +1,8 @@
 use std::{num::ParseIntError, string::ParseError};
 
+pub mod card_history;
+pub mod collection_history;
+
 use serde_derive::{Deserialize, Serialize};
 
 use crate::xml::XmlCard;

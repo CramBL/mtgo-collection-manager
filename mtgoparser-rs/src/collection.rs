@@ -100,4 +100,8 @@ impl Collection {
             quantity
         }
     }
+
+    pub fn take_cards(&mut self) -> Vec<MtgoCard> {
+        self.cards.drain(..).collect()
+    }
 }

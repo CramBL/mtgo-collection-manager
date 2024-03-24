@@ -1,9 +1,13 @@
-use chrono::{Datelike, Timelike};
+use chrono::{Datelike, SecondsFormat, Timelike};
 use mtgoparser_rs::{
     collection::Collection,
     goatbots::{
         card_definitions::{parse_card_def_json, GoatBotsCard},
         price_history::parse_price_history_json,
+    },
+    mtgo_card::{
+        card_history::{self, CardHistory},
+        collection_history::CollectionHistory,
     },
     scryfall::default_cards::ScryfallCard,
     xml::{parse_dek_xml, XmlCard},
@@ -95,6 +99,18 @@ pub fn test_collection_parse_small() -> TestResult {
 
     assert_eq!(colletion_from_f1, colletion_from_f2);
     assert_eq!(colletion_from_f2.total_cards(), 457);
+
+    let mut card_history: Vec<CardHistory> = Vec::new();
+    for card in colletion_from_f2.take_cards() {
+        card_history.push(CardHistory::from_mtgo_card(card));
+    }
+    assert_eq!(card_history.len(), 5);
+
+    let collection_history = CollectionHistory::from_card_history(
+        most_recent_ts.to_rfc3339_opts(SecondsFormat::Secs, true),
+        card_history,
+    );
+    assert_eq!(collection_history.size(), 5);
 
     //cleanup
     fs::remove_dir_all(&subdir)?;
