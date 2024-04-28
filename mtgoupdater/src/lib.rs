@@ -9,7 +9,6 @@ use std::sync::OnceLock;
 
 pub mod date;
 pub mod internal_only;
-pub mod mtgo_preprocessor_api;
 pub mod mtgogetter_api;
 mod util;
 mod zip_util;
