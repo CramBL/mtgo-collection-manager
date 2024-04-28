@@ -123,7 +123,7 @@ jobs:
 
   Test-cross-windows:
     runs-on: ubuntu-latest
-    name: Test
+    name: Test cross compile to windows
     steps:
       - uses: actions/checkout@v4
       - uses: extractions/setup-just@v2
@@ -131,23 +131,6 @@ jobs:
         uses: cardinalby/export-env-action@v2
         with:
           envFile: '.github/constants.env'
-      - uses: moonrepo/setup-rust@v1
-      - uses: aminya/setup-cpp@v1
-        with:
-          compiler: gcc
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Setup Mold linker for Linux 🐧 builds
-        if: runner.os == 'Linux'
-        uses: rui314/setup-mold@v1
-
-      - name: Install Task
-        uses: arduino/setup-task@v1
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ⚙️ Build devcontainer - Linux 🐧
         run: just build-devcontainer
