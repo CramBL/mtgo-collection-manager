@@ -22,7 +22,6 @@ use crate::menubar::util::TextBufferStylePair;
 pub fn fill_about_text_buffers(
     mtgogui_version: &str,
     mtgogetter_version: &str,
-    mtgo_preproc_version: &str,
     mtgoupdater_version: &str,
     project_url: &str,
 ) -> TextBufferStylePair {

@@ -60,7 +60,6 @@ pub fn format_about_window(
     let txt_buffers = text::fill_about_text_buffers(
         mtgogui_version,
         mtgogetter_version,
-        mtgo_preproc_version,
         mtgoupdater_version,
         project_url,
     );
