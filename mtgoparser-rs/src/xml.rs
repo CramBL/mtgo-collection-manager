@@ -48,7 +48,7 @@ impl XmlCard {
 }
 
 pub fn parse_dek_xml(path: &Path) -> Result<Vec<XmlCard>, quick_xml::Error> {
-    let mut reader = Reader::from_file(path).unwrap();
+    let mut reader = Reader::from_file(path)?;
     let mut deck: Vec<XmlCard> = Vec::with_capacity(1024);
 
     let mut buf = Vec::new();

@@ -21,7 +21,8 @@ pub fn parse_full(
     price_history_path: &Path,
     save_json_to_dir: Option<&Path>,
 ) -> Result<Vec<MtgoCard>, io::Error> {
-    let xml_cards = parse_dek_xml(full_trade_list_path).unwrap();
+    let xml_cards =
+        parse_dek_xml(full_trade_list_path).map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
     let price_hist = parse_price_history_json(price_history_path).unwrap();
     let goatbots_card_defs = parse_card_def_json(card_definitions_path).unwrap();
     let scryfall_json_str = fs::read_to_string(scryfall_path)?;
