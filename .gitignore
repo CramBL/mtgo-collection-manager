@@ -29,6 +29,8 @@ mtgogui/*.json
 mtgogui/state_log.toml
 mtgogui/appdata
 
+# Cross compiler cache
+xwin_cache
 
 # User spesific settings
 mtgoparser/CMakeUserPresets.json
