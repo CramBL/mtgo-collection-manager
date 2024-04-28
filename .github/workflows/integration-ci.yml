@@ -93,7 +93,7 @@ jobs:
 ####                                   ####
       - name: 📩 Upload - MacOS 🍎
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-mtgo-collection-manager
           path: macos-13-${{ matrix.compiler }}-mtgo-cm.zip
@@ -104,7 +104,7 @@ jobs:
 ####                                      ####
       - name: 📩 Upload - Linux 🐧
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-mtgo-collection-manager
           path: ubuntu-22.04-${{ matrix.compiler }}-mtgo-cm.zip
@@ -115,7 +115,7 @@ jobs:
 ####                                      ####
       - name: 📩 Upload - Windows 💻
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-mtgo-collection-manager
           path: windows-2022-${{ matrix.compiler }}-mtgo-cm.zip
@@ -153,7 +153,7 @@ jobs:
           PACKAGE_NAME: windows-gcc-mtgo-cm
 
       - name: 📩 Upload - Linux-windows cross 💻🐧
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-mtgo-collection-manager
           path: windows-gcc-mtgo-cm.zip
