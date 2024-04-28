@@ -4,7 +4,7 @@
 
 ci-install-cross-compile-windows-deps:
     rustup target add x86_64-pc-windows-gnu 
-    sudo apt-get install gcc-mingw-w64-x86-64
+    sudo apt-get install gcc-mingw-w64-x86-64 ninja-build cmake
 
 cross-compile-windows PROFILE="dev":
     cd mtgogui && cargo build --profile={{PROFILE}} --target=x86_64-pc-windows-gnu

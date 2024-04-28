@@ -132,11 +132,6 @@ jobs:
         with:
           envFile: '.github/constants.env'
       - uses: moonrepo/setup-rust@v1
-      - uses: aminya/setup-cpp@v1
-        with:
-          compiler: llvm-17
-          cmake: true
-          ninja: true
       - uses: actions/setup-go@v4
         with:
           go-version: '1.21'
