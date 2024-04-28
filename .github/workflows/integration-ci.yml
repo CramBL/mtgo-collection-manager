@@ -149,19 +149,16 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: ⚙️ Install development headers - Linux 🐧
-        run: source build-util/dev-ubuntu/install-ubuntu-fltk-dev-headers.sh
+      - name: ⚙️ Build devcontainer - Linux 🐧
+        run: just build-devcontainer
 
-      - name: Setup cross-compilation
-        run: just ci-install-cross-compile-windows-deps
-
-      - name: ⚒️ Build - 🍎🐧💻
+      - name: ⚒️ Build - 🐧💻
         # This doesn't actually build mtgogetter and parser for windows, but the important part is
         #  confirming cross-compilation abilities for fltk
-        run: just cross-compile-windows release
+        run: just cross-compile-windows-winx release
 
       - name: 📦 Pack/Archive - 🍎🐧💻
-        run: just archive-cross-compile-windows ${PACKAGE_NAME}
+        run: just archive-cross-compile-windows-xwin ${PACKAGE_NAME}
         env:
           PACKAGE_NAME: windows-gcc-mtgo-cm
 
