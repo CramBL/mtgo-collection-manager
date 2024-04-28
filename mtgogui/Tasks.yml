@@ -1,10 +1,10 @@
-version: '3'
+version: "3"
 
 tasks:
-  # These tasks should be run from the root of the project
-  # E.g. `task mtgogui:build`
+   # These tasks should be run from the root of the project.
+   # E.g. `task mtgogui:build`
 
-  build:
+   build:
       aliases: [b]
       desc: Build MTGO GUI
       silent: true
@@ -13,15 +13,15 @@ tasks:
          - echo "==> Building MTGO GUI..."
          - echo "building in ${BUILD_MODE} mode"
          - cmd: |
-            if [ "${BUILD_MODE}" = "Debug" ]; then
-               cargo build
-            else
-               cargo build --release
-            fi
+              if [ "${BUILD_MODE}" = "Debug" ]; then
+                 cargo build
+              else
+                 cargo build --release
+              fi
       requires:
          vars: [BUILD_MODE]
 
-  test:
+   test:
       aliases: [t]
       desc: Runs unit/module tests for MTGO GUI
       silent: true
@@ -34,8 +34,7 @@ tasks:
            platforms: [darwin]
          - echo "=== Done testing MTGO GUI ==="
 
-
-  clean:
+   clean:
       aliases: [c]
       desc: Clean MTGO GUI build artifacts
       dir: mtgogui

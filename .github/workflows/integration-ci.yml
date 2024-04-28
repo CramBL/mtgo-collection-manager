@@ -93,7 +93,7 @@ jobs:
 ####                                   ####
       - name: 📩 Upload - MacOS 🍎
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-mtgo-collection-manager
           path: macos-13-${{ matrix.compiler }}-mtgo-cm.zip
@@ -104,7 +104,7 @@ jobs:
 ####                                      ####
       - name: 📩 Upload - Linux 🐧
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-mtgo-collection-manager
           path: ubuntu-22.04-${{ matrix.compiler }}-mtgo-cm.zip
@@ -115,9 +115,48 @@ jobs:
 ####                                      ####
       - name: 📩 Upload - Windows 💻
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-mtgo-collection-manager
           path: windows-2022-${{ matrix.compiler }}-mtgo-cm.zip
           retention-days: 14
+
+  Test-cross-windows:
+    runs-on: ubuntu-latest
+    name: Test cross compile to windows
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v2
+      - name: 🗻 Export constants as environment variables 🏝️
+        uses: cardinalby/export-env-action@v2
+        with:
+          envFile: '.github/constants.env'
+
+      - name: ⚙️ Build devcontainer - Linux 🐧
+        run: just build-devcontainer
+        env:
+          USE_CLANG: 0
+
+      - name: ⚒️ Build - 🐧💻
+        # This doesn't actually build mtgogetter and parser for windows, but the important part is
+        #  confirming cross-compilation abilities for fltk
+        run: |
+          just build-mtgogetter
+          just build-mtgoparser
+          just cross-compile-windows-xwin release
+        env:
+          USE_CLANG: 0
+
+      - name: 📦 Pack/Archive - 🍎🐧💻
+        run: just archive-cross-compile-windows-xwin ${PACKAGE_NAME}
+        env:
+          PACKAGE_NAME: windows-gcc-mtgo-cm
+
+      - name: 📩 Upload - Linux-windows cross 💻🐧
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-mtgo-collection-manager
+          path: windows-gcc-mtgo-cm.zip
+          retention-days: 14
+
 
