@@ -7,8 +7,20 @@ FROM ubuntu:${VARIANT} as build-base
 # Restate the variant to use it later on in the llvm and cmake installations
 ARG VARIANT
 
+ARG HOST_USER
+ARG HOST_UID
+ARG HOST_GID
+
+
+# Ignore "WARNING: Running pip as the 'root' user can result in broken permissions..."
+ENV PIP_ROOT_USER_ACTION=ignore
+
+RUN groupadd --gid ${HOST_GID} ${HOST_USER} \
+    && useradd --uid ${HOST_UID} --gid ${HOST_GID} -m ${HOST_USER}
+
 # Install necessary packages available from standard repos
-RUN apt-get update -qq \
+RUN touch /in_container \
+    && apt-get update -qq \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y --no-install-recommends \
     # software-properties-common contains add-apt-repository
@@ -26,20 +38,9 @@ RUN apt-get update -qq \
     git \
     python3 \
     python3-pip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Download and install Rust using the official Rust installer script
-RUN apt-get update \
-    && wget --progress=dot:giga -O - https://sh.rustup.rs | sh -s -- -y \
-    && apt-get install -y \
     build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Add the Rust binaries to the system PATH
-ENV PATH=$PATH:/root/.cargo/bin
-RUN rustc --version
 
 # User-settable versions:
 # This Dockerfile should support gcc-[7, 8, 9, 10, 11, 12, 13] and clang-[10, 11, 12, 13, 14, 15, 16, 17]
@@ -99,6 +100,8 @@ RUN update-alternatives --install /usr/bin/clang-tidy clang-tidy $(which clang-t
 # Set clang-${LLVM_VER} as default clang
 RUN update-alternatives --install /usr/bin/clang clang $(which clang-${LLVM_VER}) 100
 RUN update-alternatives --install /usr/bin/clang++ clang++ $(which clang++-${LLVM_VER}) 100
+# Set ld.lld to point to a matching LLVM version
+RUN update-alternatives --install /usr/bin/ld.lld ld.lld /usr/bin/ld.lld-${LLVM_VER} 100
 
 # Add current cmake/ccmake, from Kitware
 ARG CMAKE_URL="https://apt.kitware.com/ubuntu/"
@@ -154,6 +157,14 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Download and install Rust using the official Rust installer script
+RUN wget --progress=dot:giga -O - https://sh.rustup.rs | sh -s -- -y 
+
+# Add the Rust binaries to the system PATH
+ENV PATH=/root/.cargo/bin:${PATH}
+RUN rustc --version
+RUN cargo install cargo-xwin
+
 
 # Allow the user to set compiler defaults
 ARG USE_CLANG
@@ -164,48 +175,20 @@ ENV CXX=${USE_CLANG:+"clang++"}
 ENV CC=${CC:-"gcc"}
 ENV CXX=${CXX:-"g++"}
 
-# Install editors
-RUN apt-get update -qq \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y --no-install-recommends \
-    neovim \
-    emacs \
-    nano \
+RUN rustup target add \
+    x86_64-pc-windows-gnu \
+    x86_64-pc-windows-msvc \
+    && rustup component add llvm-tools-preview \
+    && apt-get update -qq \
+    && apt-get install -y gcc-mingw-w64-x86-64 mingw-w64 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Include project
-ADD . /workspaces/mtgo-collection-manager
-WORKDIR /workspaces/mtgo-collection-manager
+WORKDIR /work
+
+RUN git config --global --add safe.directory /work
 
 FROM build-base as extras
-
-
-# Install include-what-you-use
-ENV IWYU /home/iwyu
-ENV IWYU_BUILD ${IWYU}/build
-ENV IWYU_SRC ${IWYU}/include-what-you-use
-RUN mkdir -p ${IWYU_BUILD} \
-    && git clone --branch clang_${LLVM_VER} \
-    https://github.com/include-what-you-use/include-what-you-use.git \
-    ${IWYU_SRC}
-RUN CC=clang-${LLVM_VER} \
-    CXX=clang++-${LLVM_VER} \
-    cmake -S ${IWYU_SRC} \
-    -B ${IWYU_BUILD} \
-    -G "Unix Makefiles" \
-    -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} \
-    && cmake --build ${IWYU_BUILD} -j \
-    && cmake --install ${IWYU_BUILD}
-
-# Per https://github.com/include-what-you-use/include-what-you-use#how-to-install:
-# `You need to copy the Clang include directory to the expected location before
-#  running (similarly, use include-what-you-use -print-resource-dir to learn
-#  exactly where IWYU wants the headers).`
-RUN mkdir -p $(include-what-you-use -print-resource-dir 2>/dev/null)
-RUN ln -s $(readlink -f /usr/lib/clang/${LLVM_VER}/include) \
-    $(include-what-you-use -print-resource-dir 2>/dev/null)/include
-
 
 # Install optional dependecies
 RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive \
@@ -217,20 +200,5 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive \
     cmake-curses-gui \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Install conan
-RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools \
-    && python3 -m pip install --no-cache-dir conan \
-    && conan --version
-
-# By default, anything you run in Docker is done as superuser.
-# Conan runs some install commands as superuser, and will prepend `sudo` to
-# these commands, unless `CONAN_SYSREQUIRES_SUDO=0` is in your env variables.
-ENV CONAN_SYSREQUIRES_SUDO 0
-# Some packages request that Conan use the system package manager to install
-# a few dependencies. This flag allows Conan to proceed with these installations;
-# leaving this flag undefined can cause some installation failures.
-ENV CONAN_SYSREQUIRES_MODE enabled
-
 
 CMD ["/bin/bash"]
