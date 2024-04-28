@@ -140,7 +140,10 @@ jobs:
       - name: ⚒️ Build - 🐧💻
         # This doesn't actually build mtgogetter and parser for windows, but the important part is
         #  confirming cross-compilation abilities for fltk
-        run: just cross-compile-windows-xwin release
+        run: |
+          just build-mtgogetter
+          just build-mtgoparser
+          just cross-compile-windows-xwin release
         env:
           USE_CLANG: 0
 

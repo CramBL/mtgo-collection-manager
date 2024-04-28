@@ -186,6 +186,8 @@ RUN rustup target add \
 
 WORKDIR /work
 
+RUN git config --global --add safe.directory /work
+
 FROM build-base as extras
 
 # Install optional dependecies
