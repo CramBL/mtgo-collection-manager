@@ -13,7 +13,6 @@ use crate::menubar::util::TextBufferStylePair;
 ///
 /// * `mtgogui_version` - The version of the MTGO Collection Manager
 /// * `mtgogetter_version` - The version of the MTGO Getter binary
-/// * `mtgo_preproc_version` - The version of the MTGO Preprocessor binary
 /// * `mtgoupdater_version` - The version of the MTGO Updater crate
 /// * `project_url` - The URL of the project homepage
 ///
@@ -54,14 +53,7 @@ pub fn fill_about_text_buffers(
     );
     tbuf.append(&mtgogetter_txt);
     sbuf.append(&"C".repeat(mtgogetter_txt.len()));
-    let mtgopreproc_txt = format!(
-        "   {:<width$} {}\n",
-        "MTGO Preprocessor",
-        mtgo_preproc_version,
-        width = component_left_pad
-    );
-    tbuf.append(&mtgopreproc_txt);
-    sbuf.append(&"C".repeat(mtgopreproc_txt.len()));
+
     let mtgoupdater_txt = format!(
         "   {:<width$} v{}\n\n",
         "MTGO Updater",

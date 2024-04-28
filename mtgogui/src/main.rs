@@ -35,7 +35,6 @@ use collection::view::table::column;
 use collection::TableMessage;
 use gui::MtgoGui;
 use menubar::McmMenuBar;
-use mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor_version;
 use mtgoupdater::mtgogetter_api::mtgogetter_version;
 use mtgoupdater::MtgoCard;
 
@@ -82,7 +81,6 @@ fn main() {
     // In debug mode use the paths to the binaries when they're built in each subproject
     if cfg!(debug_assertions) {
         mtgoupdater::internal_only::dev_try_init_mtgogetter_bin();
-        mtgoupdater::internal_only::dev_try_init_mtgoparser_bin();
         // Show box edges
         Flex::debug(true);
     }
@@ -90,7 +88,7 @@ fn main() {
     // Setup logger (has to be done with a let binding to make the logger live long enough)
     let _logger = util::setup_logger();
 
-    // Write the raw bytes of MTGOGETTER and MTGO_PREPROCESSOR to disk if they don't exist
+    // Write the raw bytes of MTGOGETTER to disk if it doesn't exist
     #[cfg(not(debug_assertions))]
     write_binaries_out().unwrap_or_else(|e| {
         log::error!("Failed to write binaries to bin directory: {e}");

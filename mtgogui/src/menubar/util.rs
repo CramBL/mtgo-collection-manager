@@ -4,9 +4,7 @@ use fltk::{
     enums::{Color, Font},
     text::{self, TextAttr, TextBuffer},
 };
-use mtgoupdater::{
-    mtgo_preprocessor_api::run_mtgo_preprocessor_version, mtgogetter_api::mtgogetter_version,
-};
+use mtgoupdater::mtgogetter_api::mtgogetter_version;
 
 use crate::{util::RelativeSize, DEFAULT_APP_WIDTH, MENU_BAR_HEIGHT};
 
@@ -75,20 +73,6 @@ pub fn mtgogetter_version_str() -> Result<String, io::Error> {
     Ok(mtgogetter_version_str[version_pos + 8..].to_string())
 }
 
-/// Get the version of the MTGO Preprocessor binary (X.Y.Z) and return it as a string
-///
-/// # Errors
-/// Returns an error if the MTGO Preprocessor binary cannot be found
-pub fn mtgo_preprocessor_version() -> Result<String, io::Error> {
-    let mtgo_preproc_version = match run_mtgo_preprocessor_version() {
-        Ok(v) => v,
-        Err(e) => return Err(e),
-    };
-    Ok(String::from_utf8_lossy(&mtgo_preproc_version.stdout)
-        .trim()
-        .to_string())
-}
-
 /// A text buffer and its associated style buffer
 #[derive(Debug)]
 pub struct TextBufferStylePair {
@@ -143,11 +127,5 @@ mod tests {
     fn get_mtgogetter_version() {
         let mtgogetter_version = mtgogetter_version_str().unwrap();
         assert_eq!(mtgogetter_version, "0.1.0\n");
-    }
-
-    #[test]
-    fn get_mtgo_preprocessor_version() {
-        let mtgo_preproc_version = mtgo_preprocessor_version().unwrap();
-        assert_eq!(mtgo_preproc_version, "v0.1.0");
     }
 }
