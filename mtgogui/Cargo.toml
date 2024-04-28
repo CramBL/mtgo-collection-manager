@@ -10,11 +10,11 @@ maintenance = { status = "actively-developed" }
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-fltk = { version = "1.4", features = ["fltk-bundled"] }
-fltk-flex = "0.2"
-fltk-grid = "0.4"
+fltk = { version = "1.4.21", features = ["fltk-bundled"] }
+fltk-flex = "0.2.1"
+fltk-grid = "0.4.0"
 fltk-table = "0.3.1"
-fltk-theme = "0.7"
+fltk-theme = "0.7.2"
 mtgoupdater = { version = "0.1.0", path = "../mtgoupdater" }
 url = "2.4.1"
 flexi_logger = { version = "0.27", features = ["async", "specfile"] }
