@@ -91,6 +91,10 @@ impl Collection {
         Ok(())
     }
 
+    pub fn unique_cards(&self) -> usize {
+        self.cards.len()
+    }
+
     pub fn total_cards(&mut self) -> u32 {
         if let Some(quantity) = self.total_quantity {
             quantity

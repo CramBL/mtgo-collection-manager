@@ -11,8 +11,8 @@ use super::{paths::CardDataPaths, APP_DATA_DIR};
 /// [AppData] contains the paths to the appdata directory and the card data files
 #[derive(Debug)]
 pub struct AppData {
-    appdata_dir: PathBuf,
-    card_data: CardDataPaths,
+    pub(crate) appdata_dir: PathBuf,
+    pub(crate) card_data: CardDataPaths,
 }
 
 impl AppData {

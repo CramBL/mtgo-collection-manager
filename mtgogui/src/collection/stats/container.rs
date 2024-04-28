@@ -1,4 +1,4 @@
-use mtgoupdater::mtgo_card::{MtgoCard, Rarity};
+use mtgoupdater::{MtgoCard, Rarity};
 
 use super::util::{MultiValueStat, UniqueTotal};
 

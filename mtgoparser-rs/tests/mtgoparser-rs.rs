@@ -117,3 +117,41 @@ pub fn test_collection_parse_small() -> TestResult {
 
     Ok(())
 }
+
+#[test]
+pub fn test_collection_parse_medium() -> TestResult {
+    let xml_cards = parse_dek_xml(Path::new(
+        r"../test/test-data/mtgo/Full Trade List-medium-3000cards.dek",
+    ))?;
+    assert_eq!(xml_cards.len(), 3000);
+
+    let price_hist = parse_price_history_json(Path::new(
+        r"../test/test-data/goatbots/price-history-2023-10-02-full.json",
+    ))?;
+    assert_eq!(price_hist.len(), 76070);
+
+    let goatbots_card_defs = parse_card_def_json(Path::new(
+        r"../test/test-data/goatbots/card-definitions-2023-10-02-full.json",
+    ))?;
+    assert_eq!(goatbots_card_defs.len(), 76070);
+
+    let scryfall_json_str =
+        fs::read_to_string("../test/test-data/mtgogetter-out/scryfall-20231002-full.json")?;
+    let scryfall_cards: Vec<ScryfallCard> = serde_json::from_str(&scryfall_json_str)?;
+    assert_eq!(scryfall_cards.len(), 43705);
+
+    let mut collection = Collection::from_xml_cards(xml_cards)?;
+
+    collection.extract_goatbots_info(goatbots_card_defs, price_hist)?;
+
+    collection.extract_scryfall_info(scryfall_cards)?;
+
+    assert_eq!(collection.unique_cards(), 3000);
+    assert_eq!(collection.total_cards(), 8859);
+
+    assert_eq!(
+        collection,
+        serde_json::from_str(&serde_json::to_string(&collection)?)?
+    );
+    Ok(())
+}

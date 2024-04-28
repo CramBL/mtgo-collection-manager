@@ -1,4 +1,4 @@
-use std::{num::ParseIntError, string::ParseError};
+use std::num::ParseIntError;
 
 pub mod card_history;
 pub mod collection_history;
@@ -82,5 +82,65 @@ impl From<&str> for Rarity {
             "Common" => Rarity::Common,
             _ => Rarity::None, // e.g. Event tickets
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::assert_eq;
+
+    #[test]
+    fn test_serialize() {
+        let c = MtgoCard::default();
+
+        let serialized = serde_json::to_string_pretty(&c).unwrap();
+        println!("serialized = {serialized}");
+
+        let deserialized: MtgoCard = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(c, deserialized);
+    }
+
+    #[test]
+    fn test_deserialize_json_string_vector() {
+        let json_vec_str = r#"[
+         {
+            "id": 1,
+            "quantity": 391,
+            "name": "Event Ticket",
+            "set": "",
+            "rarity": "",
+            "foil": false,
+            "goatbots_price": 0
+         },
+         {
+            "id": 235,
+            "quantity": 1,
+            "name": "Swamp",
+            "set": "PRM",
+            "rarity": "Common",
+            "foil": false,
+            "goatbots_price": 0.002,
+            "scryfall_price": 0.05
+         }
+      ]"#;
+
+        let deserialized: Vec<MtgoCard> = serde_json::from_str(json_vec_str).unwrap();
+        assert_eq!(deserialized.len(), 2);
+        assert_eq!(deserialized[0].id, 1);
+        assert_eq!(deserialized[0].quantity, 391);
+        assert_eq!(deserialized[0].name, "Event Ticket".into());
+        assert_eq!(deserialized[0].set, "".into());
+        assert_eq!(deserialized[0].rarity, Rarity::None);
+        assert_eq!(deserialized[0].goatbots_price, 0.0);
+        assert_eq!(deserialized[0].scryfall_price, None);
+
+        assert_eq!(deserialized[1].id, 235);
+        assert_eq!(deserialized[1].quantity, 1);
+        assert_eq!(deserialized[1].name, "Swamp".into());
+        assert_eq!(deserialized[1].set, "PRM".into());
+        assert_eq!(deserialized[1].rarity, Rarity::Common);
+        assert_eq!(deserialized[1].goatbots_price, 0.002);
+        assert_eq!(deserialized[1].scryfall_price, Some(0.05));
     }
 }

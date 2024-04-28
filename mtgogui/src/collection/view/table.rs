@@ -9,7 +9,7 @@ use fltk::{
     prelude::{GroupExt, TableExt, WidgetExt},
 };
 use fltk_table::{SmartTable, TableOpts};
-use mtgoupdater::mtgo_card::MtgoCard;
+use mtgoupdater::MtgoCard;
 use std::{
     fmt::Alignment,
     sync::{Arc, Mutex},

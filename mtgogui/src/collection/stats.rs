@@ -2,7 +2,7 @@ use fltk::{
     browser::Browser,
     prelude::{BrowserExt, WidgetBase},
 };
-use mtgoupdater::mtgo_card::MtgoCard;
+use mtgoupdater::MtgoCard;
 
 pub mod container;
 pub mod items;

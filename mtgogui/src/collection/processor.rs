@@ -104,15 +104,15 @@ impl TradelistProcessor {
                         },
                     )));
 
-                    match mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor_parse_full(
-                        OsStr::new(full_trade_list_path.as_ref()),
-                        appdata_paths.scryfall_path(),
-                        appdata_paths.card_definitions_path(),
-                        appdata_paths.price_history_path(),
-                        Some(appdata_paths.appdata_dir_path()),
+                    match mtgoupdater::parse_full(
+                        full_trade_list_path.as_ref(),
+                        appdata_paths.card_data.scryfall_path(),
+                        appdata_paths.card_data.card_definitions_path(),
+                        appdata_paths.card_data.price_history_path(),
+                        Some(appdata_paths.appdata_dir.as_path()),
                     ) {
                         Ok(cards) => {
-                            log::info!("MTGO Preprocessor output: {} cards", cards.len());
+                            log::info!("MTGO Parser-rs output: {} cards", cards.len());
                             // Fill the progress bar as appropriate
                             // Give all the data to the collection table
                             sender.send(Message::MenuBar(MenubarMessage::ProgressBar(
@@ -134,6 +134,37 @@ impl TradelistProcessor {
                             log::info!("MTGO Preprocessor error: {e}");
                         }
                     }
+
+                    // match mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor_parse_full(
+                    //     OsStr::new(full_trade_list_path.as_ref()),
+                    //     appdata_paths.scryfall_path(),
+                    //     appdata_paths.card_definitions_path(),
+                    //     appdata_paths.price_history_path(),
+                    //     Some(appdata_paths.appdata_dir_path()),
+                    // ) {
+                    //     Ok(cards) => {
+                    //         log::info!("MTGO Preprocessor output: {} cards", cards.len());
+                    //         // Fill the progress bar as appropriate
+                    //         // Give all the data to the collection table
+                    //         sender.send(Message::MenuBar(MenubarMessage::ProgressBar(
+                    //             ProgressUpdate {
+                    //                 show: true,
+                    //                 progress: 95.,
+                    //                 label: "Processing complete...".into(),
+                    //                 ..Default::default()
+                    //             },
+                    //         )));
+
+                    //         fadeout_progress_bar(sender.clone());
+                    //         sender.send(Message::SetCollectionStats(CollectionStats::from_cards(
+                    //             &cards,
+                    //         )));
+                    //         sender.send(Message::SetCards(cards));
+                    //     }
+                    //     Err(e) => {
+                    //         log::info!("MTGO Preprocessor error: {e}");
+                    //     }
+                    // }
                 }
             })
             .expect("Failed spawning Trade List Processor thread");
