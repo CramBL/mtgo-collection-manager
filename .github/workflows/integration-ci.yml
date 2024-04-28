@@ -134,8 +134,7 @@ jobs:
       - uses: moonrepo/setup-rust@v1
       - uses: aminya/setup-cpp@v1
         with:
-          vcvarsall: true
-          compiler: gcc-13
+          compiler: llvm-17
           cmake: true
           ninja: true
       - uses: actions/setup-go@v4
