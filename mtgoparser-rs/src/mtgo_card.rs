@@ -1,4 +1,11 @@
+use std::num::ParseIntError;
+
+pub mod card_history;
+pub mod collection_history;
+
 use serde_derive::{Deserialize, Serialize};
+
+use crate::xml::XmlCard;
 
 /// This is the struct that represents a card in the MTGO collection.
 ///
@@ -13,6 +20,19 @@ pub struct MtgoCard {
     pub foil: bool,
     pub goatbots_price: f32,
     pub scryfall_price: Option<f32>,
+}
+
+impl MtgoCard {
+    /// Create an instance of [MtgoCard] from an [XmlCard]. An [XmlCard] only has 3 values, so the remaining
+    /// values of the [MtgoCard] is set to default values.
+    pub fn from_xml_card(card: XmlCard) -> Result<Self, ParseIntError> {
+        Ok(Self {
+            id: card.cat_id.parse()?,
+            quantity: card.quantity.parse()?,
+            name: card.name.into_boxed_str(),
+            ..Default::default()
+        })
+    }
 }
 
 /// Represents the rarity of an MTGO item (e.g. card, booster, event ticket)

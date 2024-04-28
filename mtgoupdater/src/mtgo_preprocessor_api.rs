@@ -1,6 +1,8 @@
 use std::{ffi::OsStr, io};
 
-use crate::{mtgo_card::MtgoCard, mtgoparser_bin, util};
+use mtgoparser_rs::mtgo_card::MtgoCard;
+
+use crate::{mtgoparser_bin, util};
 
 /// Convenience functions for calling MTGO Parser/MTGO Preprocessor
 ///
@@ -10,7 +12,7 @@ use crate::{mtgo_card::MtgoCard, mtgoparser_bin, util};
 /// # use mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor;
 /// # use mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor_version;
 /// # use mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor_parse_full;
-/// # use mtgoupdater::mtgo_card::MtgoCard;
+/// # use mtgoparser_rs::mtgo_card::MtgoCard;
 ///
 ///
 /// // Invoke MTGO preprocessor

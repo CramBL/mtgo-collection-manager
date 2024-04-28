@@ -95,7 +95,7 @@ jobs:
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
         with:
-          name: macos-mtgo-collection-manager
+          name: macos-${{ matrix.compiler }}-mtgo-collection-manager
           path: macos-13-${{ matrix.compiler }}-mtgo-cm.zip
           retention-days: 14
 
@@ -106,7 +106,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4
         with:
-          name: linux-mtgo-collection-manager
+          name: linux-${{ matrix.compiler }}-mtgo-collection-manager
           path: ubuntu-22.04-${{ matrix.compiler }}-mtgo-cm.zip
           retention-days: 14
 
@@ -117,7 +117,7 @@ jobs:
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: windows-mtgo-collection-manager
+          name: windows-${{ matrix.compiler }}-mtgo-collection-manager
           path: windows-2022-${{ matrix.compiler }}-mtgo-cm.zip
           retention-days: 14
 
@@ -155,7 +155,7 @@ jobs:
       - name: 📩 Upload - Linux-windows cross 💻🐧
         uses: actions/upload-artifact@v4
         with:
-          name: windows-mtgo-collection-manager
+          name: windows-gcc-cross-mtgo-collection-manager
           path: windows-gcc-mtgo-cm.zip
           retention-days: 14
 

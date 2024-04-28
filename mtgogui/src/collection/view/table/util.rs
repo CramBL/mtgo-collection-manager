@@ -6,7 +6,7 @@ use fltk::{
     prelude::{TableExt, WidgetBase},
 };
 use fltk_table::SmartTable;
-use mtgoupdater::mtgo_card::MtgoCard;
+use mtgoupdater::MtgoCard;
 
 use crate::{
     collection::view::table::{SortStates, SortedBy},
