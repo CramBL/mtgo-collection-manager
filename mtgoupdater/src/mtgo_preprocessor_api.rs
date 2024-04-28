@@ -12,7 +12,7 @@ use crate::{mtgoparser_bin, util};
 /// # use mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor;
 /// # use mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor_version;
 /// # use mtgoupdater::mtgo_preprocessor_api::run_mtgo_preprocessor_parse_full;
-/// # use mtgoupdater::mtgo_card::MtgoCard;
+/// # use mtgoparser_rs::mtgo_card::MtgoCard;
 ///
 ///
 /// // Invoke MTGO preprocessor
