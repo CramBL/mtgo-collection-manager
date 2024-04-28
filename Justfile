@@ -74,7 +74,7 @@ archive-cross-compile-windows PACKAGE_NAME="windows-mtgo-collection-manager":
 archive-cross-compile-windows-xwin PACKAGE_NAME="windows-mtgo-collection-manager":
     mkdir -p mtgo-collection-manager
     cp mtgogui/target/x86_64-pc-windows-msvc/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager.exe
-    zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager.exe
+    zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
 
 
 clean: (cmd "cd mtgogui && cargo clean")
