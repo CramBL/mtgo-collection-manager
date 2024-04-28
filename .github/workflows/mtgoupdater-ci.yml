@@ -99,10 +99,6 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build ⚒️ MTGO Parser 🤓
-        working-directory: ./mtgoparser
-        run: task mtgoparser:build-for-integration
-
       ## Build the MTGO Getter binary
       - name: Setup Go 🛠️ Toolchain
         uses: actions/setup-go@v4

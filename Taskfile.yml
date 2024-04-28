@@ -1,12 +1,11 @@
-version: '3'
+version: "3"
 
 includes:
    mtgogetter: mtgogetter/Tasks.yml
-   mtgoparser: mtgoparser/Tasks.yml
    mtgoupdater: mtgoupdater/Tasks.yml
    mtgogui: mtgogui/Tasks.yml
 
-dotenv: ['build.env']
+dotenv: ["build.env"]
 
 set: [pipefail]
 
@@ -38,17 +37,9 @@ vars:
    GCC_VERSION:
       sh: echo {{ regexFind "[0-9]+\\.[0-9]+\\.[0-9]+" .GCC_VERSION_CMD | default `not found` }}
 
-   MTGOPARSER_IPO: # Set to On for linux and windows but off for macos
-      sh: if [ "{{OS}}" = "linux" ] || [ "{{OS}}" = "windows" ]; then echo "On"; else echo "Off"; fi
-   MTGOPARSER_USER_LINKER: # Enable user linker for linux only
-      sh: if [ "{{OS}}" = "linux" ]; then echo "On"; else echo "Off"; fi
-   MTGOPARSER_EXCLUDE_BOOST_LIBS: serialization;asio;json;graph;log;property_tree;wave;contract;coroutine;date_time;fiber;locale;thread;type_erasure;test;url;python;compute;crc;dll;endian;lamda;fusion;geometry;gil;regex;iostreams;filesystem;program_options;random;math;multiprecision;mysql;stacktrace;cobalt;redis;
-
-
-
 tasks:
    default:
-   # Just lists the tasks
+      # Just lists the tasks
       desc: List tasks
       cmds: [task --list-all]
 
@@ -64,15 +55,15 @@ tasks:
          Using the -f to point to the Dockerfile is required because the Dockerfile is not
          in the root directory. This way the project directory is correctly copied into the image.
       vars:
-         USE_CLANG: '{{default 1 .USE_CLANG}}'
+         USE_CLANG: "{{default 1 .USE_CLANG}}"
          UBUNTU_VARIANT: '{{default "jammy" .UBUNTU_VARIANT}}'
       cmds:
          - echo "==> Building devcontainer image..."
          - docker build
-            -t mcm-devcontainer
-            --build-arg USE_CLANG={{.USE_CLANG}}
-            --build-arg VARIANT={{.UBUNTU_VARIANT}}
-            -f .devcontainer/Dockerfile .
+           -t mcm-devcontainer
+           --build-arg USE_CLANG={{.USE_CLANG}}
+           --build-arg VARIANT={{.UBUNTU_VARIANT}}
+           -f .devcontainer/Dockerfile .
          - echo "=== Done building devcontainer image ==="
          - echo "=== Run the devcontainer with:"" ==="
          - echo "docker run --rm -it mcm-devcontainer"
@@ -88,27 +79,25 @@ tasks:
    build:
       aliases: [b]
       desc: Build all subprojects with the default build configuration, including warnings as errors and static analysis.
-      deps: [mtgogetter:build, mtgoparser:build, mtgoupdater:build]
+      deps: [mtgogetter:build mtgoupdater:build]
       cmds:
          - task: mtgogui:build
          - task: print-tool-versions
-         - task: mtgoparser:print-build-vars
          - echo "=== Done building all subprojects ==="
 
    build-integration:
       aliases: [b-integration]
       desc: Build all subprojects for integration with the rest of the MTGO Collection Manager app.
-      deps: [mtgogetter:build, mtgoparser:build-for-integration, mtgoupdater:build]
+      deps: [mtgogetter:build, mtgoupdater:build]
       cmds:
          - task: mtgogui:build
          - task: print-tool-versions
-         - task: mtgoparser:print-build-vars
          - echo "=== Done building all subprojects for integration ==="
 
    test:
       aliases: [t]
       desc: Run all tests
-      deps: [mtgogetter:test, mtgoparser:test, mtgoupdater:test, mtgogui:test]
+      deps: [mtgogetter:test, mtgoupdater:test, mtgogui:test]
       cmds:
          - echo "=== Done running all tests ==="
 
@@ -128,21 +117,27 @@ tasks:
          - echo "  - CLANG:" "{{ .CLANG_VERSION }} (min. ${LLVM_MIN_VERSION})"
          - echo "  - GCC  :" "{{ .GCC_VERSION }} (min. ${GCC_MIN_VERSION})"
          - echo "CMake:" "{{ .CMAKE_VERSION }} (min. ${CMAKE_MIN_VERSION})"
-         - echo "CMake generator:" "${MTGOPARSER_GENERATOR}"
       requires:
-         vars: [RUST_VERSION, RUST_MIN_VERSION,
-               GO_VERSION, GO_MIN_VERSION,
-               CMAKE_VERSION, CMAKE_MIN_VERSION,
-               CLANG_VERSION, LLVM_MIN_VERSION,
-               GCC_VERSION, GCC_MIN_VERSION,
-               MTGOPARSER_GENERATOR]
+         vars:
+            [
+               RUST_VERSION,
+               RUST_MIN_VERSION,
+               GO_VERSION,
+               GO_MIN_VERSION,
+               CMAKE_VERSION,
+               CMAKE_MIN_VERSION,
+               CLANG_VERSION,
+               LLVM_MIN_VERSION,
+               GCC_VERSION,
+               GCC_MIN_VERSION,
+            ]
 
    clean:
       aliases: [c]
       prompt: Are you sure you want to clean all build artifacts?
       desc: Clean build artifacts in all subprojects
       silent: true
-      deps: [mtgogetter:clean, mtgoparser:clean, mtgoupdater:clean, mtgogui:clean]
+      deps: [mtgogetter:clean, mtgoupdater:clean, mtgogui:clean]
       cmds:
          - echo "==> Done cleaning build artifacts..."
 

@@ -35,24 +35,6 @@ const MTGOGETTER_BIN: &str = if cfg!(target_os = "windows") {
     "mtgogetter"
 };
 
-/// Binary name for the MTGO Preprocessor binary
-const MTGO_PREPROCESSOR_BIN: &str = if cfg!(target_os = "windows") {
-    "mtgo_preprocessor.exe"
-} else {
-    "mtgo_preprocessor"
-};
-
-/// Path to the MTGO Preprocessor binary relative to a subproject of the root project
-const MTGO_PREPROCESSOR_BIN_PATH: &str = if cfg!(target_os = "windows") {
-    // Add `.exe` to the end of the binary name if we're building for Windows
-    concat!(
-        "../mtgoparser/build/src/mtgo_preprocessor/Release/mtgo_preprocessor",
-        ".exe"
-    )
-} else {
-    "../mtgoparser/build/src/mtgo_preprocessor/Release/mtgo_preprocessor"
-};
-
 /// Name of the file that contains the byte arrays for the binaries
 const INCLUDE_BINARIES_FILE: &str = "include_binaries.rs";
 
@@ -67,9 +49,6 @@ mod util {
     pub fn detect_changes() {
         // Build script itself
         println!("cargo:rerun-if-changed=build.rs");
-        // MTGO Parser files (source code)
-        println!("cargo:rerun-if-changed=../mtgoparser/src/mtgo_preprocessor");
-        println!("cargo:rerun-if-changed=../mtgoparser/include");
         // MTGO Updater
         println!("cargo:rerun-if-changed=../mtgoupdater/src");
         // MTGO Getter
@@ -95,19 +74,11 @@ mod util {
 fn include_binaries(out_dir: &Path) -> io::Result<()> {
     let dest_path = Path::new(&out_dir).join(INCLUDE_BINARIES_FILE);
     let mtgogetter_path = Path::new(&out_dir).join(MTGOGETTER_BIN);
-    let mtgo_preprocessor_path = Path::new(&out_dir).join(MTGO_PREPROCESSOR_BIN);
 
     let mtgogetter_size = util::file_len(&mtgogetter_path)?;
 
-    let mtgo_preprocessor_size = util::file_len(&mtgo_preprocessor_path)?;
-
     // format contents
-    let contents = format_include_binaries_rs(
-        mtgo_preprocessor_size,
-        mtgo_preprocessor_path,
-        mtgogetter_size,
-        mtgogetter_path,
-    );
+    let contents = format_include_binaries_rs(mtgogetter_size, mtgogetter_path);
 
     // Write the file contents
     fs::write(dest_path, contents)?;
@@ -116,16 +87,9 @@ fn include_binaries(out_dir: &Path) -> io::Result<()> {
 }
 
 /// Format the contents of the `include_binaries.rs` file
-fn format_include_binaries_rs(
-    mtgo_preprocessor_size: usize,
-    mtgo_preprocessor_path: PathBuf,
-    mtgogetter_size: usize,
-    mtgogetter_path: PathBuf,
-) -> String {
+fn format_include_binaries_rs(mtgogetter_size: usize, mtgogetter_path: PathBuf) -> String {
     format!(
         r#"
-        #[cfg(not(debug_assertions))]
-        pub const MTGO_PREPROCESSOR: &[u8; {mtgo_preprocessor_size}] = include_bytes!({mtgo_preprocessor_path:?});
         #[cfg(not(debug_assertions))]
         pub const MTGOGETTER: &[u8; {mtgogetter_size}] = include_bytes!({mtgogetter_path:?});
         {WRITE_TO_BIN_DIR_FN}
@@ -145,11 +109,6 @@ fn write_binaries_out() -> std::io::Result<()> {
         "mtgogetter.exe"
     } else {
         "mtgogetter"
-    };
-    const MTGO_PREPROCESSOR_BIN: &str = if cfg!(target_os = "windows") {
-        "mtgo_preprocessor.exe"
-    } else {
-        "mtgo_preprocessor"
     };
 
     let mut path = std::env::current_exe()?;
@@ -178,31 +137,12 @@ fn write_binaries_out() -> std::io::Result<()> {
         }
     }
 
-    let mtgo_preprocessor_bin = path.join(MTGO_PREPROCESSOR_BIN);
-
-    if !mtgo_preprocessor_bin.exists() {
-        std::fs::write(&mtgo_preprocessor_bin, MTGO_PREPROCESSOR)?;
-        if !cfg!(windows) {
-
-            let exit_status = std::process::Command::new("chmod")
-            .arg("+x")
-            .arg(format!("{}", mtgo_preprocessor_bin.display()))
-            .status()
-            .expect("Failed to execute chmod to make mtgo_preprocessor executable");
-
-            assert!(
-                exit_status.success(),
-                "failed to make MTGO Preprocessor executable"
-            );
-        }
-    }
-
     Ok(())
 }
 "#;
 
 mod build {
-    use crate::{MTGOGETTER_BIN, MTGO_PREPROCESSOR_BIN, MTGO_PREPROCESSOR_BIN_PATH};
+    use crate::MTGOGETTER_BIN;
 
     use std::{error::Error, fs, path::Path};
 
@@ -210,30 +150,10 @@ mod build {
 
     /// Build all binaries and copy them to the OUT_DIR
     pub fn build_all(out_dir: &Path) {
-        // Build MTGO Getter and MTGO Preprocessor in parallel
-        std::thread::scope(|s| {
-            let getter_build_thread = s.spawn(|| {
-                build_mtgogetter(out_dir).unwrap_or_else(|e| {
-                    panic!("Failed to build MTGO Getter and copy to OUT_DIR: {out_dir:?}: {e}")
-                })
-            });
-            let preprocessor_build_thread = s.spawn(|| {
-                build_mtgo_preprocessor(out_dir).unwrap_or_else(|e| {
-                    panic!(
-                        "Failed to build MTGO Preprocessor and copy to OUT_DIR: {out_dir:?}: {e}"
-                    )
-                })
-            });
-
-            // Join the threads, panic if any of them panicked
-            // Join MTGO Getter build thread first because it's much faster
-            getter_build_thread
-                .join()
-                .unwrap_or_else(|e| panic!("Failed to join getter build thread: {e:?}"));
-            preprocessor_build_thread
-                .join()
-                .unwrap_or_else(|e| panic!("Failed to join preprocessor build thread: {e:?}"));
-        });
+        // Build MTGO Getter
+        build_mtgogetter(out_dir).unwrap_or_else(|e| {
+            panic!("Failed to build MTGO Getter and copy to OUT_DIR: {out_dir:?}: {e}")
+        })
     }
 
     /// Build MTGO Getter and copy the binary to the OUT_DIR set by cargo
@@ -263,38 +183,6 @@ mod build {
         fs::copy(rel_mtgogetter_bin_path, &dest_path)?;
 
         print_warn!("Built MTGO Getter and copied the binary to {dest_path:?}");
-
-        Ok(())
-    }
-
-    /// Build MTGO Preprocessor and copy the binary to the OUT_DIR set by cargo
-    fn build_mtgo_preprocessor(out_dir: &Path) -> Result<()> {
-        print_warn!("Building MTGO Parser/Preprocessor - if this is the first time you're building the MTGO Parser project, this may take a while!");
-
-        let mut cmd_build_mtgo_preprocessor = std::process::Command::new("task");
-
-        let cmd_build_mtgo_preprocessor = cmd_build_mtgo_preprocessor
-            .arg("mtgoparser:build-for-integration")
-            .current_dir("..")
-            .status()?;
-
-        assert!(
-            cmd_build_mtgo_preprocessor.success(),
-            "failed to build MTGO Preprocessor"
-        );
-
-        assert!(
-            Path::new(MTGO_PREPROCESSOR_BIN_PATH).exists(),
-            "Build succeeded but mtgo_preprocessor.exe was not found at the expected path {MTGO_PREPROCESSOR_BIN_PATH}",
-        );
-
-        // Copy MTGO Preprocessor binary to the OUT_DIR set by cargo
-        let dest_path = Path::new(&out_dir).join(MTGO_PREPROCESSOR_BIN);
-        fs::copy(Path::new(MTGO_PREPROCESSOR_BIN_PATH), &dest_path).unwrap_or_else(|e| {
-            panic!("Failed to copy mtgo_preprocessor binary to {dest_path:?}: {e}")
-        });
-
-        print_warn!("Built MTGO Preprocessor and copied the binary to {dest_path:?}");
 
         Ok(())
     }
