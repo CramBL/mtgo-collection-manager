@@ -37,7 +37,7 @@ fn test_call_mtgo_preprocessor_example_collection_json_stdout() {
             );
 
             let stdout_json = String::from_utf8_lossy(&output.stdout);
-            let deserialized: Vec<mtgoupdater::mtgo_card::MtgoCard> =
+            let deserialized: Vec<mtgoupdater::MtgoCard> =
                 serde_json::from_str(&stdout_json).unwrap();
             println!("Got {len} cards as JSON", len = deserialized.len());
             assert_eq!(deserialized.len(), 3000);
