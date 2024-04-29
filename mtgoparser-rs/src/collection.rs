@@ -80,9 +80,16 @@ impl Collection {
             }
 
             while let Some(sc) = scryfall_cards.get_mut(scry_idx) {
+                if sc.mtgo_id > card.id {
+                    // In this case we need to check the next card in the collection
+                    break;
+                }
                 if sc.mtgo_id == card.id {
-                    if let Some(tix_price) = sc.prices.tix.take() {
-                        card.scryfall_price = Some(tix_price.parse()?);
+                    match sc.prices.tix.take() {
+                        Some(tix_price) if !tix_price.is_empty() => {
+                            card.scryfall_price = Some(tix_price.parse()?)
+                        }
+                        _ => (),
                     }
                 }
                 scry_idx += 1;
