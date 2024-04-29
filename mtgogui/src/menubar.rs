@@ -10,9 +10,7 @@ use fltk::{
     window::Window,
 };
 use fltk_flex::Flex;
-use mtgoupdater::{
-    mtgo_preprocessor_api::run_mtgo_preprocessor_version, mtgogetter_api::mtgogetter_version,
-};
+use mtgoupdater::mtgogetter_api::mtgogetter_version;
 use std::{io, path::PathBuf};
 use util::ProgressUpdate;
 

@@ -9,7 +9,6 @@ use std::sync::OnceLock;
 
 pub mod date;
 pub mod internal_only;
-pub mod mtgo_preprocessor_api;
 pub mod mtgogetter_api;
 mod util;
 mod zip_util;
@@ -46,19 +45,6 @@ pub fn set_mtgogetter_bin(bin_path: OsString) -> Result<(), OsString> {
     MTGOGETTER_BIN.set(bin_path)
 }
 
-/// Sets the path to the binary of `MTGO Parser`/`MTGO Preprocessor`
-///
-/// # Arguments
-///
-/// * `bin_path` - Path to the `MTGO Parser`/`MTGO Preprocessor` binary
-///
-/// # Errors
-///
-/// Returns an error if path has already been set.
-pub fn set_mtgoparser_bin(bin_path: OsString) -> Result<(), OsString> {
-    MTGOPARSER_BIN.set(bin_path)
-}
-
 /// Gets the path to the `MTGO Getter` binary
 ///
 /// If the path has not been set, it will be set to the default path relative to the current executable
@@ -72,26 +58,6 @@ pub(crate) fn mtgogetter_bin() -> &'static OsStr {
         path.pop();
         path.push("bin");
         path.push("mtgogetter");
-        if cfg!(windows) {
-            path.set_extension(std::env::consts::EXE_EXTENSION);
-        }
-        path.into_os_string()
-    })
-}
-
-/// Gets the path to the `MTGO Parser`/`MTGO Preprocessor` binary
-///
-/// If the path has not been set, it will be set to the default path relative to the current executable
-///
-/// # Panics
-///
-/// Panics if the current executable path cannot be determined
-pub(crate) fn mtgoparser_bin() -> &'static OsStr {
-    MTGOPARSER_BIN.get_or_init(|| {
-        let mut path = std::env::current_exe().expect("Failed to get current executable path");
-        path.pop();
-        path.push("bin");
-        path.push("mtgo_preprocessor");
         if cfg!(windows) {
             path.set_extension(std::env::consts::EXE_EXTENSION);
         }

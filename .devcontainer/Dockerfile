@@ -116,14 +116,6 @@ RUN wget --progress=dot:giga -O - https://apt.kitware.com/keys/kitware-archive-l
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install optional dependecies
-RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y --no-install-recommends \
-    ccache \
-    cppcheck \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install mold for much faster linking
 RUN apt-get update \
     && apt-get install -y \
@@ -188,17 +180,5 @@ WORKDIR /work
 
 RUN git config --global --add safe.directory /work
 
-FROM build-base as extras
-
-# Install optional dependecies
-RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y --no-install-recommends \
-    doxygen \
-    graphviz \
-    clang-format-${LLVM_VER} \
-    gdb \
-    cmake-curses-gui \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
 
 CMD ["/bin/bash"]

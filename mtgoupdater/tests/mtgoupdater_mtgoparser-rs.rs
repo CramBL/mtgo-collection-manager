@@ -1,4 +1,4 @@
-use std::{ffi::OsStr, path::Path};
+use std::path::Path;
 
 use pretty_assertions::assert_eq;
 
@@ -14,7 +14,7 @@ fn test_full_parse_3000cards_from_pathbuf() {
 
     let full_trade_list_path =
         std::path::PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
-    // Invoke MTGO preprocessor
+
     match mtgoupdater::parse_full(
         full_trade_list_path.as_path(),
         scryfall_path.as_path(),
@@ -23,14 +23,14 @@ fn test_full_parse_3000cards_from_pathbuf() {
         None,
     ) {
         Ok(cards) => {
-            eprintln!("MTGO Preprocessor output: {} cards", cards.len());
+            eprintln!("MTGO Parser output: {} cards", cards.len());
             // Fill the progress bar as appropriate
             // Give all the data to the collection table
             println!("Got {} cards", cards.len());
             assert_eq!(3000, cards.len());
         }
         Err(e) => {
-            panic!("MTGO Preprocessor error: {e}")
+            panic!("MTGO Parser error: {e}")
         }
     }
 }
@@ -55,14 +55,14 @@ fn test_full_parse_3000cards_bad_path() {
         None,
     ) {
         Ok(cards) => {
-            eprintln!("MTGO Preprocessor output: {} cards", cards.len());
+            eprintln!("MTGO Parser output: {} cards", cards.len());
             // Fill the progress bar as appropriate
             // Give all the data to the collection table
             println!("Got {} cards", cards.len());
             panic!("Expected failure with bad path!")
         }
         Err(e) => {
-            eprintln!("MTGO Preprocessor error: {e}");
+            eprintln!("MTGO Parser error: {e}");
         }
     }
 }
@@ -103,7 +103,7 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir() {
         Some(save_to_dir),
     ) {
         Ok(cards) => {
-            eprintln!("MTGO Preprocessor output: {} cards", cards.len());
+            eprintln!("MTGO Parser output: {} cards", cards.len());
             // Fill the progress bar as appropriate
             // Give all the data to the collection table
             println!("Got {} cards", cards.len());
@@ -114,12 +114,12 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir() {
         Err(e) => {
             // Cleanup
             std::fs::remove_dir_all(local_test_dir).unwrap();
-            panic!("MTGO Preprocessor error: {e}")
+            panic!("MTGO Parser error: {e}")
         }
     }
 }
 
-// Copies the test example state_log to the json dir and it is then used by the mtgo_preprocessor
+// Copies the test example state_log to the json dir and it is then used by the MTGO parser
 // deletes it again after test
 #[test]
 fn test_full_parse_3000cards_from_path_with_save_to_dir_state_log() {
@@ -147,7 +147,6 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir_state_log() {
     )
     .unwrap();
 
-    // Invoke MTGO preprocessor
     match mtgoupdater::parse_full(
         full_trade_list_path.as_path(),
         Path::new("../test/test-data/mtgogetter-out/scryfall-20231002-full.json"),
@@ -156,7 +155,7 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir_state_log() {
         Some(save_to_dir),
     ) {
         Ok(cards) => {
-            eprintln!("MTGO Preprocessor output: {} cards", cards.len());
+            eprintln!("MTGO Parser output: {} cards", cards.len());
             // Fill the progress bar as appropriate
             // Give all the data to the collection table
             assert_eq!(3000, cards.len());
@@ -166,7 +165,7 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir_state_log() {
         Err(e) => {
             // Cleanup
             std::fs::remove_dir_all(local_test_dir).unwrap();
-            panic!("MTGO Preprocessor error: {e}")
+            panic!("MTGO Parser error: {e}")
         }
     }
 }
