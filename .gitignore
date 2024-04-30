@@ -7,12 +7,7 @@ mtgogetter/state_log.toml
 mtgogetter/mtgogetter
 mtgogetter/*.json
 
-## MTGO Parser
-mtgoparser/build/
-mtgoparser/out/
-mtgoparser/cmake-build-*/
-mtgoparser/conan-cache/
-mtgoparser/.cache
+mtgogetter-rs/target
 
 ## MTGO Parser-RS
 mtgoparser-rs/target
