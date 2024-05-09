@@ -8,6 +8,7 @@ mtgogetter/mtgogetter
 mtgogetter/*.json
 
 mtgogetter-rs/target
+mtgogetter-rs/Cargo.lock
 
 ## MTGO Parser-RS
 mtgoparser-rs/target
