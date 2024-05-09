@@ -77,7 +77,7 @@ pub fn has_state_log_changed(appdata_dir: &Path) -> bool {
 mod tests {
 
     use super::*;
-    use pretty_assertions::assert_str_eq;
+    //use pretty_assertions::assert_str_eq;
 
     #[test]
     pub fn test_timestamped_filename() {
