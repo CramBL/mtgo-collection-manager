@@ -1,4 +1,3 @@
-use reqwest::Url;
 use std::io::{Cursor, Read};
 
 pub mod state_log;
@@ -24,12 +23,14 @@ pub fn get_goatbots_price_history() -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use reqwest::Url;
 
     #[test]
     fn test_goatbots_price_history_url() {
         assert!(Url::parse(GOATBOTS_PRICE_HISTORY_URL).is_ok());
     }
 
+    #[ignore = "Will download data from the goatbots website"]
     #[test]
     fn test_get_goatbots_price_history() {
         let res = get_goatbots_price_history();
