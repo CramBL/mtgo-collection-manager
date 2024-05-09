@@ -1,14 +1,16 @@
+use chrono::{DateTime, Utc};
+use reqwest::blocking;
+use scryfall_parse::bulk_info::ScryfallBulkDataInfo;
 use std::io::{Cursor, Read};
 
+pub mod scryfall_parse;
 pub mod state_log;
 
 const GOATBOTS_PRICE_HISTORY_URL: &str = "https://www.goatbots.com/download/price-history.zip";
 
 pub fn get_goatbots_price_history() -> String {
-    let bytes = reqwest::blocking::get(GOATBOTS_PRICE_HISTORY_URL)
-        .unwrap()
-        .bytes()
-        .unwrap();
+    let resp = blocking::get(GOATBOTS_PRICE_HISTORY_URL).unwrap();
+    let bytes = resp.bytes().unwrap();
 
     eprintln!("Got {} bytes", bytes.len());
     let cursor = Cursor::new(bytes);
@@ -18,6 +20,14 @@ pub fn get_goatbots_price_history() -> String {
     let mut contents = String::with_capacity(512 * 1024);
     file.read_to_string(&mut contents).unwrap();
     contents
+}
+
+pub fn get_scryfall_bulk(last_updated: DateTime<Utc>) {
+    let scryfall_bulk_info = ScryfallBulkDataInfo::get().unwrap();
+    // Check if the given timestamp is older, if so then we download the bulk data
+    if scryfall_bulk_info.updated_at() > last_updated {
+        // Update
+    }
 }
 
 #[cfg(test)]
