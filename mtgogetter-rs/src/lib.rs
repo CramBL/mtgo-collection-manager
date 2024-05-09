@@ -1,5 +1,8 @@
 use reqwest::Url;
 
+pub mod state_log;
+
+
 const GOATBOTS_PRICE_HISTORY_URL: &str = "https://www.goatbots.com/download/price-history.zip";
 
 pub fn get_goatbots_price_history() {

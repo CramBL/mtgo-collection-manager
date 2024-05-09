@@ -7,3 +7,13 @@ edition = "2021"
 
 [dependencies]
 reqwest = { version = "0.12.4", features = ["blocking"] }
+chrono = { version = "0.4.31", features = ["serde"] }
+serde = "1.0.188"
+serde_derive = "1.0.188"
+toml = { version = "0.8.12", features = ["default"] }
+
+
+[dev-dependencies]
+pretty_assertions = "1.4.0"
+temp-dir = "0.1.11"
+testresult = "0.4.0"
