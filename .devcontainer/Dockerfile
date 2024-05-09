@@ -11,10 +11,6 @@ ARG HOST_USER
 ARG HOST_UID
 ARG HOST_GID
 
-
-# Ignore "WARNING: Running pip as the 'root' user can result in broken permissions..."
-ENV PIP_ROOT_USER_ACTION=ignore
-
 RUN groupadd --gid ${HOST_GID} ${HOST_USER} \
     && useradd --uid ${HOST_UID} --gid ${HOST_GID} -m ${HOST_USER}
 
@@ -36,8 +32,6 @@ RUN touch /in_container \
     make \
     ninja-build \
     git \
-    python3 \
-    python3-pip \
     build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
