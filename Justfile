@@ -57,8 +57,13 @@ ci-install-cross-compile-windows-deps:
     rustup target add x86_64-pc-windows-gnu 
     sudo apt-get install gcc-mingw-w64-x86-64 ninja-build cmake
 
-build-mtgoparser: (cmd 'task mtgoparser:build-for-integration')
-build-mtgogetter: (cmd 'task mtgogetter:build')
+build: build-mtgogetter build-mtgogui
+build-mtgogetter *ARGS='-v': (cmd 'cd mtgogetter && go build ' + ARGS)
+build-mtgogui *ARGS: (cmd 'cd mtgogui && cargo build ' + ARGS)
+
+[unix]
+launch: build-mtgogui
+    ./mtgogui/target/release/mtgogui
 
 cross-compile-windows PROFILE="dev":
     just cmd 'cd mtgogui && cargo build --profile={{PROFILE}} --target=x86_64-pc-windows-gnu'
