@@ -2,15 +2,15 @@ use chrono::{Datelike, SecondsFormat, Timelike};
 use mtgoparser_rs::{
     collection::Collection,
     goatbots::{
-        card_definitions::{parse_card_def_json, GoatBotsCard},
+        card_definitions::parse_card_def_json,
         price_history::parse_price_history_json,
     },
     mtgo_card::{
-        card_history::{self, CardHistory},
+        card_history::CardHistory,
         collection_history::CollectionHistory,
     },
     scryfall::default_cards::ScryfallCard,
-    xml::{parse_dek_xml, XmlCard},
+    xml::parse_dek_xml,
 };
 use pretty_assertions::assert_eq;
 use std::{

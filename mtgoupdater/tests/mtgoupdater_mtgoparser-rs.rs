@@ -1,19 +1,20 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
+use std::fs;
 
 use pretty_assertions::assert_eq;
 
 #[test]
 fn test_full_parse_3000cards_from_pathbuf() {
     let scryfall_path =
-        std::path::PathBuf::from("../test/test-data/mtgogetter-out/scryfall-20231002-full.json");
-    let card_definitions_path = std::path::PathBuf::from(
+        PathBuf::from("../test/test-data/mtgogetter-out/scryfall-20231002-full.json");
+    let card_definitions_path = PathBuf::from(
         "../test/test-data/goatbots/card-definitions-2023-10-02-full.json",
     );
     let price_history_path =
-        std::path::PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json");
+        PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json");
 
     let full_trade_list_path =
-        std::path::PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
+        PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
 
     match mtgoupdater::parse_full(
         full_trade_list_path.as_path(),
@@ -70,25 +71,25 @@ fn test_full_parse_3000cards_bad_path() {
 #[test]
 fn test_full_parse_3000cards_from_path_with_save_to_dir() {
     let local_test_dir = "target/test_full_parse_3000cards_from_path_with_save_to_dir/";
-    std::fs::create_dir_all(local_test_dir).unwrap();
+    fs::create_dir_all(local_test_dir).unwrap();
 
-    let card_definitions_path = std::path::PathBuf::from(
+    let card_definitions_path = PathBuf::from(
         "../test/test-data/goatbots/card-definitions-2023-10-02-full.json",
     );
     let price_history_path =
-        std::path::PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json");
+        PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json");
 
     let full_trade_list_path =
-        std::path::PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
+        PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
 
     let save_to_dir = Path::new(local_test_dir);
 
     let state_log_path =
-        std::path::PathBuf::from("../test/test-data/mtgogetter-out/state_log.toml");
+        PathBuf::from("../test/test-data/mtgogetter-out/state_log.toml");
     assert!(state_log_path.exists());
     let mut save_to_dir_state_log = save_to_dir.to_path_buf();
     save_to_dir_state_log.push("state_log.toml");
-    _ = std::fs::copy(
+    _ = fs::copy(
         state_log_path.as_os_str(),
         save_to_dir_state_log.as_os_str(),
     )
@@ -109,11 +110,11 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir() {
             println!("Got {} cards", cards.len());
             assert_eq!(3000, cards.len());
             // Cleanup
-            std::fs::remove_dir_all(local_test_dir).unwrap();
+            fs::remove_dir_all(local_test_dir).unwrap();
         }
         Err(e) => {
             // Cleanup
-            std::fs::remove_dir_all(local_test_dir).unwrap();
+            fs::remove_dir_all(local_test_dir).unwrap();
             panic!("MTGO Parser error: {e}")
         }
     }
@@ -124,24 +125,24 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir() {
 #[test]
 fn test_full_parse_3000cards_from_path_with_save_to_dir_state_log() {
     let local_test_dir = "target/test_full_parse_3000cards_from_path_with_save_to_dir_state_log/";
-    std::fs::create_dir_all(local_test_dir).unwrap();
+    fs::create_dir_all(local_test_dir).unwrap();
 
-    let card_definitions_path = std::path::PathBuf::from(
+    let card_definitions_path = PathBuf::from(
         "../test/test-data/goatbots/card-definitions-2023-10-02-full.json",
     );
     let price_history_path =
-        std::path::PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json");
+        PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json");
 
     let full_trade_list_path =
-        std::path::PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
+        PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
     let save_to_dir = Path::new("target/");
 
     let state_log_path =
-        std::path::PathBuf::from("../test/test-data/mtgogetter-out/state_log.toml");
+        PathBuf::from("../test/test-data/mtgogetter-out/state_log.toml");
     assert!(state_log_path.exists());
     let mut save_to_dir_state_log = save_to_dir.to_path_buf();
     save_to_dir_state_log.push("state_log.toml");
-    _ = std::fs::copy(
+    _ = fs::copy(
         state_log_path.as_os_str(),
         save_to_dir_state_log.as_os_str(),
     )
@@ -160,11 +161,11 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir_state_log() {
             // Give all the data to the collection table
             assert_eq!(3000, cards.len());
             // Cleanup
-            std::fs::remove_dir_all(local_test_dir).unwrap();
+            fs::remove_dir_all(local_test_dir).unwrap();
         }
         Err(e) => {
             // Cleanup
-            std::fs::remove_dir_all(local_test_dir).unwrap();
+            fs::remove_dir_all(local_test_dir).unwrap();
             panic!("MTGO Parser error: {e}")
         }
     }
