@@ -17,3 +17,6 @@ chrono.workspace = true
 pretty_assertions.workspace = true
 temp-dir.workspace = true
 testresult.workspace = true
+
+[lints]
+workspace = true
