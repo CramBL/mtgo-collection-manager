@@ -3,7 +3,9 @@ use reqwest::{blocking, Error, Url};
 use serde::{Deserialize, Serialize};
 use std::{fs, io::Cursor};
 
+pub mod bulk_cards;
 pub mod bulk_info;
+pub mod util;
 
 ////////////////////////////////
 #[derive(Deserialize, Serialize)]

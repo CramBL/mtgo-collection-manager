@@ -1,0 +1,22 @@
+[package]
+name = "get_goatbots"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dev-dependencies]
+pretty_assertions.workspace = true
+temp-dir.workspace = true
+testresult.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+regex.workspace = true
+reqwest.workspace = true
+zip.workspace = true

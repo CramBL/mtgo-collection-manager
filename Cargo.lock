@@ -583,6 +583,37 @@ dependencies = [
 ]
 
 [[package]]
+name = "get_goatbots"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "pretty_assertions",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "temp-dir",
+ "testresult",
+ "toml",
+ "zip",
+]
+
+[[package]]
+name = "get_scryfall"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "pretty_assertions",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "temp-dir",
+ "testresult",
+ "toml",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -958,12 +989,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "mtgogetter-rs"
+name = "mtgogetter_rs"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "get_goatbots",
+ "get_scryfall",
  "pretty_assertions",
- "reqwest",
+ "regex",
  "serde",
  "serde_json",
  "temp-dir",

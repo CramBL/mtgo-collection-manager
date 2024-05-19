@@ -44,6 +44,7 @@ impl ScryfallBulkDataInfo {
 
 #[cfg(test)]
 mod tests {
+    use regex::Regex;
     use testresult::TestResult;
 
     use super::*;
@@ -54,6 +55,22 @@ mod tests {
         let scryfall_bulk_info = ScryfallBulkDataInfo::get()?;
 
         eprintln!("{scryfall_bulk_info:?}");
+        eprintln!("URL: {}", scryfall_bulk_info.download_url().as_str());
+        eprintln!("Updated at: {}", scryfall_bulk_info.updated_at());
+
+        assert!(scryfall_bulk_info
+            .download_url()
+            .as_str()
+            .starts_with("https://data.scryfall.io/default-cards/default-cards-"));
+        let re = Regex::new("https://data.scryfall.io/default-cards/default-cards-[0-9]{14}.json")
+            .unwrap();
+        assert!(re.is_match(scryfall_bulk_info.download_url().as_str()));
+
+        let re_date =
+            Regex::new("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3} UTC")
+                .unwrap();
+        assert!(re_date.is_match(&scryfall_bulk_info.updated_at().to_string()));
+
         Ok(())
     }
 }
