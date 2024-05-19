@@ -1,0 +1,27 @@
+[workspace]
+members = ["mtgogui", "mtgoupdater", "mtgoparser-rs", "mtgogetter-rs"]
+resolver = "2"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Marc Beck König <mbkj@tutamail.com>"]
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/CramBL/mtgo-collection-manager"
+
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.dependencies]
+
+# Dev dependencies
+pretty_assertions = "1.4.0"
+temp-dir = "0.1.11"
+testresult = "0.4.0"

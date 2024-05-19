@@ -1,5 +1,5 @@
-# Build directories and binary files
-rust-processing/target
+## Workspace
+target
 
 ## MTGO Getter
 mtgogetter/mtgogetter.exe
@@ -24,6 +24,7 @@ mtgogui/target
 mtgogui/*.json
 mtgogui/state_log.toml
 mtgogui/appdata
+
 
 # Cross compiler cache
 xwin_cache

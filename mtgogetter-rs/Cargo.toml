@@ -15,6 +15,6 @@ toml = { version = "0.8.12", features = ["default"] }
 zip = "1.2.1"
 
 [dev-dependencies]
-pretty_assertions = "1.4.0"
-temp-dir = "0.1.11"
-testresult = "0.4.0"
+pretty_assertions.workspace = true
+temp-dir.workspace = true
+testresult.workspace = true
