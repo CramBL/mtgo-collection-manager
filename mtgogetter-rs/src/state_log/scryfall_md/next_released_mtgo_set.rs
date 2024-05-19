@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 use chrono::NaiveDate;
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NextReleasedMtgoSet {

@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 use chrono::{DateTime, Utc};
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 use self::next_released_mtgo_set::NextReleasedMtgoSet;
 
