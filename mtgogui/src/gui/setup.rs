@@ -47,8 +47,10 @@ pub(super) fn set_search_box(ev_send: app::Sender<Message>) -> Grid {
         }
     });
 
-    search_box_grid_row.set_widget(&mut frame, 0, 0);
-    search_box_grid_row.set_widget(&mut search_input, 0, 1..4);
+    search_box_grid_row.set_widget(&mut frame, 0, 0).unwrap();
+    search_box_grid_row
+        .set_widget(&mut search_input, 0, 1..4)
+        .unwrap();
 
     search_box_grid_row.end();
     search_box_grid_row
