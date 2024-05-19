@@ -54,7 +54,7 @@ run-devcontainer:
 
 
 ci-install-cross-compile-windows-deps:
-    rustup target add x86_64-pc-windows-gnu 
+    rustup target add x86_64-pc-windows-gnu
     sudo apt-get install gcc-mingw-w64-x86-64 ninja-build cmake
 
 build: build-mtgogetter build-mtgogui
@@ -66,19 +66,19 @@ launch: build-mtgogui
     ./mtgogui/target/release/mtgogui
 
 cross-compile-windows PROFILE="dev":
-    just cmd 'cd mtgogui && cargo build --profile={{PROFILE}} --target=x86_64-pc-windows-gnu'
+    just cmd 'cargo build --profile={{PROFILE}} --target=x86_64-pc-windows-gnu'
 
 cross-compile-windows-xwin PROFILE="dev":
-    just cmd 'cd mtgogui && cargo xwin build --profile={{PROFILE}} --target x86_64-pc-windows-msvc'
+    just cmd 'cargo xwin build --profile={{PROFILE}} --target x86_64-pc-windows-msvc'
 
 archive-cross-compile-windows PACKAGE_NAME="windows-mtgo-collection-manager":
     mkdir -p mtgo-collection-manager
-    cp mtgogui/target/x86_64-pc-windows-gnu/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager
+    cp target/x86_64-pc-windows-gnu/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager
     zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
 
 archive-cross-compile-windows-xwin PACKAGE_NAME="windows-mtgo-collection-manager":
     mkdir -p mtgo-collection-manager
-    cp mtgogui/target/x86_64-pc-windows-msvc/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager.exe
+    cp target/x86_64-pc-windows-msvc/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager.exe
     zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
 
 
