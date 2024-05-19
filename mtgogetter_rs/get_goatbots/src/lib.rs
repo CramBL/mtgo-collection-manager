@@ -1,6 +1,5 @@
 use std::io::{self, Read};
 
-
 use reqwest::blocking;
 
 const GOATBOTS_PRICE_HISTORY_URL: &str = "https://www.goatbots.com/download/price-history.zip";
