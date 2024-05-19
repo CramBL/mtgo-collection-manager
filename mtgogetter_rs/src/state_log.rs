@@ -19,6 +19,7 @@ impl CardInfoMetaData {
 
     /// Create a first time [CardInfoMetaData] state log.
     /// From then on it should always be edited/updated on disk instead of creating a new one.
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
             description: Self::DESCRIPTION,

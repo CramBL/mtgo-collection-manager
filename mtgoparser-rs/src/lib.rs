@@ -61,12 +61,12 @@ pub fn has_state_log_changed(appdata_dir: &Path) -> bool {
         let app_log_md = fs::metadata(&appdata_log_path).unwrap();
         let hist_log_md = fs::metadata(history_log_path).unwrap();
         if app_log_md.len() != hist_log_md.len() {
-            return true;
+            true
         } else {
             let app_log_contents = fs::read(&appdata_log_path).unwrap();
 
             let hist_log_contents = fs::read(&appdata_log_path).unwrap();
-            return app_log_contents != hist_log_contents;
+            app_log_contents != hist_log_contents
         }
     } else {
         true

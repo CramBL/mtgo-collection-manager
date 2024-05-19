@@ -34,12 +34,11 @@ impl CardHistory {
     }
 
     pub fn from_mtgo_card(card: MtgoCard) -> Self {
-        let mut price_history = Vec::with_capacity(1);
-        price_history.push((
+        let price_history = vec![(
             Some(card.quantity),
             Some(card.goatbots_price),
             card.scryfall_price,
-        ));
+        )];
         Self {
             id: card.id,
             quantity: card.quantity.to_string(),
@@ -75,12 +74,12 @@ impl CardHistory {
             }
             match gb_price {
                 Some(p) => s.push_str(p.to_string().as_str()),
-                None => s.push_str("-"),
+                None => s.push('-'),
             }
             s.push(';');
             match scryfall_price {
                 Some(p) => s.push_str(p.to_string().as_str()),
-                None => s.push_str("-"),
+                None => s.push('-'),
             }
         }
         s

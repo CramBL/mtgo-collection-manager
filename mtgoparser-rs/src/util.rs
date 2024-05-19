@@ -12,7 +12,7 @@ pub fn get_files_with_timestamp(dir: &Path) -> Result<Vec<(PathBuf, DateTime<Utc
         let entry = entry?;
         let name = entry.file_name();
         let name = name.to_string_lossy();
-        if name.ends_with("Z") {
+        if name.ends_with('Z') {
             // Index where the timestamp of pattern `YYYY-MM-DDThhmmssZ` starts
             let start_of_timestamp = name.len() - 18;
             // Will fail in about 1000 years.
