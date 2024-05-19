@@ -299,7 +299,7 @@ mod tests {
         // Files to compress
         let compress_files = [
             Path::new("Cargo.toml"),
-            Path::new("Cargo.lock"),
+            Path::new("src/lib.rs"),
             Path::new("README.md"),
         ];
 
@@ -338,7 +338,7 @@ mod tests {
 
             assert_eq!(
                 zipped_file.enclosed_name().unwrap().to_str().unwrap(),
-                compressed_file.to_str().unwrap()
+                compressed_file.file_name().unwrap()
             );
             assert_eq!(
                 fs::read_to_string(compressed_file).expect("Failed to read file"),
