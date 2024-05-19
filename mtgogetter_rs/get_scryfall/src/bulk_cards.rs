@@ -37,6 +37,8 @@ impl ScryfallBulkData {
                 .unwrap()
                 .0;
 
+        log::info!("Got {} MTGO Scryfall cards", deserialized.len());
+
         Ok(Self {
             endpoint: url_endpoint,
             updated_at: date,
