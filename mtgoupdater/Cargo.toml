@@ -12,12 +12,11 @@ description = "Library for interoperating with MTGO Collection manager's C++ and
 maintenance = { status = "actively-developed" }
 
 [dependencies]
-chrono = "0.4.31"
-serde = "1.0.188"
-serde_derive = "1.0.188"
-serde_json = "1.0.107"
-zip = "0.6.6"
 mtgoparser-rs = { path = "../mtgoparser-rs", version = "*" }
+serde_json.workspace = true
+chrono.workspace = true
+serde.workspace = true
+zip = "1.2.1"
 
 
 [dev-dependencies]
