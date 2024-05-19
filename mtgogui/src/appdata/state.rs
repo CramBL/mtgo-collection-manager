@@ -1,7 +1,7 @@
 use std::{ffi::OsString, io, path::PathBuf};
 
 use chrono::prelude::*;
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use toml::Table;
 
 use super::GUI_STATE;

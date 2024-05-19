@@ -1,4 +1,4 @@
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::{collections::hash_map::HashMap, path::Path};
 
 /// The relevant card information that can be extracted from a GoatBots JSON file.

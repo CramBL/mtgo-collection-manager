@@ -4,7 +4,7 @@ use crate::{
     scryfall::default_cards::ScryfallCard,
     xml::XmlCard,
 };
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, num::ParseIntError};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]

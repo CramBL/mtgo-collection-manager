@@ -3,7 +3,7 @@ use std::num::ParseIntError;
 pub mod card_history;
 pub mod collection_history;
 
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 use crate::xml::XmlCard;
 
