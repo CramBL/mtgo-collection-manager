@@ -106,6 +106,8 @@ mod tests {
         assert_str_eq!(
             serialized,
             "\
+description = \"log for MTGO Getter state, such as updated_at timestamps\"
+
 [goatbots]
 card_definitions_updated_at = \"2023-10-21T22:29:53Z\"
 prices_updated_at = \"2023-10-14T15:24:21Z\"
