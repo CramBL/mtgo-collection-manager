@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
-use reqwest::{blocking, Error, Url};
+use reqwest::{blocking, Url};
 use serde::{Deserialize, Serialize};
-use std::{fs, io::Cursor};
+
 
 #[derive(Debug)]
 pub struct ScryfallBulkDataInfo {

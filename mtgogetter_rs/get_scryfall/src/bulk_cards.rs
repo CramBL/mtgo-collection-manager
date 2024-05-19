@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
-use reqwest::{blocking, Error, Url};
+use reqwest::{blocking, Url};
 use serde::{Deserialize, Serialize};
-use std::{fs, io::Cursor};
+
 
 use crate::util::format_datetime_utc_for_url;
 
