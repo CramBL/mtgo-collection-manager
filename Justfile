@@ -82,4 +82,4 @@ archive-cross-compile-windows-xwin PACKAGE_NAME="windows-mtgo-collection-manager
     zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
 
 
-clean: (cmd "cd mtgogui && cargo clean")
+clean: (cmd "cargo clean")
