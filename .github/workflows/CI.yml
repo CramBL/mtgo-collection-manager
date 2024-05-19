@@ -42,6 +42,14 @@ jobs:
           components: clippy, rustfmt
           bins: cargo-audit
 
+      - name: ⚙️ Setup C++ Tools
+        uses: aminya/setup-cpp@v1
+        with:
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          compiler: ${{ matrix.compiler }}
+          cmake: true
+          ninja: true
+
       - name: 🍄 Check & Lint 🩺
         run: |
             cargo check --verbose
@@ -51,15 +59,14 @@ jobs:
             cargo clean
             cargo clippy -- -D warnings --no-deps
 
-      - name: ⚙️ Setup C++ Tools
-        uses: aminya/setup-cpp@v1
-        with:
-          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
-          compiler: ${{ matrix.compiler }}
-          cmake: true
-          ninja: true
+      - name: ⚙️ Install development headers - Linux 🐧
+        if: runner.os == 'Linux'
+        run: source build-util/dev-ubuntu/install-ubuntu-fltk-dev-headers.sh
 
-      - name: Run tests
+      - name: ⚒️ Build - 🍎🐧💻
+        run: cargo build
+
+      - name: 📝 Test - 🍎🐧💻
         run: cargo test
 
 
@@ -70,10 +77,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: extractions/setup-just@v2
-      - name: 🗻 Export constants as environment variables 🏝️
-        uses: cardinalby/export-env-action@v2
-        with:
-          envFile: '.github/constants.env'
 
       - name: ⚙️ Build devcontainer - Linux 🐧
         run: just build-devcontainer
