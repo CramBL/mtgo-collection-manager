@@ -1,11 +1,8 @@
 [package]
 name = "mtgogui"
-edition = "2021"
+edition.workspace = true
 version.workspace = true
 authors.workspace = true
-
-[badges]
-maintenance = { status = "actively-developed" }
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -28,3 +25,6 @@ once_cell.workspace = true
 [dev-dependencies]
 pretty_assertions.workspace = true
 temp-dir.workspace = true
+
+[lints]
+workspace = true

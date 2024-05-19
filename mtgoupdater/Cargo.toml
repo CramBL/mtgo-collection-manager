@@ -1,23 +1,19 @@
 [package]
 name = "mtgoupdater"
+readme = "README.md"
+description = "Library for interoperating with MTGO Collection manager's C++ and Go code"
 version.workspace = true
 authors.workspace = true
-edition = "2021"
-readme = "README.md"
-license = "MIT OR Apache-2.0"
-keywords = ["mtgo"]
-description = "Library for interoperating with MTGO Collection manager's C++ and Go code"
-
-[badges]
-maintenance = { status = "actively-developed" }
+edition.workspace = true
+license.workspace = true
+keywords.workspace = true
 
 [dependencies]
 mtgoparser-rs = { path = "../mtgoparser-rs", version = "*" }
 serde_json.workspace = true
 chrono.workspace = true
 serde.workspace = true
-zip = "1.2.1"
-
+zip.workspace = true
 
 [dev-dependencies]
 pretty_assertions.workspace = true
