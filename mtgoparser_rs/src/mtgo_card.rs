@@ -1,4 +1,4 @@
-use std::num::ParseIntError;
+use std::{fmt::Display, num::ParseIntError};
 
 pub mod card_history;
 pub mod collection_history;
@@ -53,15 +53,15 @@ pub enum Rarity {
     None,
 }
 
-impl ToString for Rarity {
-    fn to_string(&self) -> String {
+impl Display for Rarity {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Rarity::Common => "Common".into(),
-            Rarity::Uncommon => "Uncommon".into(),
-            Rarity::Rare => "Rare".into(),
-            Rarity::Mythic => "Mythic".into(),
-            Rarity::Booster => "Booster".into(),
-            Rarity::None => "None".into(),
+            Rarity::Common => f.write_str("Common"),
+            Rarity::Uncommon => f.write_str("Uncommon"),
+            Rarity::Rare => f.write_str("Rare"),
+            Rarity::Mythic => f.write_str("Mythic"),
+            Rarity::Booster => f.write_str("Booster"),
+            Rarity::None => f.write_str("None"),
         }
     }
 }
