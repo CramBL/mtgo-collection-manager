@@ -7,11 +7,11 @@ mtgogetter/state_log.toml
 mtgogetter/mtgogetter
 mtgogetter/*.json
 
-mtgogetter-rs/target
-mtgogetter-rs/Cargo.lock
+mtgogetter_rs/target
+mtgogetter_rs/Cargo.lock
 
 ## MTGO Parser-RS
-mtgoparser-rs/target
+mtgoparser_rs/target
 
 
 ## MTGO Updater

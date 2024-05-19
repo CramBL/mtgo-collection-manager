@@ -2,7 +2,6 @@ use chrono::{DateTime, Utc};
 use reqwest::{blocking, Url};
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Debug)]
 pub struct ScryfallBulkDataInfo {
     download_url: Url,

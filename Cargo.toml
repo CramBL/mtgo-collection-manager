@@ -2,7 +2,7 @@
 members = [
     "mtgogui",
     "mtgoupdater",
-    "mtgoparser-rs",
+    "mtgoparser_rs",
     "mtgogetter_rs",
     "mtgogetter_rs/get_scryfall",
     "mtgogetter_rs/get_goatbots",
