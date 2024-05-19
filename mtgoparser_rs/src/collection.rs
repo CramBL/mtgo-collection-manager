@@ -1,9 +1,9 @@
 use crate::{
-    goatbots::card_definitions::GoatBotsCard,
     mtgo_card::{MtgoCard, Rarity},
-    scryfall::default_cards::ScryfallCard,
     xml::XmlCard,
 };
+use parse_goatbots::card_definitions::GoatBotsCard;
+use parse_scryfall::ScryfallCard;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, num::ParseIntError};
 

@@ -13,3 +13,16 @@ use chrono::{DateTime, Utc};
 pub fn format_datetime_utc_for_url(date: DateTime<Utc>) -> String {
     date.format("%Y%m%d%H%M%S").to_string()
 }
+
+#[allow(dead_code)]
+#[cfg(debug_assertions)]
+pub fn init_debug_logging<V>(verbosity: V)
+where
+    V: Into<stderrlog::LogLevelNum>,
+{
+    use stderrlog::LogLevelNum;
+    stderrlog::new()
+        .verbosity(LogLevelNum::Trace)
+        .init()
+        .unwrap();
+}

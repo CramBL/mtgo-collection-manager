@@ -2,15 +2,15 @@ use std::{fs, io, path::Path};
 
 use chrono::Utc;
 use collection::Collection;
-use goatbots::{card_definitions::parse_card_def_json, price_history::parse_price_history_json};
 use mtgo_card::MtgoCard;
-use scryfall::default_cards::ScryfallCard;
+use parse_goatbots::{
+    card_definitions::parse_card_def_json, price_history::parse_price_history_json,
+};
+use parse_scryfall::ScryfallCard;
 use xml::parse_dek_xml;
 
 pub mod collection;
-pub mod goatbots;
 pub mod mtgo_card;
-pub mod scryfall;
 pub mod util;
 pub mod xml;
 

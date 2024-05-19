@@ -64,7 +64,7 @@ mod tests {
 
     #[test]
     fn test_parse_goatbots_json_5_cards() -> TestResult {
-        let path = Path::new(r"../test/test-data/goatbots/card-defs-small-5cards.json");
+        let path = Path::new(r"../../test/test-data/goatbots/card-defs-small-5cards.json");
         let cards = parse_card_def_json(path)?;
         assert_eq!(cards.len(), 5);
         assert_eq!(
@@ -90,7 +90,8 @@ mod tests {
 
     #[test]
     fn test_parse_goatbots_json_full() -> TestResult {
-        let path = Path::new(r"../test/test-data/goatbots/card-definitions-2023-10-02-full.json");
+        let path =
+            Path::new(r"../../test/test-data/goatbots/card-definitions-2023-10-02-full.json");
         let cards = parse_card_def_json(path)?;
         assert_eq!(cards.len(), 76070);
         assert_eq!(

@@ -1,15 +1,13 @@
 [package]
-name = "mtgoparser_rs"
-edition = "2021"
+name = "parse_goatbots"
 version.workspace = true
+edition.workspace = true
 authors.workspace = true
 
 [dependencies]
-parse_scryfall = { path = "parse_scryfall", version = "*" }
-parse_goatbots = { path = "parse_goatbots", version = "*" }
 serde.workspace = true
-quick-xml.workspace = true
 serde_json.workspace = true
+quick-xml.workspace = true
 chrono.workspace = true
 
 

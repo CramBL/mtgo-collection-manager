@@ -13,9 +13,12 @@ testresult.workspace = true
 workspace = true
 
 [dependencies]
+parse_scryfall = { path = "../../mtgoparser_rs/parse_scryfall", version = "*" }
 chrono.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 toml.workspace = true
 regex.workspace = true
 reqwest.workspace = true
+log.workspace = true
+stderrlog.workspace = true

@@ -1,14 +1,16 @@
-use chrono::{DateTime, Utc};
-use reqwest::{blocking, Url};
-use serde::{Deserialize, Serialize};
-
+use std::io::{BufReader, Read};
 
 use crate::util::format_datetime_utc_for_url;
+use chrono::{DateTime, Utc};
+use log::*;
+use parse_scryfall::{ScryfallCard, ScryfallMtgoCards};
+use reqwest::{blocking, Url};
 
 #[derive(Debug)]
 pub struct ScryfallBulkData {
     endpoint: Url,
     updated_at: DateTime<Utc>,
+    cards: Vec<ScryfallCard>,
 }
 
 impl ScryfallBulkData {
@@ -17,24 +19,23 @@ impl ScryfallBulkData {
     /// Get bulk data from the supplied date
     pub fn get(date: DateTime<Utc>) -> Result<Self, reqwest::Error> {
         let url_str = String::from(Self::URL_PREFIX) + &format_datetime_utc_for_url(date) + ".json";
+        log::info!("Getting bulk cards from {url_str}");
         let url_endpoint = Url::parse(&url_str).unwrap();
         let resp = blocking::get(url_endpoint.clone())?;
 
-        let bytes = resp.bytes()?;
+        // Todo: Optimize
+        let stream = BufReader::new(resp);
 
-        #[derive(Deserialize, Serialize, Debug)]
-        struct TmpBulkDataInfo {
-            updated_at: DateTime<Utc>,
-        }
+        let deserialized: Vec<ScryfallCard> =
+            serde_json::from_reader::<_, ScryfallMtgoCards>(stream)
+                .unwrap()
+                .0;
 
-        let deserialized: TmpBulkDataInfo = serde_json::from_slice(&bytes).unwrap();
-
-        let bulk_data_info: Self = Self {
+        Ok(Self {
             endpoint: url_endpoint,
-            updated_at: deserialized.updated_at,
-        };
-
-        Ok(bulk_data_info)
+            updated_at: date,
+            cards: deserialized,
+        })
     }
 
     pub fn endpoint(&self) -> &Url {
@@ -44,20 +45,42 @@ impl ScryfallBulkData {
     pub fn updated_at(&self) -> DateTime<Utc> {
         self.updated_at
     }
+
+    pub fn cards(&self) -> &[ScryfallCard] {
+        &self.cards
+    }
+
+    /// Take ownership of the [Vec] of [ScryfallCard], consuming [ScryfallBulkData] in the process
+    pub fn take_cards(self) -> Vec<ScryfallCard> {
+        self.cards
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use chrono::TimeZone;
     use testresult::TestResult;
+
+    use crate::util::init_debug_logging;
 
     use super::*;
 
-    #[ignore = "Will download data from the Scryfall API"]
+    #[ignore = "Will download A LOT of data from the Scryfall API"]
     #[test]
-    fn test_get_scryfall_bulk_info() -> TestResult {
-        // let scryfall_bulk_info = ScryfallBulkData::get()?;
+    fn test_get_scryfall_bulk_data() -> TestResult {
+        init_debug_logging(3);
+        let date = Utc.with_ymd_and_hms(2024, 5, 19, 9, 5, 48).unwrap();
+        let bulk_data = ScryfallBulkData::get(date)?;
 
-        // eprintln!("{scryfall_bulk_info:?}");
+        eprintln!("{bulk_data:?}");
+
+        assert!(!bulk_data.cards().is_empty());
+
+        let cards = bulk_data.take_cards();
+        for c in &cards[0..=10] {
+            dbg!(c);
+        }
+
         Ok(())
     }
 }

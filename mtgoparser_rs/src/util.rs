@@ -51,17 +51,16 @@ mod tests {
         let (file0, timestamp0) = &files[0];
         let (file1, timestamp1) = &files[1];
 
-        // 1 and 0 are swapped because they are read in reverse order relative to when they were written
-        assert_eq!(file0, &tmp_file1);
-        assert_eq!(file1, &tmp_file0);
+        assert_eq!(file0, &tmp_file0);
+        assert_eq!(file1, &tmp_file1);
 
         assert_eq!(
             timestamp0.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
-            "2023-11-05T15:28:00Z"
+            "2023-11-05T15:27:00Z"
         );
         assert_eq!(
             timestamp1.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
-            "2023-11-05T15:27:00Z"
+            "2023-11-05T15:28:00Z"
         );
 
         Ok(())

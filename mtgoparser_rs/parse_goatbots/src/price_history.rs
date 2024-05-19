@@ -16,7 +16,7 @@ mod tests {
 
     #[test]
     fn test_price_history_5_cards() -> TestResult {
-        let path = Path::new(r"../test/test-data/goatbots/price-hist-small-5cards.json");
+        let path = Path::new(r"../../test/test-data/goatbots/price-hist-small-5cards.json");
         let price_history = parse_price_history_json(path)?;
         assert_eq!(price_history.len(), 5);
         assert_eq!(price_history.get("112348").unwrap(), &0.003);
@@ -29,7 +29,7 @@ mod tests {
 
     #[test]
     fn test_price_history_full() -> TestResult {
-        let path = Path::new(r"../test/test-data/goatbots/price-history-2023-10-02-full.json");
+        let path = Path::new(r"../../test/test-data/goatbots/price-history-2023-10-02-full.json");
         let price_history = parse_price_history_json(path)?;
         assert_eq!(price_history.len(), 76070);
         assert_eq!(price_history.get("112348").unwrap(), &0.003);
