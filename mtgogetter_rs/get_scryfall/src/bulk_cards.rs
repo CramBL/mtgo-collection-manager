@@ -1,8 +1,7 @@
-use std::io::{BufReader, Read};
+use std::io::BufReader;
 
 use crate::util::format_datetime_utc_for_url;
 use chrono::{DateTime, Utc};
-use log::*;
 use parse_scryfall::{ScryfallCard, ScryfallMtgoCards};
 use reqwest::{blocking, Url};
 
@@ -22,6 +21,13 @@ impl ScryfallBulkData {
         log::info!("Getting bulk cards from {url_str}");
         let url_endpoint = Url::parse(&url_str).unwrap();
         let resp = blocking::get(url_endpoint.clone())?;
+
+        let content_lenght: String = match resp.content_length() {
+            Some(l) => l.to_string(),
+            // Why could it be unknown? Read more: https://docs.rs/reqwest/latest/reqwest/blocking/struct.Response.html#method.content_length
+            None => String::from("Unknown Response Content length"),
+        };
+        log::info!("Response content length: {content_lenght}",);
 
         // Todo: Optimize
         let stream = BufReader::new(resp);
