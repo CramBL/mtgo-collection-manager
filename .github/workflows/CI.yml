@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    tags: [ master ]
+    branches: [ master ]
+
+env:
+  VERBOSE: 1
+
+jobs:
+  Test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            compiler: gcc-13
+
+          - os: ubuntu-22.04
+            compiler: llvm-17.0.2
+            enable_ipo: On
+
+          - os: macos-13
+            compiler: gcc-13
+            enable_ipo: Off
+
+          - os: macos-13
+            compiler: llvm-15.0.3
+
+          - os: windows-2022
+            compiler: msvc
+            generator: "Visual Studio 17 2022"
+
+    name: ⚒️ Build & Test 📝
+    steps:
+      - uses: actions/checkout@v4
+      - uses: moonrepo/setup-rust@v1
+        with:
+          components: clippy, rustfmt
+          bins: cargo-audit
+
+      - name: 🍄 Check & Lint 🩺
+        run: |
+            cargo check --verbose
+            cargo fmt -- --check
+            cargo audit
+            cargo doc
+            cargo clean
+            cargo clippy -- -D warnings --no-deps
+
+      - name: ⚙️ Setup C++ Tools
+        uses: aminya/setup-cpp@v1
+        with:
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          compiler: ${{ matrix.compiler }}
+          cmake: true
+          ninja: true
+
+      - name: Run tests
+        run: cargo test
+
+
+
+  Test-cross-windows:
+    runs-on: ubuntu-latest
+    name: Test cross compile to windows
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v2
+      - name: 🗻 Export constants as environment variables 🏝️
+        uses: cardinalby/export-env-action@v2
+        with:
+          envFile: '.github/constants.env'
+
+      - name: ⚙️ Build devcontainer - Linux 🐧
+        run: just build-devcontainer
+        env:
+          USE_CLANG: 0
+
+      - name: ⚒️ Build - 🐧💻
+        # This doesn't actually build mtgogetter and parser for windows, but the important part is
+        #  confirming cross-compilation abilities for fltk
+        run: |
+          just build-mtgogetter
+          just cross-compile-windows-xwin release
+        env:
+          USE_CLANG: 0
+
+      - name: 📦 Pack/Archive - 🍎🐧💻
+        run: just archive-cross-compile-windows-xwin ${PACKAGE_NAME}
+        env:
+          PACKAGE_NAME: windows-gcc-mtgo-cm
+
+      - name: 📩 Upload - Linux-windows cross 💻🐧
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-gcc-cross-mtgo-collection-manager
+          path: windows-gcc-mtgo-cm.zip
+          retention-days: 14
