@@ -4,6 +4,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use mtgoupdater::new_update_all::new_update_all;
+
 use crate::util::{self, first_file_match_from_dir};
 
 use super::{paths::CardDataPaths, APP_DATA_DIR};
@@ -25,14 +27,15 @@ impl AppData {
         let appdata_dir = super::util::appdata_path()?;
 
         // Get App Data
-        match mtgoupdater::mtgogetter_api::mtgogetter_update_all(appdata_dir.as_os_str()) {
-            Ok(output) => {
-                log::info!("MTGO Getter output: {}", output.status);
-            }
-            Err(e) => {
-                log::info!("MTGO Getter error: {e}");
-            }
-        }
+        // match mtgoupdater::mtgogetter_api::mtgogetter_update_all(appdata_dir.as_os_str()) {
+        //     Ok(output) => {
+        //         log::info!("MTGO Getter output: {}", output.status);
+        //     }
+        //     Err(e) => {
+        //         log::info!("MTGO Getter error: {e}");
+        //     }
+        // }
+        new_update_all(appdata_dir.as_os_str())?;
 
         let card_data_paths = CardDataPaths::find(&appdata_dir)?;
 

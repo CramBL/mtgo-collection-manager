@@ -10,6 +10,7 @@ use std::sync::OnceLock;
 pub mod date;
 pub mod internal_only;
 pub mod mtgogetter_api;
+pub mod new_update_all;
 mod util;
 mod zip_util;
 

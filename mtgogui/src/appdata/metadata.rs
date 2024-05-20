@@ -33,7 +33,7 @@ impl MetaData {
     ///
     /// Returns an error if the MTGO Getter state log is not found or if the parsing fails
     pub fn load(mut src_dir: PathBuf) -> io::Result<Self> {
-        src_dir.push(MTGO_GETTER_STATE_LOG);
+        src_dir.push("fetch_log.toml");
         let gui_state = if src_dir.try_exists()? {
             let toml = std::fs::read_to_string(src_dir)?;
             let goatbots = match GoatBots::from_raw_string(&toml) {
