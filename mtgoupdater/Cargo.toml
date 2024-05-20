@@ -10,6 +10,7 @@ keywords.workspace = true
 
 [dependencies]
 mtgoparser_rs = { path = "../mtgoparser_rs", version = "*" }
+mtgogetter_rs = { path = "../mtgogetter_rs", version = "*" }
 serde_json.workspace = true
 chrono.workspace = true
 serde.workspace = true

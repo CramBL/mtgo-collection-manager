@@ -623,11 +623,13 @@ name = "get_goatbots"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "log",
  "pretty_assertions",
  "regex",
  "reqwest",
  "serde",
  "serde_json",
+ "stderrlog",
  "temp-dir",
  "testresult",
  "toml",
@@ -1064,10 +1066,12 @@ dependencies = [
  "chrono",
  "get_goatbots",
  "get_scryfall",
+ "log",
  "pretty_assertions",
  "regex",
  "serde",
  "serde_json",
+ "stderrlog",
  "temp-dir",
  "testresult",
  "toml",
@@ -1116,6 +1120,7 @@ name = "mtgoupdater"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "mtgogetter_rs",
  "mtgoparser_rs",
  "pretty_assertions",
  "serde",

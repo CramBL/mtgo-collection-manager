@@ -20,3 +20,5 @@ toml.workspace = true
 regex.workspace = true
 reqwest.workspace = true
 zip.workspace = true
+log.workspace = true
+stderrlog.workspace = true
