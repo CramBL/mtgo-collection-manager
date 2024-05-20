@@ -23,8 +23,16 @@ impl GoatBotsMetaData {
         self.card_definitions_updated_at
     }
 
-    pub fn prices_updated_at(&self) -> Option<DateTime<Utc>> {
+    pub(super) fn refresh_card_definitions_updated_at_timestamp(&mut self) {
+        self.card_definitions_updated_at = Some(Utc::now())
+    }
+
+    pub(super) fn prices_updated_at(&self) -> Option<DateTime<Utc>> {
         self.prices_updated_at
+    }
+
+    pub(super) fn refresh_prices_updated_at_timestamp(&mut self) {
+        self.prices_updated_at = Some(Utc::now())
     }
 
     /// Check if the price data is up to date.

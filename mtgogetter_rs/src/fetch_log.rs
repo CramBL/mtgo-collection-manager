@@ -1,20 +1,26 @@
+use std::{fs, io, path::Path};
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 mod goatbots_md;
 use goatbots_md::GoatBotsMetaData;
 
-mod scryfall_md;
+pub(crate) mod scryfall_md;
 use scryfall_md::ScryfallMetaData;
 
+use self::scryfall_md::next_released_mtgo_set::NextReleasedMtgoSet;
+
+/// Also known as `fetch_log.toml`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CardInfoMetaData {
-    description: &'static str,
+    description: Box<str>,
     goatbots: GoatBotsMetaData,
     scryfall: ScryfallMetaData,
 }
 
 impl CardInfoMetaData {
+    pub const FILENAME: &'static str = "fetch_log.toml";
     const DESCRIPTION: &'static str = "log for MTGO Getter state, such as updated_at timestamps";
 
     /// Create a first time [CardInfoMetaData] state log.
@@ -22,15 +28,32 @@ impl CardInfoMetaData {
     #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
-            description: Self::DESCRIPTION,
+            description: Self::DESCRIPTION.into(),
             goatbots: GoatBotsMetaData::default(),
             scryfall: ScryfallMetaData::default(),
         }
     }
 
+    pub fn from_toml_file(p: &Path) -> Result<Self, io::Error> {
+        let contents = fs::read_to_string(p)?;
+        // TODO: Handle/converge error types here (thiserror?)
+        let toml: CardInfoMetaData = toml::from_str(&contents).unwrap();
+        Ok(toml)
+    }
+
+    pub fn to_toml_on_disk(&self, p: &Path) -> Result<(), io::Error> {
+        let toml = toml::to_string(self).unwrap();
+        fs::write(p, toml)
+    }
+
     /// Check if the price data is up to date. it's outdated if it hasn't been updated since 4 AM UTC
     pub fn is_goatbots_prices_updated(&self) -> bool {
         self.goatbots.is_price_updated()
+    }
+
+    /// Refresh the timestamp by assigning the current UTC time.
+    pub fn refresh_prices_updated_at_timestamp(&mut self) {
+        self.goatbots.refresh_prices_updated_at_timestamp()
     }
 
     /// Check if the card definitions are up to date.
@@ -43,7 +66,7 @@ impl CardInfoMetaData {
                 None => return false, // They were never updated
             };
 
-        if self.scryfall.next_released_mtgo_set().is_any_none() {
+        if self.scryfall.is_next_set_out() {
             return false; // There's no next set, assume they need to be updated (were never updated in the first place)
         }
 
@@ -61,12 +84,35 @@ impl CardInfoMetaData {
             || (card_definitions_updated_at < twenty_minutes_ago)
     }
 
+    /// Refresh the timestamp by assigning the current UTC time.
+    pub fn refresh_card_definitions_updated_at_timestamp(&mut self) {
+        self.goatbots
+            .refresh_card_definitions_updated_at_timestamp();
+    }
+
     /// Check if the bulk data is up to date.
     /// outdated if the timestamp is older than the `updated_at` retrieved from the Scryfall API
     pub fn is_scryfall_bulk_updated(&self, api_timestamp: DateTime<Utc>) -> bool {
         self.scryfall
             .bulk_data_updated_at()
             .is_some_and(|dt| dt > api_timestamp)
+    }
+
+    /// Refresh the timestamp by assigning the current UTC time.
+    pub fn refresh_bulk_data_updated_at_timestamp(&mut self) {
+        self.scryfall.refresh_bulk_data_updated_at_timestamp();
+    }
+
+    // Returns if the next set to come out is now out on MTGO.
+    //
+    // If it is out, we want to update which set is the next to come out
+    pub fn is_next_set_out(&self) -> bool {
+        self.scryfall.is_next_set_out()
+    }
+
+    /// Replace the [NextReleasedMtgoSet] with the given set
+    pub fn replace_next_released_set(&mut self, next_set: NextReleasedMtgoSet) {
+        self.scryfall.replace_next_released_set(next_set);
     }
 }
 
@@ -95,7 +141,7 @@ mod tests {
         );
 
         let cardinfo_metadata = CardInfoMetaData {
-            description: CardInfoMetaData::DESCRIPTION,
+            description: CardInfoMetaData::DESCRIPTION.into(),
             goatbots: goatbots_metadata,
             scryfall: scryfall_metadata,
         };
@@ -123,6 +169,9 @@ mtgo_code = \"lci\"
 "
         );
 
+        let deserialized: CardInfoMetaData = toml::from_str(&serialized)?;
+        assert_eq!(cardinfo_metadata, deserialized);
+
         Ok(())
     }
 
@@ -130,7 +179,7 @@ mtgo_code = \"lci\"
     #[test]
     fn test_is_scryfall_bulk_updated_false_cause_empty() -> TestResult {
         let cardinfo_metadata = CardInfoMetaData {
-            description: CardInfoMetaData::DESCRIPTION,
+            description: CardInfoMetaData::DESCRIPTION.into(),
             goatbots: GoatBotsMetaData::default(),
             scryfall: ScryfallMetaData::default(),
         };
@@ -146,7 +195,7 @@ mtgo_code = \"lci\"
     #[test]
     fn test_is_scryfall_bulk_updated_true() -> TestResult {
         let cardinfo_metadata = CardInfoMetaData {
-            description: CardInfoMetaData::DESCRIPTION,
+            description: CardInfoMetaData::DESCRIPTION.into(),
             goatbots: GoatBotsMetaData::default(),
             scryfall: ScryfallMetaData::new(Some(Utc::now()), NextReleasedMtgoSet::default()),
         };
@@ -163,7 +212,7 @@ mtgo_code = \"lci\"
     #[test]
     fn test_is_scryfall_bulk_updated_false() -> TestResult {
         let cardinfo_metadata = CardInfoMetaData {
-            description: CardInfoMetaData::DESCRIPTION,
+            description: CardInfoMetaData::DESCRIPTION.into(),
             goatbots: GoatBotsMetaData::default(),
             scryfall: ScryfallMetaData::new(
                 Some(Utc::now() - chrono::Duration::days(1)),

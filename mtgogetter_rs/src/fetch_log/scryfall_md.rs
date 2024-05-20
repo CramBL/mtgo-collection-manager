@@ -2,9 +2,9 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use self::next_released_mtgo_set::NextReleasedMtgoSet;
-
 pub mod next_released_mtgo_set;
+
+use self::next_released_mtgo_set::NextReleasedMtgoSet;
 
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ScryfallMetaData {
@@ -28,8 +28,26 @@ impl ScryfallMetaData {
         self.bulk_data_updated_at
     }
 
+    /// Refresh the timestamp by assigning the current UTC time.
+    pub(super) fn refresh_bulk_data_updated_at_timestamp(&mut self) {
+        self.bulk_data_updated_at = Some(Utc::now())
+    }
+
     pub fn next_released_mtgo_set(&self) -> &NextReleasedMtgoSet {
         &self.next_released_mtgo_set
+    }
+
+    // Returns if the next set to come out is now out on MTGO.
+    //
+    // If it is out, we want to update which set is the next to come out
+    pub(super) fn is_next_set_out(&self) -> bool {
+        // If the name is empty we never set the next released set or it is out
+        // either way that means it needs to be updated
+        self.next_released_mtgo_set.is_any_none()
+    }
+
+    pub(super) fn replace_next_released_set(&mut self, next_set: NextReleasedMtgoSet) {
+        self.next_released_mtgo_set = next_set;
     }
 }
 

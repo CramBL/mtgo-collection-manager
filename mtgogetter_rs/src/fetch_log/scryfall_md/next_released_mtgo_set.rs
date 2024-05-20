@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 use chrono::NaiveDate;
+use get_scryfall::MtgoSet;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -8,6 +9,26 @@ pub struct NextReleasedMtgoSet {
     name: Option<String>,
     released_at: Option<NaiveDate>,
     mtgo_code: Option<String>,
+}
+
+impl From<MtgoSet> for NextReleasedMtgoSet {
+    fn from(value: MtgoSet) -> Self {
+        Self {
+            name: Some(value.name),
+            released_at: Some(value.released_at),
+            mtgo_code: Some(value.mtgo_code),
+        }
+    }
+}
+
+impl From<&MtgoSet> for NextReleasedMtgoSet {
+    fn from(value: &MtgoSet) -> Self {
+        Self {
+            name: Some(value.name.clone()),
+            released_at: Some(value.released_at),
+            mtgo_code: Some(value.mtgo_code.clone()),
+        }
+    }
 }
 
 impl NextReleasedMtgoSet {
@@ -45,7 +66,7 @@ impl NextReleasedMtgoSet {
     /// then it is safe to assume that the data needs to be refreshed similarly to the expected case.
     ///
     /// For these reasons, this function is provided in place of one that only checks if all fields are [None].
-    pub fn is_any_none(&self) -> bool {
+    pub(super) fn is_any_none(&self) -> bool {
         self.name().is_none() || self.released_at().is_none() || self.mtgo_code().is_none()
     }
 }

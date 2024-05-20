@@ -35,7 +35,7 @@ pub fn parse_full(
 
     if let Some(p) = save_json_to_dir {
         if has_state_log_changed(p) {
-            let fname = "state_log.toml";
+            let fname = "fetch_log.toml";
             let state_log_path = p.join(fname);
             let hist_log_dir = p.join("collection-history");
             if !hist_log_dir.exists() {
@@ -54,7 +54,7 @@ pub fn parse_full(
 }
 
 pub fn has_state_log_changed(appdata_dir: &Path) -> bool {
-    let fname = "state_log.toml";
+    let fname = "fetch_log.toml";
     let history_log_path = appdata_dir.join("collection-history").join(fname);
     let appdata_log_path = appdata_dir.join(fname);
     if history_log_path.exists() {
