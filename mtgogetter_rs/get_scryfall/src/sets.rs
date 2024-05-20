@@ -66,7 +66,7 @@ impl ScryfallMtgoSets {
     }
 }
 
-/// Takes a [NaiveDateTime] and a slice of [MtgoSet] and returns a reference to the
+/// Takes a [NaiveDate] and a slice of [MtgoSet] and returns a reference to the
 /// [MtgoSet] that will be released next (first match, more than one could be released at the same date).
 ///
 /// # Errors

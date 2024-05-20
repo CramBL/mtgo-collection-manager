@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 mod goatbots_md;
 use goatbots_md::GoatBotsMetaData;
 
-pub(crate) mod scryfall_md;
+pub mod scryfall_md;
 use scryfall_md::ScryfallMetaData;
 
 use self::scryfall_md::next_released_mtgo_set::NextReleasedMtgoSet;

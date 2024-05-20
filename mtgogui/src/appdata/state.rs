@@ -63,12 +63,12 @@ impl GuiState {
         Ok(gui_state)
     }
 
-    /// Save the current [DateTime<Utc>] as the last time a tradelist was added.
+    /// Save the current [`DateTime<Utc>`] as the last time a tradelist was added.
     pub fn new_tradelist(&mut self) {
         self.tradelist_added_date = Some(Utc::now());
     }
 
-    /// Get the [DateTime<Utc>] of the last time a tradelist was added.
+    /// Get the [`DateTime<Utc>`] of the last time a tradelist was added.
     pub fn get_tradelist_added_date(&self) -> Option<&DateTime<Utc>> {
         self.tradelist_added_date.as_ref()
     }

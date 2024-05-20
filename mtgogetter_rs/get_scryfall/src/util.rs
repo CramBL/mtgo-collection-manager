@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 
-/// Parse a [DateTime<Utc>] to a string of the form `YYYYMMDDHHMMSS` e.g. `20240519090548`
+/// Parse a [`DateTime<Utc>`] to a string of the form `YYYYMMDDHHMMSS` e.g. `20240519090548`
 ///
 /// # Example
 /// ```
