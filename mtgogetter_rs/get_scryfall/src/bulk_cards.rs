@@ -10,14 +10,18 @@ pub struct ScryfallBulkData {
     endpoint: Url,
     updated_at: DateTime<Utc>,
     cards: Vec<ScryfallCard>,
+    // Name is default-cards-<timestamp>.json
+    pub filename: String,
 }
 
 impl ScryfallBulkData {
+    pub const FILENAME: &'static str = "scryfall-cards.json";
     const URL_PREFIX: &'static str = "https://data.scryfall.io/default-cards/default-cards-";
 
     /// Get bulk data from the supplied date
     pub fn get(date: DateTime<Utc>) -> Result<Self, reqwest::Error> {
-        let url_str = String::from(Self::URL_PREFIX) + &format_datetime_utc_for_url(date) + ".json";
+        let date_url_part = format_datetime_utc_for_url(date);
+        let url_str = String::from(Self::URL_PREFIX) + &date_url_part + ".json";
         log::info!("Getting bulk cards from {url_str}");
         let url_endpoint = Url::parse(&url_str).unwrap();
         let resp = blocking::get(url_endpoint.clone())?;
@@ -43,6 +47,7 @@ impl ScryfallBulkData {
             endpoint: url_endpoint,
             updated_at: date,
             cards: deserialized,
+            filename: format!("default-cards-{date_url_part}.json"),
         })
     }
 
