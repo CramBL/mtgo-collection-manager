@@ -251,7 +251,7 @@ mod tests {
     use temp_dir::TempDir;
 
     const TEST_STATE_LOG: &str =
-        include_str!("../../../test/test-data/mtgogetter-out/state_log.toml");
+        include_str!("../../../test/test-data/mtgogetter-out/fetch_log.toml");
 
     #[test]
     fn test_metadata_goatbots_load_ok() {
@@ -351,10 +351,11 @@ mod tests {
     fn test_metadata_load_ok() {
         let src_dir = PathBuf::from("../test/test-data/mtgogetter-out");
         assert!(src_dir.exists());
-        let metadata_loaded = MetaData::load(src_dir);
+        assert!(src_dir.join("fetch_log.toml").exists());
+        let metadata_loaded = MetaData::load(src_dir).unwrap();
 
         assert_eq!(
-            metadata_loaded.unwrap(),
+            metadata_loaded,
             MetaData {
                 goatbots: GoatBots {
                     card_definitions_updated_at: "2023-10-21T22:29:53Z"

@@ -82,10 +82,10 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir() {
 
     let save_to_dir = Path::new(local_test_dir);
 
-    let state_log_path = PathBuf::from("../test/test-data/mtgogetter-out/state_log.toml");
+    let state_log_path = PathBuf::from("../test/test-data/mtgogetter-out/fetch_log.toml");
     assert!(state_log_path.exists());
     let mut save_to_dir_state_log = save_to_dir.to_path_buf();
-    save_to_dir_state_log.push("state_log.toml");
+    save_to_dir_state_log.push("fetch_log.toml");
     _ = fs::copy(
         state_log_path.as_os_str(),
         save_to_dir_state_log.as_os_str(),
@@ -133,10 +133,10 @@ fn test_full_parse_3000cards_from_path_with_save_to_dir_state_log() {
         PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek");
     let save_to_dir = Path::new("target/");
 
-    let state_log_path = PathBuf::from("../test/test-data/mtgogetter-out/state_log.toml");
+    let state_log_path = PathBuf::from("../test/test-data/mtgogetter-out/fetch_log.toml");
     assert!(state_log_path.exists());
     let mut save_to_dir_state_log = save_to_dir.to_path_buf();
-    save_to_dir_state_log.push("state_log.toml");
+    save_to_dir_state_log.push("fetch_log.toml");
     _ = fs::copy(
         state_log_path.as_os_str(),
         save_to_dir_state_log.as_os_str(),
