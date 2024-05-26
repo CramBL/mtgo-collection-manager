@@ -23,13 +23,12 @@ toml.workspace = true
 regex.workspace = true
 chrono.workspace = true
 once_cell.workspace = true
-
 # Bundle FLTK for windows to avoid linker errors when cross-compiling
-[target.'cfg(windows)'.dependencies]
-fltk = { version = "1.4.30", features = ["fltk-bundled"] }
+fltk = "1.4.30"
 
-[target.'cfg(not(windows))'.dependencies]
-fltk = { version = "1.4.30" } #, features = ["fltk-bundled"] }
+[features]
+bundled = ["fltk/fltk-bundled"]
+
 
 [dev-dependencies]
 pretty_assertions.workspace = true
