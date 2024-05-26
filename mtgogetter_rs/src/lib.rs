@@ -11,8 +11,9 @@ const FETCH_LOG_FILENAME: &str = "fetch_log.toml";
 /// Fetches all data if any needs updating and stores it in `save_to_dir`
 ///
 pub fn fetch_all(save_to_dir: PathBuf) -> Result<(), io::Error> {
-    let mut fetch_log = match save_to_dir.join(FETCH_LOG_FILENAME).exists() {
-        true => CardInfoMetaData::from_toml_file(&save_to_dir)?,
+    let fetch_log_dst = save_to_dir.join(FETCH_LOG_FILENAME);
+    let mut fetch_log = match fetch_log_dst.exists() {
+        true => CardInfoMetaData::from_toml_file(&fetch_log_dst)?,
         false => CardInfoMetaData::new(),
     };
 
