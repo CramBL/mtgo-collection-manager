@@ -8,6 +8,7 @@ authors.workspace = true
 
 [dependencies]
 mtgoupdater = { version = "0.1.0", path = "../mtgoupdater" }
+mtgogetter_rs = { version = "*", path = "../mtgogetter_rs" }
 # For bundled fltk mode:
 #fltk = { version = "1.4.30" } , features = ["fltk-bundled"] }
 fltk = { version = "1.4.30" }                                         #, features = ["fltk-bundled"] }
