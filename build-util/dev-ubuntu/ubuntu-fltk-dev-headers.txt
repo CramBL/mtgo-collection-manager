@@ -1,5 +1,0 @@
-libxinerama-dev
-libxcursor-dev
-libxfixes-dev
-libxft-dev
-libpango1.0-dev

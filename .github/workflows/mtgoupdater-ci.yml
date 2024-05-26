@@ -89,10 +89,6 @@ jobs:
           cmake: true
           ninja: true
 
-      - name: Setup Mold linker for Linux 🐧 builds
-        if: runner.os == 'Linux'
-        uses: rui314/setup-mold@v1
-
       - name: Install Task
         uses: arduino/setup-task@v1
         with:

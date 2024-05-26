@@ -53,7 +53,7 @@ jobs:
 
       - name: ⚙️ Install development headers - Linux 🐧
         if: runner.os == 'Linux'
-        run: source build-util/dev-ubuntu/install-ubuntu-fltk-dev-headers.sh
+        run: cd build-util/deps && ./install-debian-deps.sh
 
       - name: 🍄 Check & Lint 🩺
         run: |

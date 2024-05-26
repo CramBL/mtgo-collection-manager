@@ -63,9 +63,6 @@ jobs:
         with:
           go-version: '1.21'
 
-      - name: Setup Mold linker for Linux 🐧 builds
-        if: runner.os == 'Linux'
-        uses: rui314/setup-mold@v1
 
       - name: Install Task
         uses: arduino/setup-task@v1
@@ -75,7 +72,7 @@ jobs:
 
       - name: ⚙️ Install development headers - Linux 🐧
         if: runner.os == 'Linux'
-        run: source build-util/dev-ubuntu/install-ubuntu-fltk-dev-headers.sh
+        run: cd build-util/deps && ./install-debian-deps.sh
 
       - name: ⚒️ Build - 🍎🐧💻
         run: task build-integration

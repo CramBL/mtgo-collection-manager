@@ -57,8 +57,7 @@ ci-install-cross-compile-windows-deps:
     rustup target add x86_64-pc-windows-gnu
     sudo apt-get install gcc-mingw-w64-x86-64 ninja-build cmake
 
-build: build-mtgogetter build-mtgogui
-build-mtgogetter *ARGS='-v': (cmd 'cd mtgogetter && go build ' + ARGS)
+build: build-mtgogui
 build-mtgogui *ARGS: (cmd 'cd mtgogui && cargo build ' + ARGS)
 
 [unix]
@@ -81,5 +80,8 @@ archive-cross-compile-windows-xwin PACKAGE_NAME="windows-mtgo-collection-manager
     cp target/x86_64-pc-windows-msvc/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager.exe
     zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
 
+
+install-debian-dev-deps:
+    cd build-util/deps && ./install-debian-deps.sh
 
 clean: (cmd "cargo clean")

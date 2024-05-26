@@ -110,47 +110,16 @@ RUN wget --progress=dot:giga -O - https://apt.kitware.com/keys/kitware-archive-l
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install mold for much faster linking
-RUN apt-get update \
-    && apt-get install -y \
-    mold \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-ENV PATH=$PATH:/usr/bin/mold
-RUN mold --version
-
-# Download and install Go
-RUN wget --progress=dot:giga https://golang.org/dl/go1.21.4.linux-amd64.tar.gz \
-    && tar -C /usr/local -xzf go1.21.4.linux-amd64.tar.gz \
-    && rm go1.21.4.linux-amd64.tar.gz
-
-# Add Go binaries to the system PATH
-ENV PATH=$PATH:/usr/local/go/bin
-RUN go version
-
-# Install Go Task
-RUN sh -c "$(wget --progress=dot:giga -O - https://taskfile.dev/install.sh)" -- -d -b /usr/bin && task --version
-
-# Add FLTK development headers, also install curl as it is needed to to download the bundled libraries during compilation
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
-    curl \
-    libxinerama-dev \
-    libxcursor-dev \
-    libxfixes-dev \
-    libxft-dev \
-    libpango1.0-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
 # Download and install Rust using the official Rust installer script
-RUN wget --progress=dot:giga -O - https://sh.rustup.rs | sh -s -- -y 
+RUN wget --progress=dot:giga -O - https://sh.rustup.rs | sh -s -- -y
 
 # Add the Rust binaries to the system PATH
 ENV PATH=/root/.cargo/bin:${PATH}
 RUN rustc --version
-RUN cargo install cargo-xwin
-
+COPY Justfile .
+COPY build-util build-util
+RUN cargo install --locked cargo-xwin just \
+    && just install-debian-dev-deps
 
 # Allow the user to set compiler defaults
 ARG USE_CLANG
