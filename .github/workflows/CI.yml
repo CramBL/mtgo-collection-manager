@@ -23,11 +23,9 @@ jobs:
 
           - os: ubuntu-22.04
             compiler: llvm-17.0.2
-            enable_ipo: On
 
           - os: macos-13
             compiler: gcc-13
-            enable_ipo: Off
 
           - os: macos-13
             compiler: llvm-15.0.3
@@ -63,8 +61,13 @@ jobs:
       - name: 🍄 Check & Lint 🩺
         run: just ci-lint
 
-      - name: ⚒️ Build - 🍎🐧💻
+      - name: ⚒️ Build - 🍎🐧 with LLVM
+        if: ${{ contains(matrix.compiler, 'llvm' )}}
         run: cargo build
+
+      - name: ⚒️ Build - 🍎🐧💻 (🍎🐧 with GCC)
+        if: ${{ !contains(matrix.compiler, 'llvm' )}}
+        run: cargo build --features bundled
 
       - name: 📝 Test - 🍎🐧💻
         run: cargo test
