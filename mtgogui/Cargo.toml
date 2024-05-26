@@ -10,8 +10,7 @@ authors.workspace = true
 mtgoupdater = { version = "0.1.0", path = "../mtgoupdater" }
 mtgogetter_rs = { version = "*", path = "../mtgogetter_rs" }
 # For bundled fltk mode:
-#fltk = { version = "1.4.30" } , features = ["fltk-bundled"] }
-fltk = { version = "1.4.30" }                                         #, features = ["fltk-bundled"] }
+
 fltk-flex = "0.2.1"
 fltk-grid = "0.4.0"
 fltk-table = "0.3.1"
@@ -24,6 +23,13 @@ toml.workspace = true
 regex.workspace = true
 chrono.workspace = true
 once_cell.workspace = true
+
+# Bundle FLTK for windows to avoid linker errors when cross-compiling
+[target.'cfg(windows)'.dependencies]
+fltk = { version = "1.4.30", features = ["fltk-bundled"] }
+
+[target.'cfg(not(windows))'.dependencies]
+fltk = { version = "1.4.30" } #, features = ["fltk-bundled"] }
 
 [dev-dependencies]
 pretty_assertions.workspace = true

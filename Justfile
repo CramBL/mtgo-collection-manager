@@ -69,8 +69,8 @@ launch: build-mtgogui
 cross-compile-windows PROFILE="dev":
     just cmd 'cargo build --profile={{PROFILE}} --target=x86_64-pc-windows-gnu'
 
-cross-compile-windows-xwin PROFILE="dev":
-    just cmd 'cargo xwin build --profile={{PROFILE}} --target x86_64-pc-windows-msvc'
+cross-compile-windows-xwin PROFILE="dev" CLIB="gnu" ARGS="":
+    just cmd 'cargo xwin build --profile={{PROFILE}} --target x86_64-pc-windows-{{CLIB}} {{ARGS}}'
 
 archive-cross-compile-windows PACKAGE_NAME="windows-mtgo-collection-manager":
     mkdir -p mtgo-collection-manager
@@ -110,6 +110,7 @@ env:
         gcc
         ninja
         docker
+        curl
     )
     for t in "${tools[@]}"; do
         {{PRINT_RGB}} 255 155 100 "==> ${t}: "
