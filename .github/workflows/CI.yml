@@ -18,14 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
-            compiler: gcc-13
 
           - os: ubuntu-22.04
             compiler: llvm-17.0.2
-
-          - os: macos-13
-            compiler: gcc-13
 
           - os: macos-13
             compiler: llvm-15.0.3
@@ -65,8 +60,8 @@ jobs:
         if: ${{ contains(matrix.compiler, 'llvm' )}}
         run: cargo build
 
-      - name: ⚒️ Build - 🍎🐧💻 (🍎🐧 with GCC)
-        if: ${{ !contains(matrix.compiler, 'llvm' )}}
+      - name: ⚒️ Build - 💻
+        if: runner.os == 'windows'
         run: cargo build --features bundled
 
       - name: 📝 Test - 🍎🐧💻
