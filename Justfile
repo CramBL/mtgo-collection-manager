@@ -1,3 +1,5 @@
+import? 'just-util/mod.just'
+
 PWD := `pwd`
 USE_CLANG := env('USE_CLANG', '1')
 GCOV_EXECUTABLE := if USE_CLANG == "1" { "llvm-cov gcov" } else { "gcov" }
@@ -28,6 +30,7 @@ CMD_IT := if path_exists('/in_container') == "true" {
 + " -it " + DEVCONTAINER_NAME \
 + " /bin/bash -l "
 }
+
 
 @_default:
     just --list
@@ -93,3 +96,22 @@ ci-lint:
     cargo doc
     cargo clean
     cargo clippy -- -D warnings --no-deps
+
+# Print tool versions
+env:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    tools=(
+        just
+        rustc
+        cargo
+        cmake
+        clang
+        gcc
+        ninja
+        docker
+    )
+    for t in "${tools[@]}"; do
+        {{PRINT_RGB}} 255 155 100 "==> ${t}: "
+        ${t} --version 2>/dev/null || echo "not found"
+    done

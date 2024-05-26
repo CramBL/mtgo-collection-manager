@@ -117,6 +117,7 @@ RUN wget --progress=dot:giga -O - https://sh.rustup.rs | sh -s -- -y
 ENV PATH=/root/.cargo/bin:${PATH}
 RUN rustc --version
 COPY Justfile .
+COPY just-util just-util
 COPY build-util build-util
 RUN cargo install --locked \
     cargo-xwin \
