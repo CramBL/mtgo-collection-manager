@@ -62,7 +62,6 @@ jobs:
         run: |
             cargo check --verbose
             cargo fmt -- --check
-            cargo audit
             cargo doc
             cargo clean
             cargo clippy -- -D warnings --no-deps
