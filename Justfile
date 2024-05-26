@@ -52,7 +52,6 @@ build-devcontainer UBUNTU_VARIANT="jammy":
 run-devcontainer:
 	{{CMD_IT}}
 
-
 ci-install-cross-compile-windows-deps:
     rustup target add x86_64-pc-windows-gnu
     sudo apt-get install gcc-mingw-w64-x86-64 ninja-build cmake
@@ -85,3 +84,12 @@ install-debian-dev-deps:
     cd build-util/deps && ./install-debian-deps.sh
 
 clean: (cmd "cargo clean")
+
+[group("CI")]
+ci-lint:
+    cargo check --verbose
+    cargo fmt -- --check
+    cargo audit
+    cargo doc
+    cargo clean
+    cargo clippy -- -D warnings --no-deps
