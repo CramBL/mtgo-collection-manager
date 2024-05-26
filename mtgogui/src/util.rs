@@ -6,7 +6,8 @@ use std::{
 };
 
 use flexi_logger::{
-    Cleanup, Criterion, Duplicate, FileSpec, Logger, LoggerHandle, Naming, WriteMode,
+    Cleanup, Criterion, Duplicate, FileSpec, LogSpecification, Logger, LoggerHandle, Naming,
+    WriteMode,
 };
 
 /// Returns the X and Y coordinates of the center of the screen
@@ -97,8 +98,20 @@ pub fn setup_logger() -> LoggerHandle {
     // 5 MiB
     const MAX_LOG_FILE_SIZE: u64 = 5 * 1024 * 1024;
 
-    Logger::try_with_str("info")
-        .expect("Failed setting up logger")
+    let env_log_verbosity_setting = std::env::var("MCM_VERBOSITY").unwrap_or("info".into());
+    let log_spec: LogSpecification = match env_log_verbosity_setting.to_lowercase().as_str() {
+        "error" => LogSpecification::error(),
+        "warn" | "warning" => LogSpecification::warn(),
+        "info" => LogSpecification::info(),
+        "debug" => LogSpecification::debug(),
+        "trace" => LogSpecification::trace(),
+        "none" | "off" => LogSpecification::off(),
+        _ => panic!("Invalid MCM_VERBOSITY: {env_log_verbosity_setting}"),
+    };
+
+    eprintln!("Initiating logger with verbosity={env_log_verbosity_setting}");
+
+    Logger::with(log_spec)
         // Log to a file in the appdata directory
         .log_to_file(
             FileSpec::default()
@@ -114,8 +127,8 @@ pub fn setup_logger() -> LoggerHandle {
             // - keep at most 7 log files (7 + current log file)
             Cleanup::KeepLogFiles(7),
         )
-        // - write all messages with `info` or higher verbosity to stderr
-        .duplicate_to_stderr(Duplicate::Info)
+        // - write all log messages to stderr as well as the file
+        .duplicate_to_stderr(Duplicate::All)
         // Configure for asynchronous logging
         .write_mode(WriteMode::Async)
         .start()
