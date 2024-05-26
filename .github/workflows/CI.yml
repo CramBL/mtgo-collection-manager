@@ -81,12 +81,12 @@ jobs:
       - name: ⚙️ Build devcontainer - Linux 🐧
         run: just build-devcontainer
         env:
-          USE_CLANG: 0
+          USE_CLANG: 1
 
       - name: ⚒️ Build - 🐧💻
         run: just cross-compile-windows-xwin release
         env:
-          USE_CLANG: 0
+          USE_CLANG: 1
 
       - name: 📦 Pack/Archive - 🍎🐧💻
         run: just archive-cross-compile-windows-xwin ${PACKAGE_NAME}
