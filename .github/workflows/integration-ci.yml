@@ -48,10 +48,6 @@ jobs:
     name: Test
     steps:
       - uses: actions/checkout@v4
-      - name: 🗻 Export constants as environment variables 🏝️
-        uses: cardinalby/export-env-action@v2
-        with:
-          envFile: '.github/constants.env'
       - uses: moonrepo/setup-rust@v1
       - uses: aminya/setup-cpp@v1
         with:
@@ -135,11 +131,7 @@ jobs:
           USE_CLANG: 0
 
       - name: ⚒️ Build - 🐧💻
-        # This doesn't actually build mtgogetter and parser for windows, but the important part is
-        #  confirming cross-compilation abilities for fltk
-        run: |
-          just build-mtgogetter
-          just cross-compile-windows-xwin release
+        run: just cross-compile-windows-xwin release
         env:
           USE_CLANG: 0
 
