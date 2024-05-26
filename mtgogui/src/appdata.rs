@@ -1,4 +1,3 @@
-pub mod metadata;
 pub mod paths;
 pub mod state;
 pub mod update;

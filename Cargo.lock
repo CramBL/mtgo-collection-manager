@@ -1090,6 +1090,7 @@ dependencies = [
  "fltk-table",
  "fltk-theme",
  "log",
+ "mtgogetter_rs",
  "mtgoupdater",
  "once_cell",
  "pretty_assertions",

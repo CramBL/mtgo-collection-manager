@@ -1,6 +1,6 @@
 use std::vec::Drain;
 
-use crate::appdata::metadata::MetaData;
+use mtgogetter_rs::fetch_log::CardInfoMetaData;
 
 use super::{
     container::CollectionStats,
@@ -189,10 +189,10 @@ impl TryFrom<CollectionStats> for BrowserItems {
     }
 }
 
-impl TryFrom<MetaData> for BrowserItems {
+impl TryFrom<CardInfoMetaData> for BrowserItems {
     type Error = String;
 
-    fn try_from(value: MetaData) -> Result<Self, Self::Error> {
+    fn try_from(value: CardInfoMetaData) -> Result<Self, Self::Error> {
         log::info!("Converting metadata to browser items");
         let mut items = BrowserItems::new();
 
@@ -201,11 +201,15 @@ impl TryFrom<MetaData> for BrowserItems {
             vec![
                 (
                     "Goatbots".into(),
-                    value.goatbots_prices_updated_at().to_string(),
+                    value
+                        .goatbots_prices_updated_at()
+                        .map_or_else(|| "N/A".to_string(), |d| d.to_string()),
                 ),
                 (
                     "Cardhoarder".into(),
-                    value.scryfall_bulk_data_updated_at().to_string(),
+                    value
+                        .scryfall_bulk_data_updated_at()
+                        .map_or_else(|| "N/A".to_string(), |d| d.to_string()),
                 ),
             ],
         );
