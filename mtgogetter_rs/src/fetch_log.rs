@@ -46,6 +46,10 @@ impl CardInfoMetaData {
         fs::write(p, toml)
     }
 
+    pub fn goatbots_prices_updated_at(&self) -> Option<DateTime<Utc>> {
+        self.goatbots.prices_updated_at()
+    }
+
     /// Check if the price data is up to date. it's outdated if it hasn't been updated since 4 AM UTC
     pub fn is_goatbots_prices_updated(&self) -> bool {
         self.goatbots.is_price_updated()
@@ -88,6 +92,10 @@ impl CardInfoMetaData {
     pub fn refresh_card_definitions_updated_at_timestamp(&mut self) {
         self.goatbots
             .refresh_card_definitions_updated_at_timestamp();
+    }
+
+    pub fn scryfall_bulk_data_updated_at(&self) -> Option<DateTime<Utc>> {
+        self.scryfall.bulk_data_updated_at()
     }
 
     /// Check if the bulk data is up to date.
