@@ -118,7 +118,10 @@ ENV PATH=/root/.cargo/bin:${PATH}
 RUN rustc --version
 COPY Justfile .
 COPY build-util build-util
-RUN cargo install --locked cargo-xwin just \
+RUN cargo install --locked \
+    cargo-xwin \
+    just \
+    cargo-audit \
     && just install-debian-dev-deps
 
 # Allow the user to set compiler defaults
