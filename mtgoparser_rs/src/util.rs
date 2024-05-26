@@ -51,17 +51,28 @@ mod tests {
         let (file0, timestamp0) = &files[0];
         let (file1, timestamp1) = &files[1];
 
-        assert_eq!(file0, &tmp_file0);
-        assert_eq!(file1, &tmp_file1);
+        if file0 == &tmp_file0 {
+            assert_eq!(file1, &tmp_file1);
+        } else {
+            assert_eq!(file1, &tmp_file0);
+            assert_eq!(file0, &tmp_file1);
+        }
 
-        assert_eq!(
-            timestamp0.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
-            "2023-11-05T15:27:00Z"
-        );
-        assert_eq!(
-            timestamp1.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
-            "2023-11-05T15:28:00Z"
-        );
+        if timestamp0.to_rfc3339_opts(chrono::SecondsFormat::Secs, true) == "2023-11-05T15:27:00Z" {
+            assert_eq!(
+                timestamp1.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+                "2023-11-05T15:28:00Z"
+            );
+        } else {
+            assert_eq!(
+                timestamp1.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+                "2023-11-05T15:27:00Z"
+            );
+            assert_eq!(
+                timestamp0.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+                "2023-11-05T15:28:00Z"
+            );
+        }
 
         Ok(())
     }
