@@ -17,27 +17,6 @@ where
     util::run_with_args(mtgogetter_bin(), args)
 }
 
-/// Returns the version of `MTGO Getter`
-///
-/// # Example
-/// ```
-/// # use std::path::Path;
-/// # use mtgoupdater::mtgogetter_api::mtgogetter_version;
-///
-/// match mtgogetter_version() {
-///   Ok(out) => {
-///     eprintln!("stderr:\n{stderr}", stderr = String::from_utf8_lossy(&out.stderr),);
-///     eprintln!("stdout:\n{stdout}", stdout = String::from_utf8_lossy(&out.stdout),);
-///     assert!(out.status.success());
-///     assert!(String::from_utf8_lossy(&out.stdout).contains("mtgogetter version"));
-/// },
-///     Err(e) => panic!("MTGO Getter error: {e}")
-/// }
-/// ```
-pub fn mtgogetter_version() -> Result<process::Output, io::Error> {
-    run_mtgogetter(["--version"])
-}
-
 /// Runs a full update of all MTGO data and saves the output to the given directory
 ///
 /// # Arguments

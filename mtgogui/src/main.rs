@@ -35,7 +35,6 @@ use collection::view::table::column;
 use collection::TableMessage;
 use gui::MtgoGui;
 use menubar::McmMenuBar;
-use mtgoupdater::mtgogetter_api::mtgogetter_version;
 use mtgoupdater::MtgoCard;
 
 use crate::util::center;

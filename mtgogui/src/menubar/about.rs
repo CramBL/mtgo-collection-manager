@@ -11,7 +11,7 @@ use crate::{assets, util::center};
 
 use self::text::TEXT_ABOUT_STYLES;
 
-use super::util::{mtgogetter_version_str, TextBufferStylePair};
+use super::util::TextBufferStylePair;
 
 pub mod text;
 

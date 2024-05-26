@@ -4,7 +4,6 @@ use fltk::{
     enums::{Color, Font},
     text::{self, TextAttr, TextBuffer},
 };
-use mtgoupdater::mtgogetter_api::mtgogetter_version;
 
 use crate::{util::RelativeSize, DEFAULT_APP_WIDTH, MENU_BAR_HEIGHT};
 
@@ -59,20 +58,6 @@ impl ProgressUpdate {
     }
 }
 
-/// Get the version of the MTGO Getter binary (X.Y.Z) and return it as a string
-///
-/// # Errors
-/// Returns an error if the MTGO Getter binary cannot be found
-pub fn mtgogetter_version_str() -> Result<String, io::Error> {
-    let mtgogetter_version = match mtgogetter_version() {
-        Ok(v) => v,
-        Err(e) => return Err(e),
-    };
-    let mtgogetter_version_str = String::from_utf8_lossy(&mtgogetter_version.stdout);
-    let version_pos = mtgogetter_version_str.trim().find("version ").unwrap();
-    Ok(mtgogetter_version_str[version_pos + 8..].to_string())
-}
-
 /// A text buffer and its associated style buffer
 #[derive(Debug)]
 pub struct TextBufferStylePair {
@@ -115,17 +100,5 @@ impl TextBufferStylePair {
                     .expect("Style buffer already taken")
                     .length(),
             )
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use pretty_assertions::assert_eq;
-
-    #[test]
-    fn get_mtgogetter_version() {
-        let mtgogetter_version = mtgogetter_version_str().unwrap();
-        assert_eq!(mtgogetter_version, "0.1.0\n");
     }
 }

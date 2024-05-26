@@ -10,7 +10,6 @@ use fltk::{
     window::Window,
 };
 use fltk_flex::Flex;
-use mtgoupdater::mtgogetter_api::mtgogetter_version;
 use std::{io, path::PathBuf};
 use util::ProgressUpdate;
 
