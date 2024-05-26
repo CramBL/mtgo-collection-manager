@@ -9,6 +9,7 @@ on:
 env:
   VERBOSE: 1
   RUST_BACKTRACE: 1
+  JUST_VERBOSE: 1
 
 jobs:
   Test:
@@ -38,6 +39,7 @@ jobs:
     name: ⚒️ Build & Test 📝
     steps:
       - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v2
       - uses: moonrepo/setup-rust@v1
         with:
           components: clippy, rustfmt
@@ -59,12 +61,7 @@ jobs:
           ninja --version
 
       - name: 🍄 Check & Lint 🩺
-        run: |
-            cargo check --verbose
-            cargo fmt -- --check
-            cargo doc
-            cargo clean
-            cargo clippy -- -D warnings --no-deps
+        run: just ci-lint
 
       - name: ⚒️ Build - 🍎🐧💻
         run: cargo build
