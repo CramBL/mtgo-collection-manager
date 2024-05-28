@@ -59,11 +59,8 @@ ci-install-cross-compile-windows-deps:
     rustup target add x86_64-pc-windows-gnu
     sudo apt-get install gcc-mingw-w64-x86-64 ninja-build cmake
 
-build: build-mtgogui
-build-mtgogui *ARGS: (cmd 'cd mtgogui && cargo build ' + ARGS)
-
 [unix]
-launch: build-mtgogui
+launch:
     ./mtgogui/target/release/mtgogui
 
 cross-compile-windows PROFILE="dev":
@@ -85,6 +82,10 @@ archive-cross-compile-windows-xwin PACKAGE_NAME="windows-mtgo-collection-manager
 
 install-debian-dev-deps:
     cd build-util/deps && ./install-debian-deps.sh
+
+build *ARGS: (cmd "cargo build " + ARGS)
+test *ARGS: (cmd "cargo test " + ARGS)
+clippy *ARGS: (cmd "cargo clippy " + ARGS)
 
 clean: (cmd "cargo clean")
 
