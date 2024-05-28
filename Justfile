@@ -1,37 +1,5 @@
 import? 'just-util/mod.just'
 
-PWD := `pwd`
-USE_CLANG := env('USE_CLANG', '1')
-GCOV_EXECUTABLE := if USE_CLANG == "1" { "llvm-cov gcov" } else { "gcov" }
-CC  := if USE_CLANG == "1" { "/usr/bin/clang"   } else { "gcc" }
-CXX := if USE_CLANG == "1" { "/usr/bin/clang++" } else { "g++" }
-DEVCONTAINER_NAME := "mtgo-cm-devcontainer"
-CMD := if path_exists('/in_container') == "true" {
-"eval"
-} else {
-"docker run" \
-+ " -e CC=" + CC \
-+ " -e CXX=" + CXX \
-+ " -e XWIN_CACHE_DIR=/work/xwin_cache"
-+ " -v " + PWD + ":/work" \
-+ " --rm" \
-+ " -t " + DEVCONTAINER_NAME \
-+ " /bin/bash -lc "
-}
-
-CMD_IT := if path_exists('/in_container') == "true" {
-"eval"
-} else {
-"docker run" \
-+ " -e CC=" + CC \
-+ " -e CXX=" + CXX \
-+ " -v " + PWD + ":/work" \
-+ " --rm" \
-+ " -it " + DEVCONTAINER_NAME \
-+ " /bin/bash -l "
-}
-
-
 @_default:
     just --list
 
@@ -44,11 +12,10 @@ cmd *ARGS:
 build-devcontainer UBUNTU_VARIANT="jammy":
 	docker build \
 		-t {{ DEVCONTAINER_NAME }} \
-		--build-arg USE_CLANG={{ USE_CLANG }} \
 		--build-arg VARIANT={{ UBUNTU_VARIANT }} \
-		--build-arg HOST_USER=${USER} \
-		--build-arg HOST_GID=$( id -g ) \
-		--build-arg HOST_UID=$( id -u ) \
+		--build-arg USER=${USER} \
+		--build-arg gid=$( id -g ) \
+		--build-arg uid=$( id -u ) \
 		-f .devcontainer/Dockerfile .
 
 [no-exit-message]
