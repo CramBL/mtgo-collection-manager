@@ -77,8 +77,6 @@ RUN wget --progress=dot:giga -O - https://apt.llvm.org/llvm-snapshot.gpg.key | a
     # Other tools
     lldb-${LLVM_VER} \
     lld-${LLVM_VER} \
-    # Compiler runtime contains the sanitizers
-    libclang-rt-${LLVM_VER}-dev \
     # libc++
     libc++-${LLVM_VER}-dev \
     && apt-get clean \
