@@ -26,15 +26,6 @@ impl AppData {
     pub fn update() -> Result<Self, Error> {
         let appdata_dir = super::util::appdata_path()?;
 
-        // Get App Data
-        // match mtgoupdater::mtgogetter_api::mtgogetter_update_all(appdata_dir.as_os_str()) {
-        //     Ok(output) => {
-        //         log::info!("MTGO Getter output: {}", output.status);
-        //     }
-        //     Err(e) => {
-        //         log::info!("MTGO Getter error: {e}");
-        //     }
-        // }
         new_update_all(appdata_dir.as_os_str())?;
 
         let card_data_paths = CardDataPaths::find(&appdata_dir)?;
