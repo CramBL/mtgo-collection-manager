@@ -27,9 +27,6 @@ RUN touch /in_container \
     zip \
     openssh-client \
     gpg-agent \
-    socat \
-    rsync \
-    make \
     ninja-build \
     git \
     build-essential \
@@ -77,7 +74,6 @@ RUN wget --progress=dot:giga -O - https://apt.llvm.org/llvm-snapshot.gpg.key | a
     libclang-${LLVM_VER}-dev \
     libclang1-${LLVM_VER} \
     clangd-${LLVM_VER} \
-    clang-tidy-${LLVM_VER} \
     # Other tools
     lldb-${LLVM_VER} \
     lld-${LLVM_VER} \
