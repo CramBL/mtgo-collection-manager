@@ -47,6 +47,10 @@ jobs:
           compiler: ${{ matrix.compiler }}
           cmake: true
           ninja: true
+      
+      - name: Setup ninja
+        if: runner.os == 'Windows' 
+        uses: seanmiddleditch/gha-setup-ninja@v4
 
       - name: ⚙️ Install development headers - Linux 🐧
         if: runner.os == 'Linux'
