@@ -39,6 +39,15 @@ jobs:
           components: clippy, rustfmt
           bins: cargo-audit
 
+
+      - name: ⚙️ Setup C++ Tools
+        if: runner.os == 'macos'
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          cmake: true
+          ninja: true
+
       - name: ⚙️ Install development headers - Linux 🐧
         if: runner.os == 'Linux'
         run: |
