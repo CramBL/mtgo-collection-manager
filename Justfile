@@ -87,6 +87,10 @@ env:
         curl
     )
     for t in "${tools[@]}"; do
-        {{PRINT_RGB}} 255 155 100 "==> ${t}: "
+        if [[ "{{os_family()}}" == "unix" ]]; then
+            {{PRINT_RGB}} 255 155 100 "==> ${t}: "
+        else
+            echo "==> ${t}:"
+        fi
         ${t} --version 2>/dev/null || echo "not found"
     done
