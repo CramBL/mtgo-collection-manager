@@ -12,7 +12,7 @@ env:
   JUST_VERBOSE: 1
 
 jobs:
-  Test:
+  Native-Test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -56,6 +56,9 @@ jobs:
           cmake --version
           ninja --version
 
+      - name: Print tool versions
+        run: just env
+
       - name: 🍄 Check & Lint 🩺
         run: just ci-lint
 
@@ -73,27 +76,40 @@ jobs:
 
 
 
-  Test-cross-windows:
+  Container-Build:
     runs-on: ubuntu-latest
-    name: Test cross compile to windows
+    strategy:
+      fail-fast: false
+      
+      matrix:
+        build-profile: [ dev, release ]
+        target: [ ubuntu, windows ]
+
+    name: ${{ matrix.target }} ${{ matrix.build-profile }}
     steps:
       - uses: actions/checkout@v4
       - uses: extractions/setup-just@v2
 
-      - name: ⚙️ Build devcontainer - Linux 🐧
+      - name: Print tool versions
+        run: just env
+
+      - name: ⚙️ Build devcontainer
         run: just build-devcontainer
 
-      - name: ⚒️ Build - 🐧💻
-        run: just cross-compile-windows-xwin release
+      - name: ⚒️ Build - 💻
+        if: ${{ matrix.target }} == 'windows'
+        run: just cross-compile-windows-xwin ${{ matrix.build-profile }}
 
-      - name: 📦 Pack/Archive - 🍎🐧💻
-        run: just archive-cross-compile-windows-xwin ${PACKAGE_NAME}
-        env:
-          PACKAGE_NAME: windows-gcc-mtgo-cm
+      - name: ⚒️ Build - 🐧
+        if: ${{ matrix.target }} != 'windows'
+        run: just build --profile=${{ matrix.build-profile }}
+        
+      - name: 📦 Pack/Archive
+        run: just archive-bin "${{ matrix.target }}-${{ matrix.build-profile }}"
 
       - name: 📩 Upload - Linux-windows cross 💻🐧
         uses: actions/upload-artifact@v4
         with:
-          name: windows-gcc-cross-mtgo-collection-manager
-          path: windows-gcc-mtgo-cm.zip
+          name: "${{ matrix.target }}-${{ matrix.build-profile }}"
+          path: "${{ matrix.target }}-${{ matrix.build-profile }}".zip
           retention-days: 14
