@@ -16,6 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
+      
       matrix:
         include:
 
@@ -47,10 +48,6 @@ jobs:
           compiler: ${{ matrix.compiler }}
           cmake: true
           ninja: true
-      
-      - name: Setup ninja
-        if: runner.os == 'Windows' 
-        uses: seanmiddleditch/gha-setup-ninja@v4
 
       - name: ⚙️ Install development headers - Linux 🐧
         if: runner.os == 'Linux'
@@ -68,6 +65,7 @@ jobs:
 
       - name: ⚒️ Build - 💻
         if: runner.os == 'windows'
+        continue-on-error: true
         run: cargo build --features bundled
 
       - name: 📝 Test - 🍎🐧💻

@@ -24,10 +24,6 @@ license = "GPL-3.0-or-later"
 readme = "README.md"
 authors = ["Marc Beck König <mbkj@tutamail.com>"]
 repository = "https://github.com/CramBL/mtgo-collection-manager"
-# The public documentation is minimal and doesn't change between
-# platforms, so we only build them for linux on docs.rs to save
-# their build machines some cycles.
-targets = ["x86_64-unknown-linux-gnu"]
 keywords = ["mtgo"]
 
 
