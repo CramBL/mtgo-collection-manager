@@ -11,6 +11,10 @@ env:
   RUST_BACKTRACE: 1
   JUST_VERBOSE: 1
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   Native-Test:
     runs-on: ${{ matrix.os }}
@@ -92,12 +96,12 @@ jobs:
       - name: ⚙️ Build devcontainer
         run: just build-devcontainer
 
-      - name: ⚒️ Build - 💻
-        if: ${{ matrix.target }} == 'windows'
+      - name: ⚒️ Build - 💻🐧
+        if: ${{ matrix.target == 'windows' }}
         run: just cross-compile-windows-xwin ${{ matrix.build-profile }}
 
-      - name: ⚒️ Build - 🐧
-        if: ${{ matrix.target }} != 'windows'
+      - name: ⚒️ Build -
+        if: ${{ matrix.target != 'windows' }}
         run: just build --profile=${{ matrix.build-profile }}
 
       - name: 📦 Pack/Archive
