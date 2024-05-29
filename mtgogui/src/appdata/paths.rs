@@ -20,7 +20,7 @@ pub struct CardDataPaths {
 
 impl CardDataPaths {
     // Strings used to locate the card data files in the appdata directory
-    const FIND_SCRYFALL: &'static str = "scryfall";
+    const FIND_SCRYFALL: &'static str = "scryfall-cards";
     const FIND_CARD_DEFINITIONS: &'static str = "card-def";
     const FIND_PRICE_HISTORY: &'static str = "price-his";
 

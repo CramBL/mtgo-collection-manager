@@ -12,19 +12,12 @@ use crate::menubar::util::TextBufferStylePair;
 /// # Arguments
 ///
 /// * `mtgogui_version` - The version of the MTGO Collection Manager
-/// * `mtgogetter_version` - The version of the MTGO Getter binary
-/// * `mtgoupdater_version` - The version of the MTGO Updater crate
 /// * `project_url` - The URL of the project homepage
 ///
 /// # Returns
 ///
 /// A [TextBufferStylePair] containing the text and style buffers
-pub fn fill_about_text_buffers(
-    mtgogui_version: &str,
-    mtgogetter_version: &str,
-    mtgoupdater_version: &str,
-    project_url: &str,
-) -> TextBufferStylePair {
+pub fn fill_about_text_buffers(mtgogui_version: &str, project_url: &str) -> TextBufferStylePair {
     let mut tbuf = TextBuffer::default();
     let mut sbuf = TextBuffer::default();
     let mtgo_cm_txt = format!(
@@ -41,26 +34,6 @@ pub fn fill_about_text_buffers(
     sbuf.set_text(&"A".repeat(mtgo_cm_txt.len()));
     tbuf.append(&mtgo_cm_ver_txt);
     sbuf.append(&"A".repeat(mtgo_cm_ver_txt.len()));
-    tbuf.append("Components:\n");
-    sbuf.append(&"B".repeat("Components:\n".len()));
-    let component_left_pad = 20;
-    let mtgogetter_txt = format!(
-        "   {:<width$} v{}",
-        "MTGO Getter",
-        mtgogetter_version,
-        width = component_left_pad
-    );
-    tbuf.append(&mtgogetter_txt);
-    sbuf.append(&"C".repeat(mtgogetter_txt.len()));
-
-    let mtgoupdater_txt = format!(
-        "   {:<width$} v{}\n\n",
-        "MTGO Updater",
-        mtgoupdater_version,
-        width = component_left_pad
-    );
-    tbuf.append(&mtgoupdater_txt);
-    sbuf.append(&"C".repeat(mtgoupdater_txt.len()));
     tbuf.append("Homepage:\n");
     sbuf.append(&"B".repeat("Homepage:\n".len()));
     tbuf.append(project_url);

@@ -65,10 +65,11 @@ impl TradelistProcessor {
 
                     // Give the full trade list to the parser
                     // Find all the most recent files in the appdata directory, download and update them if necessary
+                    log::debug!("Instantiating appdata directory");
                     let appdata_paths = match AppData::update() {
                         Ok(paths) => paths,
                         Err(err) => {
-                            log::info!("{err}");
+                            log::error!("{err}");
                             return;
                         }
                     };

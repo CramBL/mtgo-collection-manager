@@ -1,29 +1,24 @@
 [package]
 name = "mtgoupdater"
-version = "0.1.0"
-edition = "2021"
 readme = "README.md"
-license = "MIT OR Apache-2.0"
-keywords = ["mtgo"]
 description = "Library for interoperating with MTGO Collection manager's C++ and Go code"
-authors = ["Marc Beck König <mbkj@tutamail.com>"]
-
-[badges]
-maintenance = { status = "actively-developed" }
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+keywords.workspace = true
 
 [dependencies]
-chrono = "0.4.31"
-serde = "1.0.188"
-serde_derive = "1.0.188"
-serde_json = "1.0.107"
-zip = "0.6.6"
-mtgoparser-rs = { path = "../mtgoparser-rs", version = "*" }
-
+mtgoparser_rs = { path = "../mtgoparser_rs", version = "*" }
+mtgogetter_rs = { path = "../mtgogetter_rs", version = "*" }
+serde_json.workspace = true
+chrono.workspace = true
+serde.workspace = true
+zip.workspace = true
 
 [dev-dependencies]
-pretty_assertions = "1.4.0"
-temp-dir = "0.1.11"
+pretty_assertions.workspace = true
+temp-dir.workspace = true
 
-[profile.release]
-lto = true
-codegen-units = 1
+[lints]
+workspace = true

@@ -1,0 +1,9 @@
+[target.'cfg(windows)']
+rustflags = ["-C", "target-feature=+crt-static"]
+
+# Doesn't work for MSVC, only gnu works
+#[target.x86_64-pc-windows-msvc]
+#linker = "lld-link" # Note the lack of extension, which means it will work on both Windows and unix style platforms
+
+[target.'cfg(linux)']
+rustflags = ["-C", "target-feature=+crt-static"]

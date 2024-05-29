@@ -10,10 +10,10 @@ use std::sync::OnceLock;
 pub mod date;
 pub mod internal_only;
 pub mod mtgogetter_api;
+pub mod new_update_all;
 mod util;
 mod zip_util;
 
-pub use mtgogetter_api::download_custom_url as get_custom_url;
 pub use mtgogetter_api::download_goatbots_card_definitions as get_goatbots_card_definitions;
 pub use mtgogetter_api::download_goatbots_price_history as get_goatbots_price_history;
 use zip_util::Archive;

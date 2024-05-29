@@ -17,27 +17,6 @@ where
     util::run_with_args(mtgogetter_bin(), args)
 }
 
-/// Returns the version of `MTGO Getter`
-///
-/// # Example
-/// ```
-/// # use std::path::Path;
-/// # use mtgoupdater::mtgogetter_api::mtgogetter_version;
-///
-/// match mtgogetter_version() {
-///   Ok(out) => {
-///     eprintln!("stderr:\n{stderr}", stderr = String::from_utf8_lossy(&out.stderr),);
-///     eprintln!("stdout:\n{stdout}", stdout = String::from_utf8_lossy(&out.stdout),);
-///     assert!(out.status.success());
-///     assert!(String::from_utf8_lossy(&out.stdout).contains("mtgogetter version"));
-/// },
-///     Err(e) => panic!("MTGO Getter error: {e}")
-/// }
-/// ```
-pub fn mtgogetter_version() -> Result<process::Output, io::Error> {
-    run_mtgogetter(["--version"])
-}
-
 /// Runs a full update of all MTGO data and saves the output to the given directory
 ///
 /// # Arguments
@@ -61,42 +40,4 @@ pub fn download_goatbots_price_history() -> Result<process::Output, io::Error> {
 /// Downloads the latest GoatBots card definitions and saves it to the current directory
 pub fn download_goatbots_card_definitions() -> Result<process::Output, io::Error> {
     run_mtgogetter(["download", "goatbots-card-definitions"])
-}
-
-/// Downloads from the given URL and saves it to the current directory
-///
-/// # Arguments
-///
-/// * `url` - URL to download from
-/// * `decompress` - If `true`, decompresses the downloaded file
-/// * `save_as` - If `Some(path)`, saves the downloaded file to the given path
-///
-/// # Example
-/// ```
-/// # use std::path::Path;
-/// # use mtgoupdater::mtgogetter_api::download_custom_url;
-///
-/// match download_custom_url("https://raw.githubusercontent.com/CramBL/mtgo-collection-manager/main/LICENSE", false, None) {
-///  Ok(out) => {
-///   eprintln!("stderr:\n{stderr}", stderr = String::from_utf8_lossy(&out.stderr),);
-///   eprintln!("stdout:\n{stdout}", stdout = String::from_utf8_lossy(&out.stdout),);
-///   assert!(out.status.success());
-/// },
-/// Err(e) => panic!("MTGO Getter error: {e}")
-/// }
-/// ```
-pub fn download_custom_url(
-    url: &str,
-    decompress: bool,
-    save_as: Option<&str>,
-) -> Result<process::Output, io::Error> {
-    let mut custom_args = vec!["download", "custom", "url-raw", url];
-    if decompress {
-        custom_args.push("--decompress");
-    }
-    if let Some(save_as) = save_as {
-        custom_args.push("--save-as");
-        custom_args.push(save_as);
-    }
-    run_mtgogetter(custom_args)
 }

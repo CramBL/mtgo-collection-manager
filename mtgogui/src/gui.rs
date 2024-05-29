@@ -2,7 +2,6 @@ use std::ffi::OsStr;
 use std::path::PathBuf;
 use std::sync::OnceLock;
 
-use crate::appdata::metadata::{self, MetaData};
 use crate::appdata::state::GuiState;
 use crate::assets::{self, get_asc_svg, get_icon_search, get_logo};
 use crate::collection::processor::TradelistProcessor;
@@ -29,6 +28,7 @@ use fltk_flex::{Flex, FlexType};
 use fltk_grid::Grid;
 use fltk_table::{SmartTable, TableOpts};
 use fltk_theme::{widget_themes, ThemeType, WidgetTheme};
+use mtgogetter_rs::fetch_log::CardInfoMetaData;
 
 use self::setup::setup_main_window;
 
@@ -228,7 +228,10 @@ impl MtgoGui {
         );
 
         log::info!("Loading metadata");
-        match MetaData::load(appdata_dir) {
+
+        match CardInfoMetaData::from_toml_file(
+            appdata_dir.join(CardInfoMetaData::FILENAME).as_path(),
+        ) {
             Ok(metadata) => {
                 let mut items: BrowserItems = match metadata.try_into() {
                     Ok(browser_items) => browser_items,

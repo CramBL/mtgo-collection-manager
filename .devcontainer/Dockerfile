@@ -7,16 +7,23 @@ FROM ubuntu:${VARIANT} as build-base
 # Restate the variant to use it later on in the llvm and cmake installations
 ARG VARIANT
 
-ARG HOST_USER
-ARG HOST_UID
-ARG HOST_GID
+ARG uid
+ARG gid
+ARG USER=dev
 
+ENV TERM xterm-256color
+ENV HOME=/home/$USER
+ENV PATH="${PATH}:$HOME/.local/bin"
 
-# Ignore "WARNING: Running pip as the 'root' user can result in broken permissions..."
-ENV PIP_ROOT_USER_ACTION=ignore
+ARG DEBIAN_FRONTEND=noninteractive
 
-RUN groupadd --gid ${HOST_GID} ${HOST_USER} \
-    && useradd --uid ${HOST_UID} --gid ${HOST_GID} -m ${HOST_USER}
+RUN useradd -m -s /bin/bash $USER \
+    && mkdir -p /work \
+    && chown $USER:$USER /work \
+    && echo "PS1='\e[32;1m\u: \e[34m\w\e[0m\$ '" >> $HOME/.bashrc \
+    && usermod -u ${uid} ${USER} \
+    && groupmod -g ${gid} ${USER} \
+    && usermod -a -G ${gid} ${USER} 
 
 # Install necessary packages available from standard repos
 RUN touch /in_container \
@@ -26,40 +33,28 @@ RUN touch /in_container \
     # software-properties-common contains add-apt-repository
     software-properties-common \
     wget \
+    curl \
     apt-utils \
     file \
     zip \
     openssh-client \
     gpg-agent \
-    socat \
-    rsync \
-    make \
     ninja-build \
     git \
-    python3 \
-    python3-pip \
     build-essential \
+    # For cross compiling to windows
+    gcc-mingw-w64-x86-64 \
+    mingw-w64 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# User-settable versions:
-# This Dockerfile should support gcc-[7, 8, 9, 10, 11, 12, 13] and clang-[10, 11, 12, 13, 14, 15, 16, 17]
-# Earlier versions of clang will require significant modifications to the IWYU section
-ARG GCC_VER="13"
-# Add gcc-${GCC_VER}
-RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test \
-    && apt-get update -qq \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y --no-install-recommends \
-    gcc-${GCC_VER} \
-    g++-${GCC_VER} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set gcc-${GCC_VER} as default gcc
-RUN update-alternatives --install /usr/bin/gcc gcc $(which gcc-${GCC_VER}) 100
-RUN update-alternatives --install /usr/bin/g++ g++ $(which g++-${GCC_VER}) 100
-
+# Install just via curl just to lower container build times
+ARG JUST_VERSION=1.27.0
+RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --tag "${JUST_VERSION}" --to /usr/bin
+COPY Justfile .
+COPY just-util just-util
+COPY build-util build-util
+RUN just install-debian-dev-deps
 
 # Installation instructions on LLVM: https://apt.llvm.org/
 ARG LLVM_VER="17"
@@ -83,25 +78,22 @@ RUN wget --progress=dot:giga -O - https://apt.llvm.org/llvm-snapshot.gpg.key | a
     libclang-${LLVM_VER}-dev \
     libclang1-${LLVM_VER} \
     clangd-${LLVM_VER} \
-    clang-tidy-${LLVM_VER} \
     # Other tools
     lldb-${LLVM_VER} \
     lld-${LLVM_VER} \
-    # Compiler runtime contains the sanitizers
-    libclang-rt-${LLVM_VER}-dev \
     # libc++
     libc++-${LLVM_VER}-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Set the default clang-tidy, so CMake can find it
-RUN update-alternatives --install /usr/bin/clang-tidy clang-tidy $(which clang-tidy-${LLVM_VER}) 1
 
 # Set clang-${LLVM_VER} as default clang
 RUN update-alternatives --install /usr/bin/clang clang $(which clang-${LLVM_VER}) 100
 RUN update-alternatives --install /usr/bin/clang++ clang++ $(which clang++-${LLVM_VER}) 100
 # Set ld.lld to point to a matching LLVM version
 RUN update-alternatives --install /usr/bin/ld.lld ld.lld /usr/bin/ld.lld-${LLVM_VER} 100
+
+ENV CC="clang"
+ENV CXX="clang++"
 
 # Add current cmake/ccmake, from Kitware
 ARG CMAKE_URL="https://apt.kitware.com/ubuntu/"
@@ -116,65 +108,31 @@ RUN wget --progress=dot:giga -O - https://apt.kitware.com/keys/kitware-archive-l
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install mold for much faster linking
-RUN apt-get update \
-    && apt-get install -y \
-    mold \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-ENV PATH=$PATH:/usr/bin/mold
-RUN mold --version
+USER ${USER}
 
-# Download and install Go
-RUN wget --progress=dot:giga https://golang.org/dl/go1.21.4.linux-amd64.tar.gz \
-    && tar -C /usr/local -xzf go1.21.4.linux-amd64.tar.gz \
-    && rm go1.21.4.linux-amd64.tar.gz
-
-# Add Go binaries to the system PATH
-ENV PATH=$PATH:/usr/local/go/bin
-RUN go version
-
-# Install Go Task
-RUN sh -c "$(wget --progress=dot:giga -O - https://taskfile.dev/install.sh)" -- -d -b /usr/bin && task --version
-
-# Add FLTK development headers, also install curl as it is needed to to download the bundled libraries during compilation
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
-    curl \
-    libxinerama-dev \
-    libxcursor-dev \
-    libxfixes-dev \
-    libxft-dev \
-    libpango1.0-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN just --version \
+    && curl --version \
+    && wget --version \
+    && cmake --version \
+    && zip --version \
+    && ninja --version
 
 # Download and install Rust using the official Rust installer script
-RUN wget --progress=dot:giga -O - https://sh.rustup.rs | sh -s -- -y 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # Add the Rust binaries to the system PATH
-ENV PATH=/root/.cargo/bin:${PATH}
+ENV PATH="${PATH}:$HOME/.cargo/bin"
 RUN rustc --version
-RUN cargo install cargo-xwin
+
+RUN cargo install --locked \
+    cargo-xwin \
+    cargo-audit
 
 
-# Allow the user to set compiler defaults
-ARG USE_CLANG
-# if --build-arg USE_CLANG=1, set CC to 'clang' or set to null otherwise.
-ENV CC=${USE_CLANG:+"clang"}
-ENV CXX=${USE_CLANG:+"clang++"}
-# if CC is null, set it to 'gcc' (or leave as is otherwise).
-ENV CC=${CC:-"gcc"}
-ENV CXX=${CXX:-"g++"}
-
+# For cross-compiling to windows
 RUN rustup target add \
     x86_64-pc-windows-gnu \
-    x86_64-pc-windows-msvc \
-    && rustup component add llvm-tools-preview \
-    && apt-get update -qq \
-    && apt-get install -y gcc-mingw-w64-x86-64 mingw-w64 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rustup component add llvm-tools-preview
 
 WORKDIR /work
 

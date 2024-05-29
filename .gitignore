@@ -1,5 +1,5 @@
-# Build directories and binary files
-rust-processing/target
+## Workspace
+target
 
 ## MTGO Getter
 mtgogetter/mtgogetter.exe
@@ -7,15 +7,11 @@ mtgogetter/state_log.toml
 mtgogetter/mtgogetter
 mtgogetter/*.json
 
-## MTGO Parser
-mtgoparser/build/
-mtgoparser/out/
-mtgoparser/cmake-build-*/
-mtgoparser/conan-cache/
-mtgoparser/.cache
+mtgogetter_rs/target
+mtgogetter_rs/Cargo.lock
 
 ## MTGO Parser-RS
-mtgoparser-rs/target
+mtgoparser_rs/target
 
 
 ## MTGO Updater
@@ -28,6 +24,7 @@ mtgogui/target
 mtgogui/*.json
 mtgogui/state_log.toml
 mtgogui/appdata
+
 
 # Cross compiler cache
 xwin_cache

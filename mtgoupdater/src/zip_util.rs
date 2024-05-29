@@ -1,12 +1,14 @@
-use std::marker::PhantomData;
 use std::{
-    fs,
+    fs, io,
+    marker::PhantomData,
     path::{Path, PathBuf},
 };
 
+use zip::write::{ExtendedFileOptions, FileOptions};
+
 const COMPRESSION_METHOD: zip::CompressionMethod = zip::CompressionMethod::BZIP2;
 // Bzip2: 0 - 9. Default is 6
-const COMPRESSION_LEVEL: i32 = 6;
+const COMPRESSION_LEVEL: i64 = 6;
 
 /// Markers for the state of an archive
 pub struct UnArchived;
@@ -60,7 +62,7 @@ impl Archive<UnArchived> {
         let file = fs::File::create(&self.location)?;
         let mut zip = zip::ZipWriter::new(file);
 
-        let options = zip::write::FileOptions::default()
+        let options: FileOptions<_> = FileOptions::default()
             .compression_method(COMPRESSION_METHOD)
             .compression_level(Some(COMPRESSION_LEVEL));
 
@@ -81,9 +83,13 @@ impl Archive<UnArchived> {
                     )
                 })
                 .to_owned();
-            zip.start_file(filename, options)?;
+            zip::ZipWriter::start_file::<_, ExtendedFileOptions, _>(
+                &mut zip,
+                filename,
+                options.clone(),
+            )?;
             let mut f = fs::File::open(file)?;
-            std::io::copy(&mut f, &mut zip)?;
+            io::copy(&mut f, &mut zip)?;
         }
 
         // Delete files that were moved to the archive
@@ -131,7 +137,7 @@ impl Archive<Archived> {
     /// 3. Add the new files to the temporary archive
     /// 4. Delete the existing archive
     /// 5. Rename the temporary archive to the the name of the original archive
-    pub fn add_to_archive<'f, F>(&mut self, new_files: F) -> Result<(), std::io::Error>
+    pub fn add_to_archive<'f, F>(&mut self, new_files: F) -> Result<(), io::Error>
     where
         F: IntoIterator<Item = &'f Path>,
     {
@@ -141,10 +147,6 @@ impl Archive<Archived> {
 
         let mut new_archive = zip::ZipWriter::new(temp_archive);
 
-        let options = zip::write::FileOptions::default()
-            .compression_method(COMPRESSION_METHOD)
-            .compression_level(Some(COMPRESSION_LEVEL));
-
         // 2. Copy the already compressed files from the existing archive to the temporary archive
         let mut existing_archive = zip::ZipArchive::new(fs::File::open(&self.location)?)?;
 
@@ -152,6 +154,10 @@ impl Archive<Archived> {
             let file = existing_archive.by_index(i)?;
             new_archive.raw_copy_file(file)?; // raw_copy_file preserves the compression method and level of the original file
         }
+
+        let options: FileOptions<_> = FileOptions::default()
+            .compression_method(COMPRESSION_METHOD)
+            .compression_level(Some(COMPRESSION_LEVEL));
 
         // 3. Add the new files to the temporary archive
         for file in new_files {
@@ -171,9 +177,9 @@ impl Archive<Archived> {
                     )
                 })
                 .to_owned();
-            new_archive.start_file(filename, options)?;
+            new_archive.start_file::<_, ExtendedFileOptions, _>(filename, options.clone())?;
             let mut f = fs::File::open(file)?;
-            std::io::copy(&mut f, &mut new_archive)?;
+            io::copy(&mut f, &mut new_archive)?;
         }
 
         new_archive.finish()?;
@@ -188,7 +194,7 @@ impl Archive<Archived> {
     }
 
     /// Moves the given files to the archive and deletes the original files
-    pub fn move_to_archive<'f, F>(&mut self, files: F) -> Result<(), std::io::Error>
+    pub fn move_to_archive<'f, F>(&mut self, files: F) -> Result<(), io::Error>
     where
         F: IntoIterator<Item = &'f Path> + Clone,
     {
@@ -293,7 +299,7 @@ mod tests {
         // Files to compress
         let compress_files = [
             Path::new("Cargo.toml"),
-            Path::new("Cargo.lock"),
+            Path::new("src/lib.rs"),
             Path::new("README.md"),
         ];
 
@@ -332,7 +338,7 @@ mod tests {
 
             assert_eq!(
                 zipped_file.enclosed_name().unwrap().to_str().unwrap(),
-                compressed_file.to_str().unwrap()
+                compressed_file.file_name().unwrap()
             );
             assert_eq!(
                 fs::read_to_string(compressed_file).expect("Failed to read file"),

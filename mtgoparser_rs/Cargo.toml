@@ -1,0 +1,22 @@
+[package]
+name = "mtgoparser_rs"
+edition = "2021"
+version.workspace = true
+authors.workspace = true
+
+[dependencies]
+parse_scryfall = { path = "parse_scryfall", version = "*" }
+parse_goatbots = { path = "parse_goatbots", version = "*" }
+serde.workspace = true
+quick-xml.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+
+
+[dev-dependencies]
+pretty_assertions.workspace = true
+temp-dir.workspace = true
+testresult.workspace = true
+
+[lints]
+workspace = true

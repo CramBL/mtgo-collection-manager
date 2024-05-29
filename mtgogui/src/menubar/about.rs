@@ -11,34 +11,14 @@ use crate::{assets, util::center};
 
 use self::text::TEXT_ABOUT_STYLES;
 
-use super::util::{mtgogetter_version_str, TextBufferStylePair};
+use super::util::TextBufferStylePair;
 
 pub mod text;
 
-/// Get version information from all components and display in a pop-up window
-///
 /// Displays the version of the MTGO Collection Manager, MTGO Getter, and MTGO Updater.
-///
-/// If any of the components cannot be found, an error message is displayed as a [alert](dialog::alert) pop-up window.
 pub fn show_about() {
-    // Start by getting the versions from MTGO Getter
-    let mtgogetter_version = match mtgogetter_version_str() {
-        Ok(v) => v,
-        Err(e) => {
-            log::info!("Error getting mtgogetter version: {e}");
-            dialog::alert(
-                center().0 - 200,
-                center().1 - 100,
-                &format!("Could not find MTGO Getter binary!\n{e}"),
-            );
-            return;
-        }
-    };
-
     format_about_window(
         env!("CARGO_PKG_VERSION"),
-        &mtgogetter_version,
-        mtgoupdater::mtgo_updater_version(),
         "https://github.com/CramBL/mtgo-collection-manager/",
     );
 }
@@ -48,21 +28,9 @@ pub fn show_about() {
 /// # Arguments
 ///
 /// * `mtgogui_version` - The version of the MTGO Collection Manager
-/// * `mtgogetter_version` - The version of the MTGO Getter binary
-/// * `mtgoupdater_version` - The version of the MTGO Updater crate
 /// * `project_url` - The URL of the project homepage
-pub fn format_about_window(
-    mtgogui_version: &str,
-    mtgogetter_version: &str,
-    mtgoupdater_version: &str,
-    project_url: &str,
-) {
-    let txt_buffers = text::fill_about_text_buffers(
-        mtgogui_version,
-        mtgogetter_version,
-        mtgoupdater_version,
-        project_url,
-    );
+pub fn format_about_window(mtgogui_version: &str, project_url: &str) {
+    let txt_buffers = text::fill_about_text_buffers(mtgogui_version, project_url);
 
     let mut win = create_about_window(450, txt_buffers.line_count() * 30, mtgogui_version);
 

@@ -1,0 +1,20 @@
+[package]
+name = "parse_goatbots"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+quick-xml.workspace = true
+chrono.workspace = true
+
+
+[dev-dependencies]
+pretty_assertions.workspace = true
+temp-dir.workspace = true
+testresult.workspace = true
+
+[lints]
+workspace = true
