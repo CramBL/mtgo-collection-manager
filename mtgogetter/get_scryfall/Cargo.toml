@@ -13,7 +13,7 @@ testresult.workspace = true
 workspace = true
 
 [dependencies]
-parse_scryfall = { path = "../../mtgoparser_rs/parse_scryfall", version = "*" }
+parse_scryfall = { path = "../../mtgoparser/parse_scryfall", version = "*" }
 chrono.workspace = true
 serde.workspace = true
 serde_json.workspace = true

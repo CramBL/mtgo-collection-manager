@@ -1049,7 +1049,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mtgogetter_rs"
+name = "mtgogetter"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1079,7 +1079,7 @@ dependencies = [
  "fltk-table",
  "fltk-theme",
  "log",
- "mtgogetter_rs",
+ "mtgogetter",
  "mtgoupdater",
  "once_cell",
  "pretty_assertions",
@@ -1091,7 +1091,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mtgoparser_rs"
+name = "mtgoparser"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1110,8 +1110,8 @@ name = "mtgoupdater"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "mtgogetter_rs",
- "mtgoparser_rs",
+ "mtgogetter",
+ "mtgoparser",
  "pretty_assertions",
  "serde",
  "serde_json",

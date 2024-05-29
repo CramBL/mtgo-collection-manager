@@ -23,9 +23,9 @@ use zip_util::UnArchived;
 static MTGOGETTER_BIN: OnceLock<OsString> = OnceLock::new();
 static MTGOPARSER_BIN: OnceLock<OsString> = OnceLock::new();
 
-pub use mtgoparser_rs::mtgo_card::MtgoCard;
-pub use mtgoparser_rs::mtgo_card::Rarity;
-pub use mtgoparser_rs::parse_full;
+pub use mtgoparser::mtgo_card::MtgoCard;
+pub use mtgoparser::mtgo_card::Rarity;
+pub use mtgoparser::parse_full;
 
 /// Returns the version of `MTGO Updater`
 pub fn mtgo_updater_version() -> &'static str {

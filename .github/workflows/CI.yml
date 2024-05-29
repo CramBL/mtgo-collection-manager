@@ -96,11 +96,11 @@ jobs:
       - name: ⚙️ Build devcontainer
         run: just build-devcontainer
 
-      - name: ⚒️ Build - 💻🐧
+      - name: ⚒️ Build - 💻
         if: ${{ matrix.target == 'windows' }}
         run: just cross-compile-windows-xwin ${{ matrix.build-profile }}
 
-      - name: ⚒️ Build -
+      - name: ⚒️ Build - 🐧
         if: ${{ matrix.target != 'windows' }}
         run: just build --profile=${{ matrix.build-profile }}
 

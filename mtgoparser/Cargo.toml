@@ -1,5 +1,5 @@
 [package]
-name = "mtgoparser_rs"
+name = "mtgoparser"
 edition = "2021"
 version.workspace = true
 authors.workspace = true

@@ -1,6 +1,6 @@
 use std::{io, path::PathBuf};
 
-use mtgogetter_rs::fetch_all;
+use mtgogetter::fetch_all;
 
 /// Runs a full update of all MTGO data and saves the output to the given directory
 ///
