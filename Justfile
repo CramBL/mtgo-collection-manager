@@ -22,10 +22,6 @@ build-devcontainer UBUNTU_VARIANT="jammy":
 run-devcontainer:
 	{{CMD_IT}}
 
-ci-install-cross-compile-windows-deps:
-    rustup target add x86_64-pc-windows-gnu
-    sudo apt-get install gcc-mingw-w64-x86-64 ninja-build cmake
-
 [unix]
 launch:
     ./mtgogui/target/release/mtgogui
@@ -45,6 +41,16 @@ archive-cross-compile-windows-xwin PACKAGE_NAME="windows-mtgo-collection-manager
     mkdir -p mtgo-collection-manager
     cp target/x86_64-pc-windows-{{CLIB}}/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager.exe
     zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
+
+archive-bin PACKAGE_NAME:
+    #!/usr/bin/env bash
+    BIN=$( find target/ -type f -executable \
+            \( -name 'mtgogui' -o -name 'mtgogui.exe' \) \
+            -print -quit )
+    mkdir -p target/mtgo-collection-manager
+    cp ${BIN} target/mtgo-collection-manager/
+    zip -r {{PACKAGE_NAME}}.zip target/mtgo-collection-manager
+    ls -lh {{PACKAGE_NAME}}.zip
 
 
 install-debian-dev-deps:
