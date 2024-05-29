@@ -3,8 +3,8 @@ name: CI
 on:
   pull_request:
   push:
-    tags: [ master ]
-    branches: [ master ]
+    tags: [master]
+    branches: [master]
 
 env:
   VERBOSE: 1
@@ -16,10 +16,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      
+
       matrix:
         include:
-
           - os: ubuntu-22.04
             compiler: llvm-17.0.2
 
@@ -38,7 +37,6 @@ jobs:
         with:
           components: clippy, rustfmt
           bins: cargo-audit
-
 
       - name: ⚙️ Setup C++ Tools
         if: runner.os == 'macos'
@@ -74,16 +72,14 @@ jobs:
       - name: 📝 Test - 🍎🐧💻
         run: cargo test
 
-
-
   Container-Build:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      
+
       matrix:
-        build-profile: [ dev, release ]
-        target: [ ubuntu, windows ]
+        build-profile: [dev, release]
+        target: [ubuntu, windows]
 
     name: ${{ matrix.target }} ${{ matrix.build-profile }}
     steps:
@@ -103,7 +99,7 @@ jobs:
       - name: ⚒️ Build - 🐧
         if: ${{ matrix.target }} != 'windows'
         run: just build --profile=${{ matrix.build-profile }}
-        
+
       - name: 📦 Pack/Archive
         run: just archive-bin "${{ matrix.target }}-${{ matrix.build-profile }}"
 
@@ -111,5 +107,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: "${{ matrix.target }}-${{ matrix.build-profile }}"
-          path: "${{ matrix.target }}-${{ matrix.build-profile }}".zip
+          path: "${{ matrix.target }}-${{ matrix.build-profile }}.zip"
           retention-days: 14
