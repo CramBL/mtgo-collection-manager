@@ -1,5 +1,5 @@
 use chrono::{Datelike, SecondsFormat, Timelike};
-use mtgoparser_rs::{
+use mtgoparser::{
     collection::Collection,
     mtgo_card::{card_history::CardHistory, collection_history::CollectionHistory},
     xml::parse_dek_xml,
@@ -65,7 +65,7 @@ pub fn test_collection_parse_small() -> TestResult {
     fs::write(&f1, json_str0)?;
     fs::write(&f2, json_str1)?;
 
-    let mut files = mtgoparser_rs::util::get_files_with_timestamp(&subdir)?;
+    let mut files = mtgoparser::util::get_files_with_timestamp(&subdir)?;
     assert_eq!(files.len(), 2);
 
     files.sort_by_key(|(_, dt)| std::cmp::Reverse(dt.timestamp()));

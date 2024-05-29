@@ -9,8 +9,8 @@ license.workspace = true
 keywords.workspace = true
 
 [dependencies]
-mtgoparser_rs = { path = "../mtgoparser_rs", version = "*" }
-mtgogetter_rs = { path = "../mtgogetter_rs", version = "*" }
+mtgoparser = { path = "../mtgoparser", version = "*" }
+mtgogetter = { path = "../mtgogetter", version = "*" }
 serde_json.workspace = true
 chrono.workspace = true
 serde.workspace = true

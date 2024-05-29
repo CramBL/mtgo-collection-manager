@@ -14,24 +14,25 @@ SUCCESS := ECHO + " success"
 # e.g. {{PRINT_RGB}} "Hello %0, this is %1" "world" "a test"
 PRINT_RGB := ECHO + " print_rgb_interpolated"
 
-
 PWD := `pwd`
 
 CC  := "/usr/bin/clang"
 CXX := "/usr/bin/clang++"
 DEVCONTAINER_NAME := "mtgo-cm-devcontainer"
 
-# + " --user=$USER:$( id -g )" \
+
+BASE_DOCKER_RUN_CMD := "docker run" \
++ " -e CC=" + CC \
++ " -e CXX=" + CXX \
++ " -e XWIN_CACHE_DIR=/work/xwin_cache" \
++ " --user=$USER:$( id -g )" \
++ " -v " + PWD + ":/work" \
++ " --rm"
 
 CMD := if path_exists('/in_container') == "true" {
 "eval"
 } else {
-"docker run" \
-+ " -e CC=" + CC \
-+ " -e CXX=" + CXX \
-+ " -e XWIN_CACHE_DIR=/work/xwin_cache"
-+ " -v " + PWD + ":/work" \
-+ " --rm" \
+BASE_DOCKER_RUN_CMD \
 + " -t " + DEVCONTAINER_NAME \
 + " /bin/bash -lc "
 }
@@ -39,11 +40,7 @@ CMD := if path_exists('/in_container') == "true" {
 CMD_IT := if path_exists('/in_container') == "true" {
 "eval"
 } else {
-"docker run" \
-+ " -e CC=" + CC \
-+ " -e CXX=" + CXX \
-+ " -v " + PWD + ":/work" \
-+ " --rm" \
+BASE_DOCKER_RUN_CMD \
 + " -it " + DEVCONTAINER_NAME \
 + " /bin/bash -l "
 }

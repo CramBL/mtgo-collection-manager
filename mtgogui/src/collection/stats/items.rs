@@ -1,6 +1,6 @@
 use std::vec::Drain;
 
-use mtgogetter_rs::fetch_log::CardInfoMetaData;
+use mtgogetter::fetch_log::CardInfoMetaData;
 
 use super::{
     container::CollectionStats,

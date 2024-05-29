@@ -28,7 +28,7 @@ use fltk_flex::{Flex, FlexType};
 use fltk_grid::Grid;
 use fltk_table::{SmartTable, TableOpts};
 use fltk_theme::{widget_themes, ThemeType, WidgetTheme};
-use mtgogetter_rs::fetch_log::CardInfoMetaData;
+use mtgogetter::fetch_log::CardInfoMetaData;
 
 use self::setup::setup_main_window;
 

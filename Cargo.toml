@@ -3,12 +3,12 @@ resolver = "2"
 members = [
     "mtgogui",
     "mtgoupdater",
-    "mtgoparser_rs",
-    "mtgoparser_rs/parse_scryfall",
-    "mtgoparser_rs/parse_goatbots",
-    "mtgogetter_rs",
-    "mtgogetter_rs/get_scryfall",
-    "mtgogetter_rs/get_goatbots",
+    "mtgoparser",
+    "mtgoparser/parse_scryfall",
+    "mtgoparser/parse_goatbots",
+    "mtgogetter",
+    "mtgogetter/get_scryfall",
+    "mtgogetter/get_goatbots",
 ]
 
 [profile.release]
