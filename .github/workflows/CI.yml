@@ -105,8 +105,14 @@ jobs:
         if: ${{ matrix.target != 'windows' }}
         run: just build --profile=${{ matrix.build-profile }}
 
-      - name: 📦 Pack/Archive
+      - name: 📦 Pack/Archive - 💻
+        if: ${{ matrix.target == 'windows' }}
         run: just archive-bin "${{ matrix.target }}-${{ matrix.build-profile }}" "zip"
+
+      - name: 📦 Pack/Archive - 🐧
+        if: ${{ matrix.target != 'windows' }}
+        run: just archive-bin "${{ matrix.target }}-${{ matrix.build-profile }}" "tar"
+
 
       - name: 📩 Upload - Linux build 🐧
         if: ${{ matrix.target != 'windows' }}
