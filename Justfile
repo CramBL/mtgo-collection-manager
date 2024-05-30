@@ -42,15 +42,22 @@ archive-cross-compile-windows-xwin PACKAGE_NAME="windows-mtgo-collection-manager
     cp target/x86_64-pc-windows-{{CLIB}}/release/mtgogui.exe mtgo-collection-manager/mtgo-collection-manager.exe
     zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
 
-archive-bin PACKAGE_NAME:
+archive-bin PACKAGE_NAME ARCHIVE_TYPE="":
     #!/usr/bin/env bash
     BIN=$( find target/ -type f -executable \
             \( -name 'mtgogui' -o -name 'mtgogui.exe' \) \
             -print -quit )
     mkdir -p target/mtgo-collection-manager
     cp ${BIN} target/mtgo-collection-manager/
-    zip -r {{PACKAGE_NAME}}.zip target/mtgo-collection-manager
-    ls -lh {{PACKAGE_NAME}}.zip
+    if [[ "{{os_family()}}" == "unix" ]] && [[ -z "{{ARCHIVE_TYPE}}" ]] || [[ "{{ARCHIVE_TYPE}}" == "tar" ]]; then
+        tar --create -vv --file={{PACKAGE_NAME}}.tar --directory=target/mtgo-collection-manager .
+    elif [ "{{ARCHIVE_TYPE}}" == "zip" ]; then
+        cd target
+        zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
+        mv {{PACKAGE_NAME}}.zip ..
+    else
+        {{ERROR}} "please choose an archive format or leave the ARCHIVE_TYPE blank to default to tar"
+    fi
 
 
 install-debian-dev-deps:
