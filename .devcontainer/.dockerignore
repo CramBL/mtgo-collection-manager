@@ -1,10 +1,9 @@
 # Build directories and binary files
-build/
-out/
-cmake-build-*/
+target
+**/target
 
-# User spesific settings
-CMakeUserPresets.json
+.github
+xwin_cache
 
 # IDE files
 .vs/

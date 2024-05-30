@@ -1,36 +1,21 @@
 ## Workspace
 target
 
-## MTGO Getter
-mtgogetter/mtgogetter.exe
-mtgogetter/state_log.toml
-mtgogetter/mtgogetter
-mtgogetter/*.json
-
 mtgogetter/target
 mtgogetter/Cargo.lock
 
-## MTGO Parser-RS
+## MTGO Parser
 mtgoparser/target
 
-
 ## MTGO Updater
-mtgoupdater/state_log.toml
 mtgoupdater/Cargo.lock
 mtgoupdater/target
 
 ## MTGO GUI
 mtgogui/target
-mtgogui/*.json
-mtgogui/state_log.toml
-mtgogui/appdata
-
 
 # Cross compiler cache
 xwin_cache
-
-# User spesific settings
-mtgoparser/CMakeUserPresets.json
 
 # IDE files
 .vs/
