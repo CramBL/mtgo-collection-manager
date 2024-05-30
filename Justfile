@@ -49,8 +49,13 @@ archive-bin PACKAGE_NAME:
             -print -quit )
     mkdir -p target/mtgo-collection-manager
     cp ${BIN} target/mtgo-collection-manager/
-    zip -r {{PACKAGE_NAME}}.zip target/mtgo-collection-manager
-    ls -lh {{PACKAGE_NAME}}.zip
+    if [[ "{{os_family()}}" == "unix" ]]; then
+        tar --create -vv --file={{PACKAGE_NAME}}.tar --directory=target/mtgo-collection-manager mtgo-collection-manager
+    else
+        cd target
+        zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
+        mv mtgo-collection-manager ..
+    fi
 
 
 install-debian-dev-deps:
