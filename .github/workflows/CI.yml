@@ -106,7 +106,7 @@ jobs:
         run: just build --profile=${{ matrix.build-profile }}
 
       - name: 📦 Pack/Archive
-        run: just archive-bin "${{ matrix.target }}-${{ matrix.build-profile }}"
+        run: just archive-bin "${{ matrix.target }}-${{ matrix.build-profile }}" "zip"
 
       - name: 📩 Upload - Linux build 🐧
         if: ${{ matrix.target != 'windows' }}
@@ -114,6 +114,7 @@ jobs:
         with:
           name: "${{ matrix.target }}-${{ matrix.build-profile }}"
           path: "${{ matrix.target }}-${{ matrix.build-profile }}.tar"
+          if-no-files-found: error
           retention-days: 14
 
       - name: 📩 Upload - Linux-windows cross 💻
@@ -122,4 +123,5 @@ jobs:
         with:
           name: "${{ matrix.target }}-${{ matrix.build-profile }}"
           path: "${{ matrix.target }}-${{ matrix.build-profile }}.zip"
+          if-no-files-found: error
           retention-days: 14
