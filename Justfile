@@ -50,7 +50,7 @@ archive-bin PACKAGE_NAME:
     mkdir -p target/mtgo-collection-manager
     cp ${BIN} target/mtgo-collection-manager/
     if [[ "{{os_family()}}" == "unix" ]]; then
-        tar --create -vv --file={{PACKAGE_NAME}}.tar --directory=target/mtgo-collection-manager mtgo-collection-manager
+        tar --create -vv --file={{PACKAGE_NAME}}.tar --directory=target/mtgo-collection-manager .
     else
         cd target
         zip -r {{PACKAGE_NAME}}.zip mtgo-collection-manager
