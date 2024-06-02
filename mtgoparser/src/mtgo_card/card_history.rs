@@ -168,7 +168,7 @@ mod csv_row_helper {
         let mut name = first_element[1..].to_string();
 
         let mut found_end: bool = false;
-        while let Some(str_element) = iter.next() {
+        for str_element in iter.by_ref() {
             // Every additional element has to be prefixed with a comma since it was
             //  stripped by the split(',')-call
             name.push(',');

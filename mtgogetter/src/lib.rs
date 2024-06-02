@@ -1,6 +1,9 @@
 pub mod fetch_log;
 
-use std::{fs, io, path::PathBuf};
+use std::{
+    fs, io,
+    path::{Path, PathBuf},
+};
 
 use get_scryfall::{MtgoSet, ScryfallBulkData, ScryfallBulkDataInfo, ScryfallMtgoSets};
 
@@ -34,7 +37,7 @@ pub fn fetch_all(save_to_dir: PathBuf) -> Result<(), io::Error> {
 // Download goatbots price history if they are not up-to-date
 fn fetch_goatboats_price_history(
     goatbots_metadata: &mut fetch_log::GoatBotsMetaData,
-    save_to_dir: &PathBuf,
+    save_to_dir: &Path,
 ) -> Result<(), io::Error> {
     if goatbots_metadata.is_price_updated() {
         log::info!("Prices are up to date - skipping download");
@@ -53,7 +56,7 @@ fn fetch_goatboats_price_history(
 // Download goatbots card definitions if they are not up-to-date
 fn fetch_goatbots_card_definitions(
     fetch_log: &mut CardInfoMetaData,
-    save_to_dir: &PathBuf,
+    save_to_dir: &Path,
 ) -> Result<(), io::Error> {
     if fetch_log.is_card_definitions_updated() {
         log::info!("Card definitions are up to date - skipping download");
@@ -72,7 +75,7 @@ fn fetch_goatbots_card_definitions(
 // Download scryfall bulk data if they are not up-to-date
 fn fetch_scryfall_bulk_data(
     fetch_log: &mut CardInfoMetaData,
-    save_to_dir: &PathBuf,
+    save_to_dir: &Path,
 ) -> Result<(), io::Error> {
     log::info!("Downloading scryfall bulk data INFO");
     let scryfall_bulk_info: ScryfallBulkDataInfo = ScryfallBulkDataInfo::get().unwrap();
@@ -94,7 +97,7 @@ fn fetch_scryfall_bulk_data(
 // Download scryfall sets if they are not up-to-date
 fn fetch_scryfall_sets(
     fetch_log: &mut CardInfoMetaData,
-    save_to_dir: &PathBuf,
+    save_to_dir: &Path,
 ) -> Result<(), io::Error> {
     if fetch_log.is_next_set_out() {
         log::info!("Fetching sets from Scryfall");
