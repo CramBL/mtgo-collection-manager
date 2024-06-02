@@ -12,10 +12,11 @@ const FETCH_LOG_FILENAME: &str = "fetch_log.toml";
 ///
 pub fn fetch_all(save_to_dir: PathBuf) -> Result<(), io::Error> {
     let fetch_log_dst = save_to_dir.join(FETCH_LOG_FILENAME);
-    let mut fetch_log = match fetch_log_dst.exists() {
+    let mut fetch_log: CardInfoMetaData = match fetch_log_dst.exists() {
         true => CardInfoMetaData::from_toml_file(&fetch_log_dst)?,
         false => CardInfoMetaData::new(),
     };
+    log::debug!("fetch log contents: {fetch_log:?}");
 
     if fetch_log.is_next_set_out() {
         log::info!("Fetching sets from Scryfall");
@@ -31,7 +32,8 @@ pub fn fetch_all(save_to_dir: PathBuf) -> Result<(), io::Error> {
         log::info!("Scryfall sets data is up to date - skipping download");
     }
 
-    let scryfall_bulk_info = ScryfallBulkDataInfo::get().unwrap();
+    let scryfall_bulk_info: ScryfallBulkDataInfo = ScryfallBulkDataInfo::get().unwrap();
+    log::info!("scryfall bulk info: {scryfall_bulk_info:?}");
     if fetch_log.is_scryfall_bulk_updated(scryfall_bulk_info.updated_at()) {
         log::info!("Scryfall bulk data is up to date - skipping download")
     } else {
