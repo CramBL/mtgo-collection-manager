@@ -4,6 +4,7 @@ use mtgoparser::{
     mtgo_card::{card_history::CardHistory, collection_history::CollectionHistory},
     xml::parse_dek_xml,
 };
+use once_cell::sync::Lazy;
 use parse_goatbots::{
     card_definitions::parse_card_def_json, price_history::parse_price_history_json,
 };
@@ -15,25 +16,35 @@ use std::{
 };
 use testresult::TestResult;
 
+static SCRYFALL_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from("../test/test-data/mtgogetter-out/scryfall-20231002-full.json"));
+static SCRYFALL_SMALL_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from("../test/test-data/scryfall/default-cards-small-5cards.json"));
+static CARD_DEFINITIONS_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/card-definitions-2023-10-02-full.json"));
+static CARD_DEFINITIONS_SMALL_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/card-defs-small-5cards.json"));
+static PRICE_HISTORY_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json"));
+static PRICE_HISTORY_SMALL_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/price-hist-small-5cards.json"));
+static FULL_TRADELIST_MEDIUM_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek"));
+static FULL_TRADELIST_SMALL_FULL_PATH: Lazy<PathBuf> =
+    Lazy::new(|| PathBuf::from(r"../test/test-data/mtgo/Full Trade List-small-5cards.dek"));
+
 #[test]
 pub fn test_collection_parse_small() -> TestResult {
-    let xml_cards = parse_dek_xml(Path::new(
-        r"../test/test-data/mtgo/Full Trade List-small-5cards.dek",
-    ))?;
+    let xml_cards = parse_dek_xml(FULL_TRADELIST_SMALL_FULL_PATH.as_path())?;
     assert_eq!(xml_cards.len(), 5);
 
-    let price_hist = parse_price_history_json(Path::new(
-        r"../test/test-data/goatbots/price-hist-small-5cards.json",
-    ))?;
+    let price_hist = parse_price_history_json(PRICE_HISTORY_SMALL_FULL_PATH.as_path())?;
     assert_eq!(price_hist.len(), 5);
 
-    let goatbots_card_defs = parse_card_def_json(Path::new(
-        r"../test/test-data/goatbots/card-defs-small-5cards.json",
-    ))?;
+    let goatbots_card_defs = parse_card_def_json(CARD_DEFINITIONS_SMALL_FULL_PATH.as_path())?;
     assert_eq!(goatbots_card_defs.len(), 5);
 
-    let scryfall_json_str =
-        fs::read_to_string("../test/test-data/scryfall/default-cards-small-5cards.json")?;
+    let scryfall_json_str = fs::read_to_string(SCRYFALL_SMALL_FULL_PATH.as_path())?;
     let scryfall_cards: Vec<ScryfallCard> = serde_json::from_str(&scryfall_json_str)?;
     assert_eq!(scryfall_cards.len(), 5);
 
@@ -117,23 +128,16 @@ pub fn test_collection_parse_small() -> TestResult {
 
 #[test]
 pub fn test_collection_parse_medium() -> TestResult {
-    let xml_cards = parse_dek_xml(Path::new(
-        r"../test/test-data/mtgo/Full Trade List-medium-3000cards.dek",
-    ))?;
+    let xml_cards = parse_dek_xml(FULL_TRADELIST_MEDIUM_FULL_PATH.as_path())?;
     assert_eq!(xml_cards.len(), 3000);
 
-    let price_hist = parse_price_history_json(Path::new(
-        r"../test/test-data/goatbots/price-history-2023-10-02-full.json",
-    ))?;
+    let price_hist = parse_price_history_json(PRICE_HISTORY_FULL_PATH.as_path())?;
     assert_eq!(price_hist.len(), 76070);
 
-    let goatbots_card_defs = parse_card_def_json(Path::new(
-        r"../test/test-data/goatbots/card-definitions-2023-10-02-full.json",
-    ))?;
+    let goatbots_card_defs = parse_card_def_json(CARD_DEFINITIONS_FULL_PATH.as_path())?;
     assert_eq!(goatbots_card_defs.len(), 76070);
 
-    let scryfall_json_str =
-        fs::read_to_string("../test/test-data/mtgogetter-out/scryfall-20231002-full.json")?;
+    let scryfall_json_str = fs::read_to_string(SCRYFALL_FULL_PATH.as_path())?;
     let scryfall_cards: Vec<ScryfallCard> = serde_json::from_str(&scryfall_json_str)?;
     assert_eq!(scryfall_cards.len(), 43705);
 
@@ -155,23 +159,16 @@ pub fn test_collection_parse_medium() -> TestResult {
 
 #[test]
 fn test_collection_parse_medium_prices() -> TestResult {
-    let xml_cards = parse_dek_xml(Path::new(
-        r"../test/test-data/mtgo/Full Trade List-medium-3000cards.dek",
-    ))?;
+    let xml_cards = parse_dek_xml(FULL_TRADELIST_MEDIUM_FULL_PATH.as_path())?;
     assert_eq!(xml_cards.len(), 3000);
 
-    let price_hist = parse_price_history_json(Path::new(
-        r"../test/test-data/goatbots/price-history-2023-10-02-full.json",
-    ))?;
+    let price_hist = parse_price_history_json(PRICE_HISTORY_FULL_PATH.as_path())?;
     assert_eq!(price_hist.len(), 76070);
 
-    let goatbots_card_defs = parse_card_def_json(Path::new(
-        r"../test/test-data/goatbots/card-definitions-2023-10-02-full.json",
-    ))?;
+    let goatbots_card_defs = parse_card_def_json(CARD_DEFINITIONS_FULL_PATH.as_path())?;
     assert_eq!(goatbots_card_defs.len(), 76070);
 
-    let scryfall_json_str =
-        fs::read_to_string("../test/test-data/mtgogetter-out/scryfall-20231002-full.json")?;
+    let scryfall_json_str = fs::read_to_string(SCRYFALL_FULL_PATH.as_path())?;
     let scryfall_cards: Vec<ScryfallCard> = serde_json::from_str(&scryfall_json_str)?;
     assert_eq!(scryfall_cards.len(), 43705);
 

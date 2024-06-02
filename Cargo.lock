@@ -1113,6 +1113,7 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "mtgogetter",
+ "once_cell",
  "parse_goatbots",
  "parse_scryfall",
  "pretty_assertions",
