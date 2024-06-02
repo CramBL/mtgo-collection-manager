@@ -1,13 +1,13 @@
-# This is just an example state log and for testing
-title = "log for MTGO Getter state, such as updated_at timestamps"
+description = "log for MTGO Getter state, such as updated_at timestamps"
 
 [goatbots]
-  card_definitions_updated_at = 2023-10-21T22:29:53Z
-  prices_updated_at = 2023-10-14T15:24:21Z
+card_definitions_updated_at = "2024-06-02T08:17:15.343370231Z"
+prices_updated_at = "2024-06-02T08:17:15.540873234Z"
 
 [scryfall]
-  bulk_data_updated_at = 1970-01-01T00:00:00Z
-  [scryfall.next_released_mtgo_set]
-    name = "The Lost Caverns of Ixalan"
-    released_at = "2023-12-11"
-    mtgo_code = "lci"
+bulk_data_updated_at = "2024-06-02T08:17:14.832205946Z"
+
+[scryfall.next_released_mtgo_set]
+name = "Modern Horizons 3"
+released_at = "2024-06-14"
+mtgo_code = "mh3"
