@@ -3,7 +3,7 @@ use chrono::{DateTime, NaiveDateTime, NaiveTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
-pub(super) struct GoatBotsMetaData {
+pub(crate) struct GoatBotsMetaData {
     card_definitions_updated_at: Option<DateTime<Utc>>,
     prices_updated_at: Option<DateTime<Utc>>,
 }
@@ -23,15 +23,15 @@ impl GoatBotsMetaData {
         self.card_definitions_updated_at
     }
 
-    pub(super) fn refresh_card_definitions_updated_at_timestamp(&mut self) {
+    pub(crate) fn refresh_card_definitions_updated_at_timestamp(&mut self) {
         self.card_definitions_updated_at = Some(Utc::now())
     }
 
-    pub(super) fn prices_updated_at(&self) -> Option<DateTime<Utc>> {
+    pub(crate) fn prices_updated_at(&self) -> Option<DateTime<Utc>> {
         self.prices_updated_at
     }
 
-    pub(super) fn refresh_prices_updated_at_timestamp(&mut self) {
+    pub(crate) fn refresh_prices_updated_at_timestamp(&mut self) {
         self.prices_updated_at = Some(Utc::now())
     }
 
