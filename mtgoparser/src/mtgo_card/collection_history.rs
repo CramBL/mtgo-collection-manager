@@ -1,4 +1,4 @@
-use super::card_history::CardHistory;
+use super::card_history::{CardHistory, PriceHistoryTracker};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct CardHistoryAggregate {
@@ -27,8 +27,13 @@ impl CollectionHistory {
         let mut card_histories: Vec<CardHistoryAggregate> = vec![];
         for cardh in card_history.into_iter() {
             let mut newest_quantity = 0;
-            for (quant, _, _) in cardh.price_history.iter().rev() {
-                if let Some(q) = quant {
+            for PriceHistoryTracker {
+                quantity,
+                goatbots_price: _,
+                scryfall_price: _,
+            } in cardh.price_history.iter().rev()
+            {
+                if let Some(q) = quantity {
                     newest_quantity = *q;
                     break;
                 }
