@@ -3,6 +3,7 @@ use std::{fs, io, path::Path};
 use chrono::Utc;
 use collection::Collection;
 use mtgo_card::MtgoCard;
+use mtgogetter::FETCH_LOG_FILENAME;
 use parse_goatbots::{
     card_definitions::parse_card_def_json, price_history::parse_price_history_json,
 };
@@ -35,13 +36,12 @@ pub fn parse_full(
 
     if let Some(p) = save_json_to_dir {
         if has_state_log_changed(p) {
-            let fname = "fetch_log.toml";
-            let state_log_path = p.join(fname);
+            let state_log_path = p.join(FETCH_LOG_FILENAME);
             let hist_log_dir = p.join("collection-history");
             if !hist_log_dir.exists() {
                 fs::create_dir_all(&hist_log_dir).unwrap();
             }
-            let hist_log_path = hist_log_dir.join(fname);
+            let hist_log_path = hist_log_dir.join(FETCH_LOG_FILENAME);
             fs::copy(state_log_path, hist_log_path).unwrap();
         }
         // Save json
@@ -54,9 +54,10 @@ pub fn parse_full(
 }
 
 pub fn has_state_log_changed(appdata_dir: &Path) -> bool {
-    let fname = "fetch_log.toml";
-    let history_log_path = appdata_dir.join("collection-history").join(fname);
-    let appdata_log_path = appdata_dir.join(fname);
+    let history_log_path = appdata_dir
+        .join("collection-history")
+        .join(FETCH_LOG_FILENAME);
+    let appdata_log_path = appdata_dir.join(FETCH_LOG_FILENAME);
     if history_log_path.exists() {
         let app_log_md = fs::metadata(&appdata_log_path).unwrap();
         let hist_log_md = fs::metadata(history_log_path).unwrap();

@@ -3,11 +3,11 @@ use std::{fs, io, path::Path};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-mod goatbots_md;
-use goatbots_md::GoatBotsMetaData;
+pub(crate) mod goatbots_md;
+pub(crate) use goatbots_md::GoatBotsMetaData;
 
-pub mod scryfall_md;
-use scryfall_md::ScryfallMetaData;
+pub(crate) mod scryfall_md;
+pub(crate) use scryfall_md::ScryfallMetaData;
 
 use self::scryfall_md::next_released_mtgo_set::NextReleasedMtgoSet;
 
@@ -44,6 +44,10 @@ impl CardInfoMetaData {
     pub fn to_toml_on_disk(&self, p: &Path) -> Result<(), io::Error> {
         let toml = toml::to_string(self).unwrap();
         fs::write(p, toml)
+    }
+
+    pub(crate) fn goatbots_metadata(&mut self) -> &mut GoatBotsMetaData {
+        &mut self.goatbots
     }
 
     pub fn goatbots_prices_updated_at(&self) -> Option<DateTime<Utc>> {

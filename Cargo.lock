@@ -1112,6 +1112,8 @@ name = "mtgoparser"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "mtgogetter",
+ "once_cell",
  "parse_goatbots",
  "parse_scryfall",
  "pretty_assertions",
@@ -1129,6 +1131,7 @@ dependencies = [
  "chrono",
  "mtgogetter",
  "mtgoparser",
+ "once_cell",
  "pretty_assertions",
  "serde",
  "serde_json",

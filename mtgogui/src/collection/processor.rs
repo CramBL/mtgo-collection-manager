@@ -65,7 +65,7 @@ impl TradelistProcessor {
 
                     // Give the full trade list to the parser
                     // Find all the most recent files in the appdata directory, download and update them if necessary
-                    log::debug!("Instantiating appdata directory");
+                    log::info!("Instantiating appdata directory");
                     let appdata_paths = match AppData::update() {
                         Ok(paths) => paths,
                         Err(err) => {
@@ -84,16 +84,16 @@ impl TradelistProcessor {
                     )));
 
                     log::info!("Using MTGO Parser");
-                    log::info!("Scryfall path: {p:?}", p = appdata_paths.scryfall_path());
-                    log::info!(
+                    log::debug!("Scryfall path: {p:?}", p = appdata_paths.scryfall_path());
+                    log::debug!(
                         "Card definitions path: {p:?}",
                         p = appdata_paths.card_definitions_path()
                     );
-                    log::info!(
+                    log::debug!(
                         "Price history path: {p:?}",
                         p = appdata_paths.price_history_path()
                     );
-                    log::info!("Save to dir: {p:?}", p = appdata_paths.appdata_dir_path());
+                    log::debug!("Save to dir: {p:?}", p = appdata_paths.appdata_dir_path());
 
                     sender.send(Message::MenuBar(MenubarMessage::ProgressBar(
                         ProgressUpdate {
@@ -124,6 +124,8 @@ impl TradelistProcessor {
                                 },
                             )));
 
+                            // Get history instead of just collection
+
                             fadeout_progress_bar(sender.clone());
                             sender.send(Message::SetCollectionStats(CollectionStats::from_cards(
                                 &cards,
@@ -131,7 +133,7 @@ impl TradelistProcessor {
                             sender.send(Message::SetCards(cards));
                         }
                         Err(e) => {
-                            log::info!("MTGO Parser error: {e}");
+                            log::error!("MTGO Parser error: {e}");
                         }
                     }
                 }
