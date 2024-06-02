@@ -195,7 +195,6 @@ impl CollectionHistory {
     }
 
     pub fn size(&self) -> usize {
-        debug_assert_eq!(self.card_histories.len(), self.timestamps.len());
         self.card_histories.len()
     }
 
