@@ -26,6 +26,7 @@ use fltk_theme::{widget_themes, ThemeType, WidgetTheme};
 mod appdata;
 mod assets;
 mod collection;
+mod ctrlc_handler;
 mod gui;
 mod menubar;
 mod util;

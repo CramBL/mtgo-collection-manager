@@ -8,7 +8,7 @@ use fltk::{
 };
 
 /// Initialize the menubar, adding all the menu items
-pub(super) fn init_menu_bar(menu: &mut menu::SysMenuBar, s: &Sender<Message>) {
+pub(super) fn init_menu_bar(menu: &mut menu::SysMenuBar, s: Sender<Message>) {
     menu.set_frame(FrameType::FlatBox);
 
     menu.add_emit(
