@@ -8,6 +8,9 @@ import? 'just-util/mod.just'
 cmd *ARGS:
     {{CMD}} '{{ ARGS }}'
 
+run LOG_VERBOSITY="debug" *ARGS="":
+    MCM_VERBOSITY={{LOG_VERBOSITY}} cargo run {{ARGS}}
+
 [no-exit-message]
 build-devcontainer UBUNTU_VARIANT="jammy":
 	docker build \
