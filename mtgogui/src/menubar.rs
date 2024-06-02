@@ -44,9 +44,9 @@ impl McmMenuBar {
     /// * `w` - Width of the menubar
     /// * `h` - Height of the menubar
     /// * `s` - Sender to send messages to the main thread
-    pub fn new(w: i32, h: i32, s: &app::Sender<Message>) -> Self {
+    pub fn new(w: i32, h: i32, s: app::Sender<Message>) -> Self {
         let mut mb = menu::SysMenuBar::default().with_size(w, h);
-        setup::init_menu_bar(&mut mb, s);
+        setup::init_menu_bar(&mut mb, s.clone());
 
         let mut progress = Progress::new(
             DEFAULT_APP_WIDTH - Self::PROGRESS_BAR_WIDTH,
@@ -66,7 +66,7 @@ impl McmMenuBar {
 
         Self {
             menu: mb,
-            ev_emitter: s.clone(),
+            ev_emitter: s,
             progress_bar: progress,
         }
     }
@@ -114,7 +114,7 @@ impl McmMenuBar {
         let filename = dlg.filename();
         if !filename.to_string_lossy().to_string().is_empty() {
             if filename.is_file() {
-                log::info!("Full trade list: {:?}", filename);
+                log::info!("Full trade list: {filename:?}");
                 self.ev_emitter
                     .send(Message::GotFullTradeList(filename.into()));
             } else {

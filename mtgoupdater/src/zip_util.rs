@@ -300,7 +300,7 @@ mod tests {
         let compress_files = [
             Path::new("Cargo.toml"),
             Path::new("src/lib.rs"),
-            Path::new("README.md"),
+            Path::new("../README.md"),
         ];
 
         // Create a temporary directory

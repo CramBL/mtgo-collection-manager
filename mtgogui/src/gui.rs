@@ -9,6 +9,7 @@ use crate::collection::stats::items::BrowserItems;
 use crate::collection::stats::view::StatsView;
 use crate::collection::view::table::CollectionTable;
 use crate::collection::TableMessage;
+use crate::ctrlc_handler::init_ctrlc_handler;
 use crate::menubar::McmMenuBar;
 use crate::util::first_file_match_from_dir;
 use crate::{
@@ -57,14 +58,15 @@ impl MtgoGui {
     /// Create a new [MtgoGui] instance
     pub fn new() -> Self {
         let app = app::App::default();
+        let (ev_send, ev_rcv) = app::channel();
+        init_ctrlc_handler(ev_send.clone());
         let theme = WidgetTheme::new(ThemeType::Dark);
         theme.apply();
         misc::Tooltip::set_text_color(Color::Black);
 
-        let (ev_send, ev_rcv) = app::channel();
         let mut main_win: DoubleWindow = setup::setup_main_window();
 
-        let menu = McmMenuBar::new(DEFAULT_APP_WIDTH, MENU_BAR_HEIGHT, &ev_send);
+        let menu = McmMenuBar::new(DEFAULT_APP_WIDTH, MENU_BAR_HEIGHT, ev_send.clone());
 
         let mut flx_left_col = setup::setup_left_column_flx_box();
 

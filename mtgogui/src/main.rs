@@ -26,6 +26,7 @@ use fltk_theme::{widget_themes, ThemeType, WidgetTheme};
 mod appdata;
 mod assets;
 mod collection;
+mod ctrlc_handler;
 mod gui;
 mod menubar;
 mod util;
@@ -73,9 +74,7 @@ impl From<collection::TableMessage> for Message {
 }
 
 fn main() {
-    // In debug mode use the paths to the binaries when they're built in each subproject
     if cfg!(debug_assertions) {
-        mtgoupdater::internal_only::dev_try_init_mtgogetter_bin();
         // Show box edges
         Flex::debug(true);
     }

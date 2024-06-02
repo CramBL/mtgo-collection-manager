@@ -32,7 +32,12 @@ pub fn show_about() {
 pub fn format_about_window(mtgogui_version: &str, project_url: &str) {
     let txt_buffers = text::fill_about_text_buffers(mtgogui_version, project_url);
 
-    let mut win = create_about_window(450, txt_buffers.line_count() * 30, mtgogui_version);
+    let line_buf_len = txt_buffers.line_count(); //50
+    const LINE_BUF_LEN_MULTIPLIER: i32 = 10;
+    const BASE_HEIGHT: i32 = 100;
+    let about_window_height = BASE_HEIGHT + (line_buf_len * LINE_BUF_LEN_MULTIPLIER);
+    log::trace!("About Window height calculation: {BASE_HEIGHT} + ({line_buf_len} * {LINE_BUF_LEN_MULTIPLIER}) = {about_window_height}");
+    let mut win = create_about_window(450, about_window_height, mtgogui_version);
 
     let flex_about = Flex::default()
         .with_pos(0, 0)

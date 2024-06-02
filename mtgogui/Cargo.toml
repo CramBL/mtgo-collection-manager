@@ -15,6 +15,7 @@ fltk-flex = "0.2.1"
 fltk-grid = "0.4.0"
 fltk-table = "0.3.1"
 fltk-theme = "0.7.2"
+ctrlc = { version = "3.4.4", features = ["termination"] }
 flexi_logger = { version = "0.27", features = ["async", "specfile"] }
 url.workspace = true
 log.workspace = true

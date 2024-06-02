@@ -28,7 +28,9 @@ impl GuiState {
     /// Returns an [io::Error] if the [GuiState] fails to be saved.
     pub fn save(&self, mut dst_dir: PathBuf) -> io::Result<()> {
         dst_dir.push(GUI_STATE);
+        log::debug!("Saving GUI state to {dst_dir:?}");
         let toml = toml::to_string(&self).expect("Failed to serialize GUI state");
+        log::debug!("GUI state contents: {toml}");
         std::fs::write(dst_dir, toml)?;
         Ok(())
     }
@@ -65,7 +67,9 @@ impl GuiState {
 
     /// Save the current [`DateTime<Utc>`] as the last time a tradelist was added.
     pub fn new_tradelist(&mut self) {
-        self.tradelist_added_date = Some(Utc::now());
+        let timestamp = Utc::now();
+        log::debug!("Got new tradelist at: {timestamp}");
+        self.tradelist_added_date = Some(timestamp);
     }
 
     /// Get the [`DateTime<Utc>`] of the last time a tradelist was added.
