@@ -11,14 +11,14 @@ use std::path::PathBuf;
 /// * If the path to the appdata directory doesn't exist
 pub fn appdata_path() -> io::Result<PathBuf> {
     let mut appdata_dir = std::env::current_exe()?;
-    log::info!("Path to executable: {appdata_dir:?}");
+    log::debug!("Path to executable: {appdata_dir:?}");
     appdata_dir.pop();
     if cfg!(windows) {
         appdata_dir.push(format!(r#"{APP_DATA_DIR}\"#));
     } else {
         appdata_dir.push(format!(r#"{APP_DATA_DIR}/"#));
     }
-    log::info!("Path to appdata dir: {appdata_dir:?}");
+    log::debug!("Path to appdata dir: {appdata_dir:?}");
 
     let is_exists = match appdata_dir.try_exists() {
         Ok(is_exists) => is_exists,
