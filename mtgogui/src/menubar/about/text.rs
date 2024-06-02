@@ -27,8 +27,8 @@ pub fn fill_about_text_buffers(mtgogui_version: &str, project_url: &str) -> Text
     );
     let mtgo_cm_ver_txt = format!(
         "{:^width$}\n\n",
-        format!("v{}", mtgogui_version),
-        width = 57 - format!("v{}", mtgogui_version).len()
+        format!("v{mtgogui_version}"),
+        width = 57 - format!("v{mtgogui_version}").len()
     );
     tbuf.set_text(&mtgo_cm_txt);
     sbuf.set_text(&"A".repeat(mtgo_cm_txt.len()));
