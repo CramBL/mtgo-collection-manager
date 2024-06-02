@@ -4,34 +4,14 @@ use mtgoparser::{
     mtgo_card::{card_history::CardHistory, collection_history::CollectionHistory},
     xml::parse_dek_xml,
 };
-use once_cell::sync::Lazy;
 use parse_goatbots::{
     card_definitions::parse_card_def_json, price_history::parse_price_history_json,
 };
 use parse_scryfall::ScryfallCard;
 use pretty_assertions::assert_eq;
-use std::{
-    fs,
-    path::{Path, PathBuf},
-};
-use testresult::TestResult;
 
-static SCRYFALL_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from("../test/test-data/mtgogetter-out/scryfall-20231002-full.json"));
-static SCRYFALL_SMALL_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from("../test/test-data/scryfall/default-cards-small-5cards.json"));
-static CARD_DEFINITIONS_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/card-definitions-2023-10-02-full.json"));
-static CARD_DEFINITIONS_SMALL_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/card-defs-small-5cards.json"));
-static PRICE_HISTORY_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/price-history-2023-10-02-full.json"));
-static PRICE_HISTORY_SMALL_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from("../test/test-data/goatbots/price-hist-small-5cards.json"));
-static FULL_TRADELIST_MEDIUM_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from("../test/test-data/mtgo/Full Trade List-medium-3000cards.dek"));
-static FULL_TRADELIST_SMALL_FULL_PATH: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from(r"../test/test-data/mtgo/Full Trade List-small-5cards.dek"));
+mod util;
+use util::*;
 
 #[test]
 pub fn test_collection_parse_small() -> TestResult {
@@ -115,7 +95,7 @@ pub fn test_collection_parse_small() -> TestResult {
     assert_eq!(card_history.len(), 5);
 
     let collection_history = CollectionHistory::from_card_history(
-        most_recent_ts.to_rfc3339_opts(SecondsFormat::Secs, true),
+        vec![most_recent_ts.to_rfc3339_opts(SecondsFormat::Secs, true)],
         card_history,
     );
     assert_eq!(collection_history.size(), 5);

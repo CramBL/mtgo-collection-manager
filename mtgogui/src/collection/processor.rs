@@ -124,6 +124,10 @@ impl TradelistProcessor {
                                 },
                             )));
 
+                            // Get history instead of just collection
+
+
+
                             fadeout_progress_bar(sender.clone());
                             sender.send(Message::SetCollectionStats(CollectionStats::from_cards(
                                 &cards,
